@@ -1,0 +1,83 @@
+{
+  "input_graph_digest": "1466e40144bc48c2d33ac19d5215f2c59e131ab312dfbca9b512b7fb330d6f2f",
+  "enabled_actions": [
+    "31ed7912cbf38680fb027dc45a7f6c82cfdd2ea240c6e65070eb2e51ffaefd82",
+    "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
+    "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
+    "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
+    "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
+    "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
+    "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
+    "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598"
+  ],
+  "schedule": [
+    "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
+    "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
+    "31ed7912cbf38680fb027dc45a7f6c82cfdd2ea240c6e65070eb2e51ffaefd82",
+    "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
+    "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
+    "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
+    "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
+    "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598"
+  ],
+  "accepted_actions": [
+    "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
+    "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
+    "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
+    "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
+    "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
+    "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
+    "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598"
+  ],
+  "successor_graph_digest": "899ad0dffc0553bd65cc68eb7e25d83c13f9d0ecd1979d9f8f3273c18b78d315",
+  "decisions": [
+    {
+      "aid": "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
+      "rid": "r5",
+      "accepted": true,
+      "reason": "admissible"
+    },
+    {
+      "aid": "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
+      "rid": "r6",
+      "accepted": true,
+      "reason": "admissible"
+    },
+    {
+      "aid": "31ed7912cbf38680fb027dc45a7f6c82cfdd2ea240c6e65070eb2e51ffaefd82",
+      "rid": "r1",
+      "accepted": false,
+      "reason": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in MaxInclusiveConstraintComponent (http://www.w3.org/ns/shacl#MaxInclusiveConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:maxInclusive Literal(\"23.0\", datatype=xsd:decimal) ; sh:path ex:currentSetpoint ]\n\tFocus Node: <http://example.org/building#ZoneA>\n\tValue Node: Literal(\"24.0\", datatype=xsd:decimal)\n\tResult Path: ex:currentSetpoint\n\tMessage: Value is not <= Literal(\"23.0\", datatype=xsd:decimal)\n"
+    },
+    {
+      "aid": "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
+      "rid": "r4",
+      "accepted": true,
+      "reason": "admissible"
+    },
+    {
+      "aid": "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
+      "rid": "r2",
+      "accepted": true,
+      "reason": "admissible"
+    },
+    {
+      "aid": "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
+      "rid": "r3",
+      "accepted": true,
+      "reason": "admissible"
+    },
+    {
+      "aid": "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
+      "rid": "r7",
+      "accepted": true,
+      "reason": "admissible"
+    },
+    {
+      "aid": "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598",
+      "rid": "r8",
+      "accepted": true,
+      "reason": "admissible"
+    }
+  ]
+}

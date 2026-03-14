@@ -1,0 +1,54 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix ex: <http://example.org/building#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:ZoneSetpointShape a sh:NodeShape ;
+    sh:targetClass ex:HVAC_Zone ;
+    sh:property [
+        sh:path ex:currentSetpoint ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 18.0 ;
+        sh:maxInclusive 26.0 ;
+    ] .
+
+ex:ZoneVentilationShape a sh:NodeShape ;
+    sh:targetClass ex:HVAC_Zone ;
+    sh:property [
+        sh:path ex:ventilationMode ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "off" "normal" "high" "emergency" ) ;
+    ] .
+
+ex:EmergencyStateShape a sh:NodeShape ;
+    sh:targetClass ex:HVAC_Zone ;
+    sh:property [
+        sh:path ex:emergencyState ;
+        sh:datatype xsd:boolean ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+ex:ZoneAComfortCapShape a sh:NodeShape ;
+    sh:targetNode ex:ZoneA ;
+    sh:property [
+        sh:path ex:currentSetpoint ;
+        sh:maxInclusive 23.0 ;
+    ] .
+
+ex:ZoneAEmergencyVentShape a sh:NodeShape ;
+    sh:targetNode ex:ZoneA ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "If ZoneA ventilation is off, currentSetpoint must not exceed 21." ;
+        sh:select """
+            PREFIX ex: <http://example.org/building#>
+            SELECT $this
+            WHERE {
+                $this ex:ventilationMode "off" ;
+                      ex:currentSetpoint ?sp .
+                FILTER (?sp > 21.0)
+            }
+        """ ;
+    ] .

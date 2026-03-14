@@ -1,0 +1,84 @@
+{
+  "rules": [
+    {
+      "rid": "r1",
+      "priority": 2,
+      "issuing_role": "occupant",
+      "condition_select": "PREFIX ex: <http://example.org/building#> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupantSetpointRequest\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#currentSetpoint"
+      }
+    },
+    {
+      "rid": "r2",
+      "priority": 1,
+      "issuing_role": "operator",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#currentSetpoint"
+      }
+    },
+    {
+      "rid": "r3",
+      "priority": 1,
+      "issuing_role": "operator",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"CO2Spike\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#ventilationMode"
+      }
+    },
+    {
+      "rid": "r4",
+      "priority": 2,
+      "issuing_role": "occupant",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupancyDetected\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint ; ex:occupied false . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#currentSetpoint"
+      }
+    },
+    {
+      "rid": "r5",
+      "priority": 0,
+      "issuing_role": "emergency",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?state WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:emergencyState ?state . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#emergencyState"
+      }
+    },
+    {
+      "rid": "r6",
+      "priority": 0,
+      "issuing_role": "emergency",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#ventilationMode"
+      }
+    },
+    {
+      "rid": "r7",
+      "priority": 1,
+      "issuing_role": "operator",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"PreheatRequest\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#currentSetpoint"
+      }
+    },
+    {
+      "rid": "r8",
+      "priority": 1,
+      "issuing_role": "operator",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/building#ventilationMode"
+      }
+    }
+  ]
+}

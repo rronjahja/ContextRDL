@@ -1,0 +1,26 @@
+{
+  "window": {
+    "type": "sliding",
+    "length_minutes": 5,
+    "step_minutes": 1
+  },
+  "event_ordering": [
+    "timestamp",
+    "eid"
+  ],
+  "entailment_regime": "none",
+  "validation_regime": "shacl",
+  "role_precedence": {
+    "emergency": 0,
+    "operator": 1,
+    "occupant": 0
+  },
+  "schedule_key": [
+    "roleRank",
+    "priority",
+    "tsKey",
+    "rid",
+    "bindKey",
+    "aid"
+  ]
+}
