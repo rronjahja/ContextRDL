@@ -1,42 +1,59 @@
-from baseline_scheduler import nondeterministic_schedule
-from dataset_builder import build_dataset, load_events, load_state
-from rule_loader import load_rules
-from rule_engine import evaluate_rules
+from __future__ import annotations
+
+from baseline_scheduler import nondeterministic_tie_schedule
+from dataset_builder import build_dataset, load_state
+from experiment_helpers import tie_conflict_events
 from resolver import resolve_actions
+from rule_engine import evaluate_rules, load_settings, resolve_governance_context
+from rule_loader import load_rules
 from trace import graph_digest
 
 
-def run_tie_baseline_once():
-    G_t = load_state("data/base_graph.ttl")
-    events = load_events("data/events.jsonl")
+def run_tie_baseline_once(events=None):
+    settings = load_settings("configs/settings.json")
+    context = resolve_governance_context(settings=settings, contexts_path="data/contexts.json")
+    graph_t = load_state("shapes/base_graph.ttl")
     rules = load_rules("configs/rules.json")
+    event_list = tie_conflict_events() if events is None else events
 
-    dataset = build_dataset(G_t, events)
-    Act_t = evaluate_rules(dataset, rules)
+    dataset, window_meta = build_dataset(graph_t, event_list, settings=settings)
+    enabled = evaluate_rules(dataset, rules, settings=settings, context=context, window_meta=window_meta)
+    schedule = nondeterministic_tie_schedule(enabled)
 
-    Sigma_t = nondeterministic_schedule(Act_t)
+    accepted, graph_next, decisions = resolve_actions(
+        graph_t,
+        schedule,
+        shapes_path="shapes/invariants.ttl",
+        settings=settings,
+    )
 
-    B_t, G_next, decisions = resolve_actions(G_t, Sigma_t)
-
-    return G_next, B_t, decisions
+    return graph_next, accepted, decisions
 
 
-def run_tie_baseline_experiment(runs=30):
+def run_tie_baseline_experiment(runs: int = 30):
     digests = []
 
     for _ in range(runs):
-        G_next, _, _ = run_tie_baseline_once()
-        digests.append(graph_digest(G_next))
+        graph_next, _, _ = run_tie_baseline_once()
+        digests.append(graph_digest(graph_next))
 
-    unique = set(digests)
+    unique = sorted(set(digests))
 
     print("Runs:", runs)
     print("Unique successor states:", len(unique))
 
     if len(unique) == 1:
-        print("Baseline behaved deterministically")
+        print("Tie baseline behaved deterministically")
     else:
-        print("Baseline produced divergent outcomes")
+        print("Tie baseline produced divergent outcomes")
+        for digest in unique:
+            print(" -", digest)
+
+    return {
+        "runs": runs,
+        "unique_successor_states": len(unique),
+        "digests": unique,
+    }
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@
   "role_precedence": {
     "emergency": 0,
     "operator": 1,
-    "occupant": 0
+    "occupant": 2
   },
   "schedule_key": [
     "roleRank",
@@ -22,5 +22,10 @@
     "rid",
     "bindKey",
     "aid"
-  ]
+  ],
+  "governance": {
+    "context_name": "default",
+    "enforce_active_roles": false,
+    "conflict_policy": "first_writer_wins"
+  }
 }

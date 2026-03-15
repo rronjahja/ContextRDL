@@ -1,83 +1,1109 @@
 {
-  "input_graph_digest": "1466e40144bc48c2d33ac19d5215f2c59e131ab312dfbca9b512b7fb330d6f2f",
-  "enabled_actions": [
-    "31ed7912cbf38680fb027dc45a7f6c82cfdd2ea240c6e65070eb2e51ffaefd82",
-    "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
-    "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
-    "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
-    "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
-    "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
-    "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
-    "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598"
-  ],
-  "schedule": [
-    "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
-    "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
-    "31ed7912cbf38680fb027dc45a7f6c82cfdd2ea240c6e65070eb2e51ffaefd82",
-    "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
-    "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
-    "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
-    "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
-    "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598"
-  ],
   "accepted_actions": [
-    "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
-    "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
-    "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
-    "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
-    "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
-    "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
-    "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598"
+    {
+      "aid": "c8d0aff77f7a9c2769eff9abed025a79035b592dbb10a2f76bbdec7bb99a0632",
+      "bindKey": "{\"eid\":\"evt-005\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-005",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-005",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 0,
+      "rid": "r6",
+      "role": "emergency",
+      "roleRank": 0,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "emergency",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "3133203df6016ae88dabe63e8ef50b6e7a6fedf58fe85e7c299716246334a8f6",
+      "bindKey": "{\"eid\":\"evt-005\",\"state\":true,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-005",
+        "state": true,
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-005",
+      "predicate": "http://example.org/building#emergencyState",
+      "priority": 1,
+      "rid": "r5",
+      "role": "emergency",
+      "roleRank": 0,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#emergencyState",
+      "tsKey": 1773478800000000,
+      "value": true,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "4818b6c6c8c68723b1026000bd48f8e09e9964882da5175396a217b5da967796",
+      "bindKey": "{\"cap\":21.0,\"eid\":\"evt-002\",\"setpoint\":\"22\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "cap": 21.0,
+        "eid": "evt-002",
+        "setpoint": "22",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-002",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r2",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    },
+    {
+      "aid": "6c20c3292d39591d1ed7c7d97f02729002ee671d823aa926d514a9df33a4029a",
+      "bindKey": "{\"eid\":\"evt-006\",\"setpoint\":\"20\",\"target\":22.0,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneB\"}",
+      "bindings": {
+        "eid": "evt-006",
+        "setpoint": "20",
+        "target": 22.0,
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-006",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-006",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r7",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 22.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    },
+    {
+      "aid": "931b3c82b65e30ff718cfb2f43d96a843d75b9d72ea2b827e697d45c83274628",
+      "bindKey": "{\"eid\":\"evt-002\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "eid": "evt-002",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-002",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r8",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "off",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    }
   ],
-  "successor_graph_digest": "899ad0dffc0553bd65cc68eb7e25d83c13f9d0ecd1979d9f8f3273c18b78d315",
   "decisions": [
     {
-      "aid": "6aef42c525cec1b4acf955c67790c32db2710108c001a1e7f42e4039608a566a",
-      "rid": "r5",
       "accepted": true,
-      "reason": "admissible"
-    },
-    {
-      "aid": "b66ca4504e87f420aee9cdf2f37a2d438efb9278c3466bb237120677993ef63b",
+      "aid": "c8d0aff77f7a9c2769eff9abed025a79035b592dbb10a2f76bbdec7bb99a0632",
+      "candidate_graph_digest": "61f8adce86b71b02f4aecf4b2cfd8d32cd4020f58032c05999e377c0b57afc20",
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "inserted_triples": [
+        "<http://example.org/building#ZoneC> <http://example.org/building#ventilationMode> \"emergency\" ."
+      ],
+      "policy_reason": "policy_guard_not_applicable",
+      "post_graph_digest": "61f8adce86b71b02f4aecf4b2cfd8d32cd4020f58032c05999e377c0b57afc20",
+      "pre_graph_digest": "fed729ffa84d90f9307f2e934cd066eb877a36d0d1557f59d294a12e4e8ffb59",
+      "reason": "admissible",
+      "removed_triples": [
+        "<http://example.org/building#ZoneC> <http://example.org/building#ventilationMode> \"normal\" ."
+      ],
       "rid": "r6",
+      "role": "emergency",
+      "schedule_index": 0,
+      "schedule_key": {
+        "aid": "c8d0aff77f7a9c2769eff9abed025a79035b592dbb10a2f76bbdec7bb99a0632",
+        "bindKey": "{\"eid\":\"evt-005\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+        "priority": 0,
+        "rid": "r6",
+        "roleRank": 0,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#ventilationMode",
+        "value": "emergency",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#ventilationMode"
+    },
+    {
       "accepted": true,
-      "reason": "admissible"
+      "aid": "3133203df6016ae88dabe63e8ef50b6e7a6fedf58fe85e7c299716246334a8f6",
+      "candidate_graph_digest": "1c4c7a035e4787c35e43d64d909f4fc85ef14b30cdbe6752021c5b5a58be758c",
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "inserted_triples": [
+        "<http://example.org/building#ZoneC> <http://example.org/building#emergencyState> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> ."
+      ],
+      "policy_reason": "policy_guard_not_applicable",
+      "post_graph_digest": "1c4c7a035e4787c35e43d64d909f4fc85ef14b30cdbe6752021c5b5a58be758c",
+      "pre_graph_digest": "61f8adce86b71b02f4aecf4b2cfd8d32cd4020f58032c05999e377c0b57afc20",
+      "reason": "admissible",
+      "removed_triples": [
+        "<http://example.org/building#ZoneC> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> ."
+      ],
+      "rid": "r5",
+      "role": "emergency",
+      "schedule_index": 1,
+      "schedule_key": {
+        "aid": "3133203df6016ae88dabe63e8ef50b6e7a6fedf58fe85e7c299716246334a8f6",
+        "bindKey": "{\"eid\":\"evt-005\",\"state\":true,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+        "priority": 1,
+        "rid": "r5",
+        "roleRank": 0,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#emergencyState",
+        "value": true,
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#emergencyState"
     },
     {
-      "aid": "31ed7912cbf38680fb027dc45a7f6c82cfdd2ea240c6e65070eb2e51ffaefd82",
-      "rid": "r1",
-      "accepted": false,
-      "reason": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in MaxInclusiveConstraintComponent (http://www.w3.org/ns/shacl#MaxInclusiveConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:maxInclusive Literal(\"23.0\", datatype=xsd:decimal) ; sh:path ex:currentSetpoint ]\n\tFocus Node: <http://example.org/building#ZoneA>\n\tValue Node: Literal(\"24.0\", datatype=xsd:decimal)\n\tResult Path: ex:currentSetpoint\n\tMessage: Value is not <= Literal(\"23.0\", datatype=xsd:decimal)\n"
-    },
-    {
-      "aid": "85c19df2afca23a0235c1545012352528d1cf55ff4f1c747f23fed7847c64cda",
-      "rid": "r4",
       "accepted": true,
-      "reason": "admissible"
-    },
-    {
-      "aid": "2f3de8c540c5bb6bab344c4e5c5e099cacb8989d614c450ff389fbb9e598fe4b",
+      "aid": "4818b6c6c8c68723b1026000bd48f8e09e9964882da5175396a217b5da967796",
+      "candidate_graph_digest": "cc2560ff058ba3ac5f0147e1aab81ec6d4bf7be0829ae473a3e3f4a9c45fbe14",
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "inserted_triples": [
+        "<http://example.org/building#ZoneA> <http://example.org/building#currentSetpoint> \"21.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+      ],
+      "policy_reason": "policy_guard_passed",
+      "post_graph_digest": "cc2560ff058ba3ac5f0147e1aab81ec6d4bf7be0829ae473a3e3f4a9c45fbe14",
+      "pre_graph_digest": "1c4c7a035e4787c35e43d64d909f4fc85ef14b30cdbe6752021c5b5a58be758c",
+      "reason": "admissible",
+      "removed_triples": [
+        "<http://example.org/building#ZoneA> <http://example.org/building#currentSetpoint> \"22\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+      ],
       "rid": "r2",
-      "accepted": true,
-      "reason": "admissible"
+      "role": "operator",
+      "schedule_index": 2,
+      "schedule_key": {
+        "aid": "4818b6c6c8c68723b1026000bd48f8e09e9964882da5175396a217b5da967796",
+        "bindKey": "{\"cap\":21.0,\"eid\":\"evt-002\",\"setpoint\":\"22\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+        "priority": 1,
+        "rid": "r2",
+        "roleRank": 1,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value": 21.0,
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#currentSetpoint"
     },
     {
-      "aid": "91470c65a5e98d2d83e50fc00503287dcdec96856f5f6432beb7872c905522c3",
+      "accepted": false,
+      "aid": "03aeb5f408a9f21e934f6f9b6928ce3f584153198ed965059d6cc3e78cbf2821",
+      "blocked_by_aid": "c8d0aff77f7a9c2769eff9abed025a79035b592dbb10a2f76bbdec7bb99a0632",
+      "blocked_by_rid": "r6",
+      "event_id": "evt-003",
+      "event_role": "operator",
+      "inserted_triples": [],
+      "post_graph_digest": "cc2560ff058ba3ac5f0147e1aab81ec6d4bf7be0829ae473a3e3f4a9c45fbe14",
+      "pre_graph_digest": "cc2560ff058ba3ac5f0147e1aab81ec6d4bf7be0829ae473a3e3f4a9c45fbe14",
+      "reason": "shadowed_by_prior_accepted_action",
+      "removed_triples": [],
       "rid": "r3",
-      "accepted": true,
-      "reason": "admissible"
+      "role": "operator",
+      "schedule_index": 3,
+      "schedule_key": {
+        "aid": "03aeb5f408a9f21e934f6f9b6928ce3f584153198ed965059d6cc3e78cbf2821",
+        "bindKey": "{\"eid\":\"evt-003\",\"mode\":\"high\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+        "priority": 1,
+        "rid": "r3",
+        "roleRank": 1,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#ventilationMode",
+        "value": "high",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#ventilationMode"
     },
     {
-      "aid": "dcd40a15cc4e33723b895ea0f4b98c2607eef7ee597424aa014c9c5205c89153",
+      "accepted": true,
+      "aid": "6c20c3292d39591d1ed7c7d97f02729002ee671d823aa926d514a9df33a4029a",
+      "candidate_graph_digest": "5490456f3825083fe1ecb18f942447822a2730223c6659720717fdeaf7e66326",
+      "event_id": "evt-006",
+      "event_role": "operator",
+      "inserted_triples": [
+        "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+      ],
+      "policy_reason": "policy_guard_passed",
+      "post_graph_digest": "5490456f3825083fe1ecb18f942447822a2730223c6659720717fdeaf7e66326",
+      "pre_graph_digest": "cc2560ff058ba3ac5f0147e1aab81ec6d4bf7be0829ae473a3e3f4a9c45fbe14",
+      "reason": "admissible",
+      "removed_triples": [
+        "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"20\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+      ],
       "rid": "r7",
-      "accepted": true,
-      "reason": "admissible"
+      "role": "operator",
+      "schedule_index": 4,
+      "schedule_key": {
+        "aid": "6c20c3292d39591d1ed7c7d97f02729002ee671d823aa926d514a9df33a4029a",
+        "bindKey": "{\"eid\":\"evt-006\",\"setpoint\":\"20\",\"target\":22.0,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneB\"}",
+        "priority": 1,
+        "rid": "r7",
+        "roleRank": 1,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value": 22.0,
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint"
     },
     {
-      "aid": "e6970d60a2e9b7e6caa8525144a5503f953f33576133463d83c4880aa797c598",
-      "rid": "r8",
       "accepted": true,
-      "reason": "admissible"
+      "aid": "931b3c82b65e30ff718cfb2f43d96a843d75b9d72ea2b827e697d45c83274628",
+      "candidate_graph_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "inserted_triples": [
+        "<http://example.org/building#ZoneA> <http://example.org/building#ventilationMode> \"off\" ."
+      ],
+      "policy_reason": "policy_guard_not_applicable",
+      "post_graph_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "pre_graph_digest": "5490456f3825083fe1ecb18f942447822a2730223c6659720717fdeaf7e66326",
+      "reason": "admissible",
+      "removed_triples": [
+        "<http://example.org/building#ZoneA> <http://example.org/building#ventilationMode> \"normal\" ."
+      ],
+      "rid": "r8",
+      "role": "operator",
+      "schedule_index": 5,
+      "schedule_key": {
+        "aid": "931b3c82b65e30ff718cfb2f43d96a843d75b9d72ea2b827e697d45c83274628",
+        "bindKey": "{\"eid\":\"evt-002\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+        "priority": 1,
+        "rid": "r8",
+        "roleRank": 1,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#ventilationMode",
+        "value": "off",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#ventilationMode"
+    },
+    {
+      "accepted": false,
+      "aid": "fb29c2833c8a9a9ece798aaa8306d67d405eca365ac712277fb664811cbebae1",
+      "blocked_by_aid": "4818b6c6c8c68723b1026000bd48f8e09e9964882da5175396a217b5da967796",
+      "blocked_by_rid": "r2",
+      "event_id": "evt-001",
+      "event_role": "occupant",
+      "inserted_triples": [],
+      "post_graph_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "pre_graph_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "reason": "shadowed_by_prior_accepted_action",
+      "removed_triples": [],
+      "rid": "r1",
+      "role": "occupant",
+      "schedule_index": 6,
+      "schedule_key": {
+        "aid": "fb29c2833c8a9a9ece798aaa8306d67d405eca365ac712277fb664811cbebae1",
+        "bindKey": "{\"delta\":2.0,\"eid\":\"evt-001\",\"setpoint\":\"22\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+        "priority": 2,
+        "rid": "r1",
+        "roleRank": 2,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value": 24.0,
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#currentSetpoint"
+    },
+    {
+      "accepted": false,
+      "aid": "1afe0b3b3adbc40c508e61feb58f28664058c57287f3e5488863fb4126d641da",
+      "blocked_by_aid": "6c20c3292d39591d1ed7c7d97f02729002ee671d823aa926d514a9df33a4029a",
+      "blocked_by_rid": "r7",
+      "event_id": "evt-004",
+      "event_role": "occupant",
+      "inserted_triples": [],
+      "post_graph_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "pre_graph_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "reason": "shadowed_by_prior_accepted_action",
+      "removed_triples": [],
+      "rid": "r4",
+      "role": "occupant",
+      "schedule_index": 7,
+      "schedule_key": {
+        "aid": "1afe0b3b3adbc40c508e61feb58f28664058c57287f3e5488863fb4126d641da",
+        "bindKey": "{\"eid\":\"evt-004\",\"setpoint\":\"20\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneB\"}",
+        "priority": 2,
+        "rid": "r4",
+        "roleRank": 2,
+        "tsKey": 1773478800000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value": 21.0,
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint"
     }
-  ]
+  ],
+  "enabled_actions": [
+    {
+      "aid": "fb29c2833c8a9a9ece798aaa8306d67d405eca365ac712277fb664811cbebae1",
+      "bindKey": "{\"delta\":2.0,\"eid\":\"evt-001\",\"setpoint\":\"22\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "delta": 2.0,
+        "eid": "evt-001",
+        "setpoint": "22",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-001",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-001",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r1",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 24.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    },
+    {
+      "aid": "4818b6c6c8c68723b1026000bd48f8e09e9964882da5175396a217b5da967796",
+      "bindKey": "{\"cap\":21.0,\"eid\":\"evt-002\",\"setpoint\":\"22\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "cap": 21.0,
+        "eid": "evt-002",
+        "setpoint": "22",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-002",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r2",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    },
+    {
+      "aid": "03aeb5f408a9f21e934f6f9b6928ce3f584153198ed965059d6cc3e78cbf2821",
+      "bindKey": "{\"eid\":\"evt-003\",\"mode\":\"high\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-003",
+        "mode": "high",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-003",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-003",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r3",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "high",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "1afe0b3b3adbc40c508e61feb58f28664058c57287f3e5488863fb4126d641da",
+      "bindKey": "{\"eid\":\"evt-004\",\"setpoint\":\"20\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneB\"}",
+      "bindings": {
+        "eid": "evt-004",
+        "setpoint": "20",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-004",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-004",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    },
+    {
+      "aid": "3133203df6016ae88dabe63e8ef50b6e7a6fedf58fe85e7c299716246334a8f6",
+      "bindKey": "{\"eid\":\"evt-005\",\"state\":true,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-005",
+        "state": true,
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-005",
+      "predicate": "http://example.org/building#emergencyState",
+      "priority": 1,
+      "rid": "r5",
+      "role": "emergency",
+      "roleRank": 0,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#emergencyState",
+      "tsKey": 1773478800000000,
+      "value": true,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "c8d0aff77f7a9c2769eff9abed025a79035b592dbb10a2f76bbdec7bb99a0632",
+      "bindKey": "{\"eid\":\"evt-005\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-005",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-005",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 0,
+      "rid": "r6",
+      "role": "emergency",
+      "roleRank": 0,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "emergency",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "6c20c3292d39591d1ed7c7d97f02729002ee671d823aa926d514a9df33a4029a",
+      "bindKey": "{\"eid\":\"evt-006\",\"setpoint\":\"20\",\"target\":22.0,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneB\"}",
+      "bindings": {
+        "eid": "evt-006",
+        "setpoint": "20",
+        "target": 22.0,
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-006",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-006",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r7",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 22.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    },
+    {
+      "aid": "931b3c82b65e30ff718cfb2f43d96a843d75b9d72ea2b827e697d45c83274628",
+      "bindKey": "{\"eid\":\"evt-002\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "eid": "evt-002",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-002",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r8",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "off",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    }
+  ],
+  "events": [
+    {
+      "eid": "evt-001",
+      "payload": {
+        "delta": 2,
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "role": "occupant",
+      "timestamp": "2026-03-14T09:00:00Z",
+      "type": "OccupantSetpointRequest"
+    },
+    {
+      "eid": "evt-002",
+      "payload": {
+        "cap": 21,
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "role": "operator",
+      "timestamp": "2026-03-14T09:00:00Z",
+      "type": "DemandResponsePeak"
+    },
+    {
+      "eid": "evt-003",
+      "payload": {
+        "mode": "high",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "role": "operator",
+      "timestamp": "2026-03-14T09:00:00Z",
+      "type": "CO2Spike"
+    },
+    {
+      "eid": "evt-004",
+      "payload": {
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "role": "occupant",
+      "timestamp": "2026-03-14T09:00:00Z",
+      "type": "OccupancyDetected"
+    },
+    {
+      "eid": "evt-005",
+      "payload": {
+        "state": true,
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "role": "emergency",
+      "timestamp": "2026-03-14T09:00:00Z",
+      "type": "EmergencyAlarm"
+    },
+    {
+      "eid": "evt-006",
+      "payload": {
+        "target": 22,
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "role": "operator",
+      "timestamp": "2026-03-14T09:00:00Z",
+      "type": "PreheatRequest"
+    }
+  ],
+  "execution_digest": "09705c969d3f2c29ca9f37c77c9ac006909c1cef662270f4dd8f39dfd70e1c5d",
+  "input_graph": {
+    "digest": "fed729ffa84d90f9307f2e934cd066eb877a36d0d1557f59d294a12e4e8ffb59",
+    "triple_count": 23,
+    "triples": [
+      "<http://example.org/building#Policy> <http://example.org/building#emergencyMaxSetpoint> \"26\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#minSetpoint> \"18\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#occupantMaxSetpoint> \"23\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#operatorMaxSetpoint> \"24\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#ControlPolicy> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#co2Level> \"750\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#currentSetpoint> \"22\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#co2Level> \"500\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"20\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#occupied> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneB> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#co2Level> \"1200\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#currentSetpoint> \"21\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneC> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> ."
+    ]
+  },
+  "rules": [
+    {
+      "issuing_role": "occupant",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r1",
+      "value_expr": {
+        "kind": "numeric_add",
+        "left": "setpoint",
+        "right": "delta"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r2",
+      "value_expr": {
+        "kind": "copy",
+        "var": "cap"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r3",
+      "value_expr": {
+        "kind": "copy",
+        "var": "mode"
+      }
+    },
+    {
+      "issuing_role": "occupant",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "value_expr": {
+        "constant": 1,
+        "kind": "numeric_add_constant",
+        "var": "setpoint"
+      }
+    },
+    {
+      "issuing_role": "emergency",
+      "predicate": "http://example.org/building#emergencyState",
+      "priority": 1,
+      "rid": "r5",
+      "value_expr": {
+        "kind": "copy",
+        "var": "state"
+      }
+    },
+    {
+      "issuing_role": "emergency",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 0,
+      "rid": "r6",
+      "value_expr": {
+        "kind": "literal",
+        "value": "emergency"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r7",
+      "value_expr": {
+        "kind": "copy",
+        "var": "target"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r8",
+      "value_expr": {
+        "kind": "literal",
+        "value": "off"
+      }
+    }
+  ],
+  "schedule": [
+    {
+      "aid": "c8d0aff77f7a9c2769eff9abed025a79035b592dbb10a2f76bbdec7bb99a0632",
+      "bindKey": "{\"eid\":\"evt-005\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-005",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-005",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 0,
+      "rid": "r6",
+      "role": "emergency",
+      "roleRank": 0,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "emergency",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "3133203df6016ae88dabe63e8ef50b6e7a6fedf58fe85e7c299716246334a8f6",
+      "bindKey": "{\"eid\":\"evt-005\",\"state\":true,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-005",
+        "state": true,
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-005",
+      "event_role": "emergency",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-005",
+      "predicate": "http://example.org/building#emergencyState",
+      "priority": 1,
+      "rid": "r5",
+      "role": "emergency",
+      "roleRank": 0,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#emergencyState",
+      "tsKey": 1773478800000000,
+      "value": true,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "4818b6c6c8c68723b1026000bd48f8e09e9964882da5175396a217b5da967796",
+      "bindKey": "{\"cap\":21.0,\"eid\":\"evt-002\",\"setpoint\":\"22\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "cap": 21.0,
+        "eid": "evt-002",
+        "setpoint": "22",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-002",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r2",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    },
+    {
+      "aid": "03aeb5f408a9f21e934f6f9b6928ce3f584153198ed965059d6cc3e78cbf2821",
+      "bindKey": "{\"eid\":\"evt-003\",\"mode\":\"high\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneC\"}",
+      "bindings": {
+        "eid": "evt-003",
+        "mode": "high",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneC"
+      },
+      "event_id": "evt-003",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-003",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r3",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneC|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "high",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneC"
+    },
+    {
+      "aid": "6c20c3292d39591d1ed7c7d97f02729002ee671d823aa926d514a9df33a4029a",
+      "bindKey": "{\"eid\":\"evt-006\",\"setpoint\":\"20\",\"target\":22.0,\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneB\"}",
+      "bindings": {
+        "eid": "evt-006",
+        "setpoint": "20",
+        "target": 22.0,
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-006",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-006",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r7",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 22.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    },
+    {
+      "aid": "931b3c82b65e30ff718cfb2f43d96a843d75b9d72ea2b827e697d45c83274628",
+      "bindKey": "{\"eid\":\"evt-002\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "eid": "evt-002",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-002",
+      "event_role": "operator",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-002",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r8",
+      "role": "operator",
+      "roleRank": 1,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#ventilationMode",
+      "tsKey": 1773478800000000,
+      "value": "off",
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    },
+    {
+      "aid": "fb29c2833c8a9a9ece798aaa8306d67d405eca365ac712277fb664811cbebae1",
+      "bindKey": "{\"delta\":2.0,\"eid\":\"evt-001\",\"setpoint\":\"22\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneA\"}",
+      "bindings": {
+        "delta": 2.0,
+        "eid": "evt-001",
+        "setpoint": "22",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneA"
+      },
+      "event_id": "evt-001",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-001",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r1",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneA|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 24.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneA"
+    },
+    {
+      "aid": "1afe0b3b3adbc40c508e61feb58f28664058c57287f3e5488863fb4126d641da",
+      "bindKey": "{\"eid\":\"evt-004\",\"setpoint\":\"20\",\"ts\":\"2026-03-14T09:00:00Z\",\"zone\":\"http://example.org/building#ZoneB\"}",
+      "bindings": {
+        "eid": "evt-004",
+        "setpoint": "20",
+        "ts": "2026-03-14T09:00:00Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-004",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:00:00Z",
+      "event_uri": "urn:event:evt-004",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478800000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    }
+  ],
+  "settings": {
+    "entailment_regime": "none",
+    "event_ordering": [
+      "timestamp",
+      "eid"
+    ],
+    "governance": {
+      "conflict_policy": "first_writer_wins",
+      "context_name": "default",
+      "enforce_active_roles": false
+    },
+    "role_precedence": {
+      "emergency": 0,
+      "occupant": 2,
+      "operator": 1
+    },
+    "schedule_key": [
+      "roleRank",
+      "priority",
+      "tsKey",
+      "rid",
+      "bindKey",
+      "aid"
+    ],
+    "validation_regime": "shacl",
+    "window": {
+      "length_minutes": 5,
+      "step_minutes": 1,
+      "type": "sliding"
+    }
+  },
+  "successor_graph": {
+    "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+    "triple_count": 23,
+    "triples": [
+      "<http://example.org/building#Policy> <http://example.org/building#emergencyMaxSetpoint> \"26\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#minSetpoint> \"18\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#occupantMaxSetpoint> \"23\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#operatorMaxSetpoint> \"24\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#ControlPolicy> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#co2Level> \"750\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#currentSetpoint> \"21.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#ventilationMode> \"off\" .",
+      "<http://example.org/building#ZoneA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#co2Level> \"500\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#occupied> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneB> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#co2Level> \"1200\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#currentSetpoint> \"21\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#emergencyState> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#ventilationMode> \"emergency\" .",
+      "<http://example.org/building#ZoneC> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> ."
+    ]
+  },
+  "summary": {
+    "accepted_count": 5,
+    "enabled_count": 8,
+    "rejected_count": 3,
+    "scheduled_count": 8
+  },
+  "trace_version": "2.1",
+  "window": {
+    "anchor_timestamp": "2026-03-14T09:00:00+00:00",
+    "governance_context": {
+      "active_roles": [
+        "emergency",
+        "operator",
+        "occupant"
+      ],
+      "enforce_active_roles": false,
+      "name": "default",
+      "principal": "automation-engine",
+      "role_rank": {
+        "emergency": 0,
+        "occupant": 2,
+        "operator": 1
+      }
+    },
+    "selected_event_ids": [
+      "evt-001",
+      "evt-002",
+      "evt-003",
+      "evt-004",
+      "evt-005",
+      "evt-006"
+    ],
+    "selected_events": [
+      {
+        "eid": "evt-001",
+        "payload": {
+          "delta": 2,
+          "zone": "http://example.org/building#ZoneA"
+        },
+        "role": "occupant",
+        "timestamp": "2026-03-14T09:00:00Z",
+        "type": "OccupantSetpointRequest"
+      },
+      {
+        "eid": "evt-002",
+        "payload": {
+          "cap": 21,
+          "zone": "http://example.org/building#ZoneA"
+        },
+        "role": "operator",
+        "timestamp": "2026-03-14T09:00:00Z",
+        "type": "DemandResponsePeak"
+      },
+      {
+        "eid": "evt-003",
+        "payload": {
+          "mode": "high",
+          "zone": "http://example.org/building#ZoneC"
+        },
+        "role": "operator",
+        "timestamp": "2026-03-14T09:00:00Z",
+        "type": "CO2Spike"
+      },
+      {
+        "eid": "evt-004",
+        "payload": {
+          "zone": "http://example.org/building#ZoneB"
+        },
+        "role": "occupant",
+        "timestamp": "2026-03-14T09:00:00Z",
+        "type": "OccupancyDetected"
+      },
+      {
+        "eid": "evt-005",
+        "payload": {
+          "state": true,
+          "zone": "http://example.org/building#ZoneC"
+        },
+        "role": "emergency",
+        "timestamp": "2026-03-14T09:00:00Z",
+        "type": "EmergencyAlarm"
+      },
+      {
+        "eid": "evt-006",
+        "payload": {
+          "target": 22,
+          "zone": "http://example.org/building#ZoneB"
+        },
+        "role": "operator",
+        "timestamp": "2026-03-14T09:00:00Z",
+        "type": "PreheatRequest"
+      }
+    ],
+    "window_end": "2026-03-14T09:00:00+00:00",
+    "window_id": "sliding:2026-03-14T08:55:00+00:00::2026-03-14T09:00:00+00:00",
+    "window_start": "2026-03-14T08:55:00+00:00",
+    "window_type": "sliding"
+  }
 }

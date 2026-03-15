@@ -4,80 +4,114 @@
       "rid": "r1",
       "priority": 2,
       "issuing_role": "occupant",
-      "condition_select": "PREFIX ex: <http://example.org/building#> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupantSetpointRequest\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?delta WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupantSetpointRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:delta> ?delta . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#currentSetpoint"
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value_expr": {
+          "kind": "numeric_add",
+          "left": "setpoint",
+          "right": "delta"
+        }
       }
     },
     {
       "rid": "r2",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?cap WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:cap> ?cap . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#currentSetpoint"
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value_expr": {
+          "kind": "copy",
+          "var": "cap"
+        }
       }
     },
     {
       "rid": "r3",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"CO2Spike\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"CO2Spike\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:mode> ?mode . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#ventilationMode"
+        "predicate": "http://example.org/building#ventilationMode",
+        "value_expr": {
+          "kind": "copy",
+          "var": "mode"
+        }
       }
     },
     {
       "rid": "r4",
       "priority": 2,
       "issuing_role": "occupant",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupancyDetected\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint ; ex:occupied false . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupancyDetected\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint ; ex:occupied false . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#currentSetpoint"
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value_expr": {
+          "kind": "numeric_add_constant",
+          "var": "setpoint",
+          "constant": 1
+        }
       }
     },
     {
       "rid": "r5",
-      "priority": 0,
+      "priority": 1,
       "issuing_role": "emergency",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?state WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:emergencyState ?state . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?state WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:state> ?state . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:emergencyState ?currentState . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#emergencyState"
+        "predicate": "http://example.org/building#emergencyState",
+        "value_expr": {
+          "kind": "copy",
+          "var": "state"
+        }
       }
     },
     {
       "rid": "r6",
       "priority": 0,
       "issuing_role": "emergency",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#ventilationMode"
+        "predicate": "http://example.org/building#ventilationMode",
+        "value_expr": {
+          "kind": "literal",
+          "value": "emergency"
+        }
       }
     },
     {
       "rid": "r7",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"PreheatRequest\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?target WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"PreheatRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:target> ?target . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#currentSetpoint"
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value_expr": {
+          "kind": "copy",
+          "var": "target"
+        }
       }
     },
     {
       "rid": "r8",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
       "delete_template": null,
       "insert_template": {
-        "predicate": "http://example.org/building#ventilationMode"
+        "predicate": "http://example.org/building#ventilationMode",
+        "value_expr": {
+          "kind": "literal",
+          "value": "off"
+        }
       }
     }
   ]

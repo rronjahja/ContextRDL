@@ -1,7 +1,11 @@
 {
   "default": {
     "principal": "automation-engine",
-    "active_roles": ["occupant", "operator"],
+    "active_roles": [
+      "emergency",
+      "operator",
+      "occupant"
+    ],
     "role_rank": {
       "emergency": 0,
       "operator": 1,

@@ -1,31 +1,17 @@
+from __future__ import annotations
+
 from rdflib import Graph
-from pyshacl import validate
+
+from admissibility import check_admissibility
 
 
-def validate_graph(data_graph_path, shapes_graph_path):
+def validate_graph(data_graph_path: str, shapes_graph_path: str):
     data_graph = Graph()
     data_graph.parse(data_graph_path, format="turtle")
-
-    shapes_graph = Graph()
-    shapes_graph.parse(shapes_graph_path, format="turtle")
-
-    conforms, results_graph, results_text = validate(
-        data_graph,
-        shacl_graph=shapes_graph,
-        inference="none",
-        abort_on_first=False,
-        meta_shacl=False,
-        debug=False,
-    )
-
-    return conforms, results_text
+    return check_admissibility(data_graph, shapes_graph_path)
 
 
 if __name__ == "__main__":
-    conforms, report = validate_graph(
-        "data/base_graph.ttl",
-        "shapes/invariants.ttl"
-    )
-
+    conforms, report = validate_graph("shapes/base_graph.ttl", "shapes/invariants.ttl")
     print("Conforms:", conforms)
     print(report)

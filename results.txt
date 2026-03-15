@@ -1,0 +1,157 @@
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>python src/experiment_determinism.py
+Runs: 30
+Unique successor states: 1
+Unique execution traces: 1
+Determinism confirmed
+
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>python src/experiment_tie_baseline.py
+Runs: 30
+Unique successor states: 2
+Tie baseline produced divergent outcomes
+ - e96ca3bda72f2a24a59648c79902c910fdc4730b0f633cb35016b40598df0633
+ - ecf5860a6e63645c40a0610894703e05374bb35dff26a35cb126a262089feeb4
+
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>python src/experiment_governance.py
+
+Case 1: operator higher
+Role precedence:
+operator: 1 occupant: 2
+Schedule:
+r2 cda2ed8eb67c6170159140142711704a896acfa0e5ab855362e0e15bfc2105a0 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+r8 4b5b001b299128beda72f9e833b643e64b1e6c9648936db3554842c581f96e61 http://example.org/building#ZoneB|http://example.org/building#ventilationMode off
+r1 58542de7f0bdfc345025bd7def0b3bb90433a6a95de9fc6d69bb0823c97cfefa http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 22.0
+Accepted actions:
+r2 cda2ed8eb67c6170159140142711704a896acfa0e5ab855362e0e15bfc2105a0 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+r8 4b5b001b299128beda72f9e833b643e64b1e6c9648936db3554842c581f96e61 http://example.org/building#ZoneB|http://example.org/building#ventilationMode off
+Final ZoneB currentSetpoint: 21.0
+Successor graph digest: ecf5860a6e63645c40a0610894703e05374bb35dff26a35cb126a262089feeb4
+Resolver decisions:
+r2 True admissible
+r8 True admissible
+r1 False shadowed_by_prior_accepted_action
+
+Case 2: occupant higher
+Role precedence:
+operator: 2 occupant: 1
+Schedule:
+r1 58542de7f0bdfc345025bd7def0b3bb90433a6a95de9fc6d69bb0823c97cfefa http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 22.0
+r2 cda2ed8eb67c6170159140142711704a896acfa0e5ab855362e0e15bfc2105a0 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+r8 4b5b001b299128beda72f9e833b643e64b1e6c9648936db3554842c581f96e61 http://example.org/building#ZoneB|http://example.org/building#ventilationMode off
+Accepted actions:
+r1 58542de7f0bdfc345025bd7def0b3bb90433a6a95de9fc6d69bb0823c97cfefa http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 22.0
+r8 4b5b001b299128beda72f9e833b643e64b1e6c9648936db3554842c581f96e61 http://example.org/building#ZoneB|http://example.org/building#ventilationMode off
+Final ZoneB currentSetpoint: 22.0
+Successor graph digest: e96ca3bda72f2a24a59648c79902c910fdc4730b0f633cb35016b40598df0633
+Resolver decisions:
+r1 True admissible
+r2 False shadowed_by_prior_accepted_action
+r8 True admissible
+
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>python src/experiment_identity.py
+Triggered r1 action count: 2
+Event IDs: ['dup-001', 'dup-002']
+Action IDs:
+ - 1c723ba402c0ec4a9fff7d15bcb67338fdab5ca733ed3a5bfa867133dd390296
+ - 2f839e52148e38adc6983c6e246334a0e16b04a3b8f3ccb3e6098ec8df09a26a
+Unique action IDs: 2
+
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>python src/experiment_replay.py
+Recorded successor digest: 4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f
+Replay summary:
+{
+  "accepted_action_count": 5,
+  "expected_successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+  "input_digest_match": true,
+  "replay_successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+  "step_digest_match": true,
+  "step_results": [
+    {
+      "aid": "c8d0aff77f7a9c2769eff9abed025a79035b592dbb10a2f76bbdec7bb99a0632",
+      "index": 0,
+      "post_digest_match": true,
+      "pre_digest_match": true
+    },
+    {
+      "aid": "3133203df6016ae88dabe63e8ef50b6e7a6fedf58fe85e7c299716246334a8f6",
+      "index": 1,
+      "post_digest_match": true,
+      "pre_digest_match": true
+    },
+    {
+      "aid": "4818b6c6c8c68723b1026000bd48f8e09e9964882da5175396a217b5da967796",
+      "index": 2,
+      "post_digest_match": true,
+      "pre_digest_match": true
+    },
+    {
+      "aid": "6c20c3292d39591d1ed7c7d97f02729002ee671d823aa926d514a9df33a4029a",
+      "index": 3,
+      "post_digest_match": true,
+      "pre_digest_match": true
+    },
+    {
+      "aid": "931b3c82b65e30ff718cfb2f43d96a843d75b9d72ea2b827e697d45c83274628",
+      "index": 4,
+      "post_digest_match": true,
+      "pre_digest_match": true
+    }
+  ],
+  "successor_digest_match": true,
+  "trace_version": "2.1"
+}
+
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>python src/experiment_scalability.py
+Actions: 10 Accepted: 10 Rejected: 0 Time: 0.015228 seconds
+Actions: 50 Accepted: 50 Rejected: 0 Time: 0.285144 seconds
+Actions: 100 Accepted: 100 Rejected: 0 Time: 1.10149 seconds
+Actions: 200 Accepted: 200 Rejected: 0 Time: 4.410046 seconds
+Actions: 400 Accepted: 400 Rejected: 0 Time: 16.808383 seconds
+Actions: 800 Accepted: 800 Rejected: 0 Time: 68.505075 seconds
+
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>python src/experiment_collisions.py
+
+Same-target collision workload with 10 valid concurrent actions
+Actions: 10 Accepted: 1 Rejected: 9 Time: 0.0012 seconds
+Winning action: r7 52dd2d818cf066abeed406df8f115ac1b39e578b92c0be6dc20ee916867c98b9 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+Rejection reasons:
+- shadowed_by_prior_accepted_action: 9
+
+Same-target collision workload with 50 valid concurrent actions
+Actions: 50 Accepted: 1 Rejected: 49 Time: 0.003476 seconds
+Winning action: r7 52dd2d818cf066abeed406df8f115ac1b39e578b92c0be6dc20ee916867c98b9 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+Rejection reasons:
+- shadowed_by_prior_accepted_action: 49
+
+Same-target collision workload with 100 valid concurrent actions
+Actions: 100 Accepted: 1 Rejected: 99 Time: 0.005891 seconds
+Winning action: r7 52dd2d818cf066abeed406df8f115ac1b39e578b92c0be6dc20ee916867c98b9 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+Rejection reasons:
+- shadowed_by_prior_accepted_action: 99
+
+Same-target collision workload with 200 valid concurrent actions
+Actions: 200 Accepted: 1 Rejected: 199 Time: 0.011957 seconds
+Winning action: r7 52dd2d818cf066abeed406df8f115ac1b39e578b92c0be6dc20ee916867c98b9 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+Rejection reasons:
+- shadowed_by_prior_accepted_action: 199
+
+Same-target collision workload with 500 valid concurrent actions
+Actions: 500 Accepted: 1 Rejected: 499 Time: 0.030748 seconds
+Winning action: r7 52dd2d818cf066abeed406df8f115ac1b39e578b92c0be6dc20ee916867c98b9 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+Rejection reasons:
+- shadowed_by_prior_accepted_action: 499
+
+Same-target collision workload with 1000 valid concurrent actions
+Actions: 1000 Accepted: 1 Rejected: 999 Time: 0.062841 seconds
+Winning action: r7 52dd2d818cf066abeed406df8f115ac1b39e578b92c0be6dc20ee916867c98b9 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21.0
+Rejection reasons:
+- shadowed_by_prior_accepted_action: 999
+
+Summary
+Actions: 10 | Accepted: 1 | Rejected: 9 | Time: 0.0012 seconds
+Actions: 50 | Accepted: 1 | Rejected: 49 | Time: 0.003476 seconds
+Actions: 100 | Accepted: 1 | Rejected: 99 | Time: 0.005891 seconds
+Actions: 200 | Accepted: 1 | Rejected: 199 | Time: 0.011957 seconds
+Actions: 500 | Accepted: 1 | Rejected: 499 | Time: 0.030748 seconds
+Actions: 1000 | Accepted: 1 | Rejected: 999 | Time: 0.062841 seconds
+
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL>

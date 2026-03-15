@@ -52,3 +52,19 @@ ex:ZoneAEmergencyVentShape a sh:NodeShape ;
             }
         """ ;
     ] .
+
+ex:EmergencyVentLockShape a sh:NodeShape ;
+    sh:targetClass ex:HVAC_Zone ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "If emergencyState is true, ventilationMode must be emergency." ;
+        sh:select """
+            PREFIX ex: <http://example.org/building#>
+            SELECT $this
+            WHERE {
+                $this ex:emergencyState true ;
+                      ex:ventilationMode ?m .
+                FILTER (?m != "emergency")
+            }
+        """ ;
+    ] .
