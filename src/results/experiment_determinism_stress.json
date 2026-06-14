@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "n_candidates": 2,
+      "runs_per_strategy": 30,
+      "unique_states_ours": 1,
+      "unique_states_shuffle": 2
+    },
+    {
+      "n_candidates": 4,
+      "runs_per_strategy": 30,
+      "unique_states_ours": 1,
+      "unique_states_shuffle": 4
+    },
+    {
+      "n_candidates": 8,
+      "runs_per_strategy": 30,
+      "unique_states_ours": 1,
+      "unique_states_shuffle": 7
+    },
+    {
+      "n_candidates": 16,
+      "runs_per_strategy": 30,
+      "unique_states_ours": 1,
+      "unique_states_shuffle": 9
+    },
+    {
+      "n_candidates": 32,
+      "runs_per_strategy": 30,
+      "unique_states_ours": 1,
+      "unique_states_shuffle": 9
+    },
+    {
+      "n_candidates": 64,
+      "runs_per_strategy": 30,
+      "unique_states_ours": 1,
+      "unique_states_shuffle": 9
+    }
+  ]
+}

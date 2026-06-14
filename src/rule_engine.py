@@ -5,7 +5,7 @@ import json
 from copy import deepcopy
 from datetime import timezone
 from typing import Any, Dict, Iterable, List, Mapping, Optional
-
+from pathlib import Path
 from rdflib import Literal, URIRef
 
 from dataset_builder import WINDOW_ALIAS_IRI, parse_timestamp, prop_uri
@@ -22,12 +22,18 @@ DEFAULT_SCHEDULE_KEY = [
 
 
 def load_settings(path: str = "configs/settings.json") -> Dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as handle:
+    p = Path(path)
+    if not p.is_absolute() and not p.exists():
+        p = Path(__file__).resolve().parent.parent / p
+    with open(p, "r", encoding="utf-8") as handle:
         return json.load(handle)
 
 
 def load_contexts(path: str = "data/contexts.json") -> Dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as handle:
+    p = Path(path)
+    if not p.is_absolute() and not p.exists():
+        p = Path(__file__).resolve().parent.parent / p
+    with open(p, "r", encoding="utf-8") as handle:
         return json.load(handle)
 
 

@@ -5,6 +5,7 @@ from typing import Dict, List
 from rdflib import URIRef
 
 
+ZONE_A = "http://example.org/building#ZoneA"
 ZONE_B = "http://example.org/building#ZoneB"
 CURRENT_SETPOINT = URIRef("http://example.org/building#currentSetpoint")
 
@@ -82,6 +83,41 @@ def duplicate_identity_events() -> List[Dict[str, object]]:
             "payload": {
                 "zone": ZONE_B,
                 "delta": 2,
+            },
+        },
+    ]
+
+
+def longitudinal_event_stream() -> List[Dict[str, object]]:
+    return [
+        {
+            "eid": "long-preheat-001",
+            "timestamp": "2026-03-14T09:00:00Z",
+            "type": "PreheatRequest",
+            "role": "operator",
+            "payload": {
+                "zone": ZONE_B,
+                "target": 22,
+            },
+        },
+        {
+            "eid": "long-cap-001",
+            "timestamp": "2026-03-14T09:06:00Z",
+            "type": "DemandResponsePeak",
+            "role": "operator",
+            "payload": {
+                "zone": ZONE_B,
+                "cap": 21,
+            },
+        },
+        {
+            "eid": "long-occupant-001",
+            "timestamp": "2026-03-14T09:11:00Z",
+            "type": "OccupantSetpointRequest",
+            "role": "occupant",
+            "payload": {
+                "zone": ZONE_A,
+                "delta": 1,
             },
         },
     ]

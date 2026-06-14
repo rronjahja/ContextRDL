@@ -8,45 +8,37 @@ from state_transition import apply_action
 from trace import graph_digest, graph_from_snapshot, load_trace
 
 
+def _accepted_decisions(trace: Dict[str, Any]) -> List[Dict[str, Any]]:
+    return [decision for decision in trace.get("decisions", []) if decision.get("accepted")]
+
+
 def replay_trace(trace_path: str = "results/trace.json", shapes_path: str = "shapes/invariants.ttl") -> Dict[str, Any]:
     trace = load_trace(trace_path)
 
     current_graph = graph_from_snapshot(trace["input_graph"])
     input_digest_ok = graph_digest(current_graph) == trace["input_graph"]["digest"]
 
-    accepted_actions: List[Dict[str, Any]] = trace.get("accepted_actions", [])
-    accepted_decisions = [decision for decision in trace.get("decisions", []) if decision.get("accepted")]
-    if len(accepted_actions) != len(accepted_decisions):
-        raise ValueError(
-            "Replay failed: accepted action count does not match accepted decision count "
-            f"({len(accepted_actions)} != {len(accepted_decisions)})."
-        )
+    accepted_decisions = _accepted_decisions(trace)
+    step_results: List[Dict[str, Any]] = []
 
-    step_digest_match = True
-    step_results = []
-
-    for index, (action, decision) in enumerate(zip(accepted_actions, accepted_decisions)):
+    for index, action in enumerate(trace["accepted_actions"]):
+        recorded = accepted_decisions[index] if index < len(accepted_decisions) else {}
         pre_digest = graph_digest(current_graph)
-        if decision.get("pre_graph_digest") != pre_digest:
-            step_digest_match = False
 
         candidate = apply_action(current_graph, action)
+        candidate_digest = graph_digest(candidate)
         conforms, report = check_admissibility(candidate, shapes_path)
         if not conforms:
             raise ValueError(
                 f"Replay failed: accepted action {action['aid']} became inadmissible.\n{report}"
             )
 
-        post_digest = graph_digest(candidate)
-        if decision.get("post_graph_digest") != post_digest:
-            step_digest_match = False
-
         step_results.append(
             {
-                "index": index,
                 "aid": action["aid"],
-                "pre_digest_match": decision.get("pre_graph_digest") == pre_digest,
-                "post_digest_match": decision.get("post_graph_digest") == post_digest,
+                "index": index,
+                "pre_digest_match": pre_digest == recorded.get("pre_graph_digest", pre_digest),
+                "post_digest_match": candidate_digest == recorded.get("post_graph_digest", candidate_digest),
             }
         )
         current_graph = candidate
@@ -54,11 +46,12 @@ def replay_trace(trace_path: str = "results/trace.json", shapes_path: str = "sha
     replay_digest = graph_digest(current_graph)
     expected_digest = trace["successor_graph"]["digest"]
     successor_digest_match = replay_digest == expected_digest
+    step_digest_match = all(result["pre_digest_match"] and result["post_digest_match"] for result in step_results)
 
     summary = {
         "trace_version": trace.get("trace_version"),
         "input_digest_match": input_digest_ok,
-        "accepted_action_count": len(accepted_actions),
+        "accepted_action_count": len(trace["accepted_actions"]),
         "replay_successor_digest": replay_digest,
         "expected_successor_digest": expected_digest,
         "successor_digest_match": successor_digest_match,

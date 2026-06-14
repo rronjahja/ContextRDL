@@ -1,0 +1,32 @@
+{
+  "recorded": {
+    "trace_path": "results/trace.json",
+    "skipped": true,
+    "skip_reason": "results/trace.json not found; run engine.py first"
+  },
+  "fresh_round_trip": {
+    "trace_path": "results/trace_fresh_for_integrity.json",
+    "report": {
+      "enabled_match": true,
+      "schedule_match": true,
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "overall_pass": true,
+      "regenerated": {
+        "enabled_count": 8,
+        "schedule_count": 8,
+        "accepted_count": 5,
+        "successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f"
+      },
+      "recorded": {
+        "enabled_count": 8,
+        "schedule_count": 8,
+        "accepted_count": 5,
+        "successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f"
+      }
+    },
+    "skipped": false
+  },
+  "overall_pass": true
+}

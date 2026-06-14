@@ -3,8 +3,6 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
-from rdflib import Graph
-
 from dataset_builder import build_dataset, load_events, load_state
 from resolver import resolve_actions
 from rule_engine import evaluate_rules, load_settings, resolve_governance_context, schedule_actions
@@ -21,13 +19,6 @@ def _deep_update(base: Dict[str, Any], updates: Dict[str, Any]) -> Dict[str, Any
     return base
 
 
-def _copy_graph(graph: Graph) -> Graph:
-    new_graph = Graph()
-    for triple in graph:
-        new_graph.add(triple)
-    return new_graph
-
-
 def run_engine(
     state_path: str = "shapes/base_graph.ttl",
     events_path: str = "data/events.jsonl",
@@ -38,7 +29,7 @@ def run_engine(
     trace_path: str = "results/trace.json",
     save_trace_file: bool = True,
     settings_override: Optional[Dict[str, Any]] = None,
-    state_graph: Optional[Graph] = None,
+    state_graph=None,
     events: Optional[List[Dict[str, Any]]] = None,
     rules: Optional[List[Dict[str, Any]]] = None,
     context_name: Optional[str] = None,
@@ -48,7 +39,7 @@ def run_engine(
     if settings_override:
         settings = _deep_update(settings, deepcopy(settings_override))
 
-    current_state = _copy_graph(state_graph) if state_graph is not None else load_state(state_path)
+    current_state = deepcopy(state_graph) if state_graph is not None else load_state(state_path)
     event_list = deepcopy(events) if events is not None else load_events(events_path)
     rule_list = deepcopy(rules) if rules is not None else load_rules(rules_path)
 
@@ -114,5 +105,4 @@ if __name__ == "__main__":
 
     print("\nTrace summary:\n")
     print(trace["summary"])
-    print("Execution digest:", trace["execution_digest"])
     print("Successor digest:", trace["successor_graph"]["digest"])

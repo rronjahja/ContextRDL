@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
-
+from pathlib import Path
 from rdflib import Dataset, Graph, Literal, URIRef
 from rdflib.namespace import XSD
 
@@ -31,15 +31,28 @@ def parse_timestamp(value: str) -> datetime:
     return dt.astimezone(timezone.utc)
 
 
+def _resolve_project_path(path_like: str) -> Path:
+    p = Path(path_like)
+    if p.is_absolute():
+        return p
+    cwd_candidate = Path.cwd() / p
+    if cwd_candidate.exists():
+        return cwd_candidate
+    return Path(__file__).resolve().parent.parent / p
+
+
 def load_state(path: str) -> Graph:
     graph = Graph()
-    graph.parse(path, format="turtle")
+    resolved = _resolve_project_path(path)
+    text = resolved.read_text(encoding="utf-8")
+    graph.parse(data=text, format="turtle")
     return graph
 
 
 def load_events(path: str) -> List[Dict[str, Any]]:
     events: List[Dict[str, Any]] = []
-    with open(path, "r", encoding="utf-8") as handle:
+    resolved = _resolve_project_path(path)
+    with open(resolved, "r", encoding="utf-8") as handle:
         for line in handle:
             stripped = line.strip()
             if stripped:

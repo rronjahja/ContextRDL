@@ -5,7 +5,7 @@ import json
 import os
 from copy import deepcopy
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
-
+from pathlib import Path
 from rdflib import Graph
 
 
@@ -28,10 +28,9 @@ def graph_delta(before: Graph, after: Graph) -> Tuple[List[str], List[str]]:
 
 def serialize_graph_snapshot(graph: Graph) -> Dict[str, Any]:
     lines = canonical_triple_lines(graph)
-    payload = "\n".join(lines)
     return {
         "triples": lines,
-        "digest": hashlib.sha256(payload.encode("utf-8")).hexdigest(),
+        "digest": hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest(),
         "triple_count": len(lines),
     }
 
@@ -42,14 +41,6 @@ def graph_from_snapshot(snapshot: Mapping[str, Any]) -> Graph:
     if triples:
         graph.parse(data="\n".join(triples), format="nt")
     return graph
-
-
-def stable_json_dumps(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), default=str)
-
-
-def stable_json_hash(value: Any) -> str:
-    return hashlib.sha256(stable_json_dumps(value).encode("utf-8")).hexdigest()
 
 
 def _jsonable_action(action: Mapping[str, Any]) -> Dict[str, Any]:
@@ -88,14 +79,6 @@ def build_trace(
     accepted_list = [_jsonable_action(action) for action in accepted_actions]
     decisions_list = json.loads(json.dumps(list(decisions), sort_keys=True, default=str))
 
-    execution_projection = {
-        "enabled_actions": enabled_list,
-        "schedule": schedule_list,
-        "accepted_actions": accepted_list,
-        "decisions": decisions_list,
-        "successor_digest": graph_digest(successor_graph),
-    }
-
     trace = {
         "trace_version": "2.1",
         "settings": deepcopy(settings) if settings is not None else {},
@@ -108,7 +91,6 @@ def build_trace(
         "accepted_actions": accepted_list,
         "decisions": decisions_list,
         "successor_graph": serialize_graph_snapshot(successor_graph),
-        "execution_digest": stable_json_hash(execution_projection),
         "summary": {
             "enabled_count": len(enabled_list),
             "scheduled_count": len(schedule_list),
@@ -126,13 +108,16 @@ def save_trace(trace: Mapping[str, Any], path: str = "results/trace.json") -> No
 
 
 def load_trace(path: str = "results/trace.json") -> Dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as handle:
+    p = Path(path)
+    if not p.is_absolute() and not p.exists():
+        p = Path(__file__).resolve().parent.parent / p
+    with open(p, "r", encoding="utf-8") as handle:
         return json.load(handle)
 
 
 if __name__ == "__main__":
     graph = Graph()
-    graph.parse("shapes/base_graph.ttl", format="turtle")
+    graph.parse("base_graph.ttl", format="turtle")
     snapshot = serialize_graph_snapshot(graph)
     rebuilt = graph_from_snapshot(snapshot)
 

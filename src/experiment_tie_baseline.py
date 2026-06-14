@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import random
+
 from baseline_scheduler import nondeterministic_tie_schedule
 from dataset_builder import build_dataset, load_state
 from experiment_helpers import tie_conflict_events
@@ -9,16 +11,19 @@ from rule_loader import load_rules
 from trace import graph_digest
 
 
-def run_tie_baseline_once(events=None):
+BASELINE_PREFIX_KEYS = ("roleRank", "priority", "tsKey")
+
+
+def run_tie_baseline_once(seed: int | None = None):
     settings = load_settings("configs/settings.json")
     context = resolve_governance_context(settings=settings, contexts_path="data/contexts.json")
     graph_t = load_state("shapes/base_graph.ttl")
     rules = load_rules("configs/rules.json")
-    event_list = tie_conflict_events() if events is None else events
 
-    dataset, window_meta = build_dataset(graph_t, event_list, settings=settings)
+    dataset, window_meta = build_dataset(graph_t, tie_conflict_events(), settings=settings)
     enabled = evaluate_rules(dataset, rules, settings=settings, context=context, window_meta=window_meta)
-    schedule = nondeterministic_tie_schedule(enabled)
+    rng = random.Random(seed) if seed is not None else None
+    schedule = nondeterministic_tie_schedule(enabled, prefix_keys=BASELINE_PREFIX_KEYS, rng=rng)
 
     accepted, graph_next, decisions = resolve_actions(
         graph_t,
@@ -33,8 +38,8 @@ def run_tie_baseline_once(events=None):
 def run_tie_baseline_experiment(runs: int = 30):
     digests = []
 
-    for _ in range(runs):
-        graph_next, _, _ = run_tie_baseline_once()
+    for seed in range(runs):
+        graph_next, _, _ = run_tie_baseline_once(seed=seed)
         digests.append(graph_digest(graph_next))
 
     unique = sorted(set(digests))

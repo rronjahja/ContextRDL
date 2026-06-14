@@ -1,0 +1,108 @@
+{
+  "singles_total": 12,
+  "singles_failed": 0,
+  "pairs_total": 49,
+  "pairs_failed": 0,
+  "overall_pass": true,
+  "details": {
+    "singles": [
+      {
+        "test": "setpoint_below_min_ZoneA",
+        "incremental": false,
+        "shacl": false,
+        "expected": false,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "setpoint_above_max_ZoneA",
+        "incremental": false,
+        "shacl": false,
+        "expected": false,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "setpoint_above_ZoneA_cap",
+        "incremental": false,
+        "shacl": false,
+        "expected": false,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "setpoint_at_ZoneA_cap_boundary",
+        "incremental": true,
+        "shacl": true,
+        "expected": true,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "vent_off_with_high_setpoint_ZoneA",
+        "incremental": false,
+        "shacl": false,
+        "expected": false,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "vent_invalid_mode_ZoneB",
+        "incremental": false,
+        "shacl": false,
+        "expected": false,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "emergency_true_but_vent_normal_ZoneC",
+        "incremental": false,
+        "shacl": false,
+        "expected": false,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "setpoint_at_lower_boundary",
+        "incremental": true,
+        "shacl": true,
+        "expected": true,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "setpoint_at_upper_boundary",
+        "incremental": true,
+        "shacl": true,
+        "expected": true,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "vent_emergency_valid",
+        "incremental": true,
+        "shacl": true,
+        "expected": true,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "setpoint_above_ZoneA_cap_by_one",
+        "incremental": false,
+        "shacl": false,
+        "expected": false,
+        "agree": true,
+        "expectation_met": true
+      },
+      {
+        "test": "vent_off_at_exact_21_ZoneA",
+        "incremental": true,
+        "shacl": true,
+        "expected": true,
+        "agree": true,
+        "expectation_met": true
+      }
+    ],
+    "pair_failures": []
+  }
+}
