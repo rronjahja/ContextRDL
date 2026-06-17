@@ -10,7 +10,7 @@
         "returncode": 0,
         "stdout": "=== Single-perturbation results ===\n  [PASS] setpoint_below_min_ZoneA: inc=False shacl=False expected=False\n  [PASS] setpoint_above_max_ZoneA: inc=False shacl=False expected=False\n  [PASS] setpoint_above_ZoneA_cap: inc=False shacl=False expected=False\n  [PASS] setpoint_at_ZoneA_cap_boundary: inc=True shacl=True expected=True\n  [PASS] vent_off_with_high_setpoint_ZoneA: inc=False shacl=False expected=False\n  [PASS] vent_invalid_mode_ZoneB: inc=False shacl=False expected=False\n  [PASS] emergency_true_but_vent_normal_ZoneC: inc=False shacl=False expected=False\n  [PASS] setpoint_at_lower_boundary: inc=True shacl=True expected=True\n  [PASS] setpoint_at_upper_boundary: inc=True shacl=True expected=True\n  [PASS] vent_emergency_valid: inc=True shacl=True expected=True\n  [PASS] setpoint_above_ZoneA_cap_by_one: inc=False shacl=False expected=False\n  [PASS] vent_off_at_exact_21_ZoneA: inc=True shacl=True expected=True\n\n=== Pair perturbations: 49 total, 0 disagreements ===\n\nALL PASSED: 12 singles + 49 pairs.\n",
         "stderr": "",
-        "elapsed_s": 1.658
+        "elapsed_s": 1.478
       },
       {
         "name": "test_resolver_equivalence",
@@ -21,7 +21,7 @@
         "returncode": 0,
         "stdout": "[PASS] default: accepted=True decisions=True digest=True\n[PASS] governance_reversed: accepted=True decisions=True digest=True\n[PASS] tie_conflict: accepted=True decisions=True digest=True\n[PASS] governance_conflict: accepted=True decisions=True digest=True\n[PASS] governance_conflict_reversed: accepted=True decisions=True digest=True\n[PASS] duplicate_identity: accepted=True decisions=True digest=True\n\nALL PASSED: 6 workloads match original resolver.\n",
         "stderr": "",
-        "elapsed_s": 0.687
+        "elapsed_s": 0.558
       },
       {
         "name": "experiment_pyshacl_baseline",
@@ -30,9 +30,9 @@
           "experiment_pyshacl_baseline.py"
         ],
         "returncode": 0,
-        "stdout": "\n== Workload: default  (enabled_count=8) ==\n  strategy                         unique  admissible%  meanAccepted   meanRt(ms)\n  A_ours                                1       100.0%          5.00         3.06\n  B_shacl_gated_no_shadow               1       100.0%          6.00       140.06\n  C_posthoc_random                      8        23.3%          8.00         1.54\n\n== Workload: tie_conflict  (enabled_count=3) ==\n  strategy                         unique  admissible%  meanAccepted   meanRt(ms)\n  A_ours                                1       100.0%          2.00         1.78\n  B_shacl_gated_no_shadow               1       100.0%          3.00        51.05\n  C_posthoc_random                      2       100.0%          3.00         1.06\n\n== Workload: governance_conflict  (enabled_count=3) ==\n  strategy                         unique  admissible%  meanAccepted   meanRt(ms)\n  A_ours                                1       100.0%          2.00         1.30\n  B_shacl_gated_no_shadow               1       100.0%          3.00        53.48\n  C_posthoc_random                      2       100.0%          3.00         0.68\n\nWrote results/experiment_pyshacl_baseline.json\n",
+        "stdout": "\n== Workload: default  (enabled_count=8) ==\n  strategy                         unique  admissible%  meanAccepted   meanRt(ms)\n  A_ours                                1       100.0%          5.00         2.68\n  B_shacl_gated_no_shadow               1       100.0%          6.00       133.68\n  C_posthoc_random                      8        23.3%          8.00         1.33\n\n== Workload: tie_conflict  (enabled_count=3) ==\n  strategy                         unique  admissible%  meanAccepted   meanRt(ms)\n  A_ours                                1       100.0%          2.00         1.13\n  B_shacl_gated_no_shadow               1       100.0%          3.00        48.85\n  C_posthoc_random                      2       100.0%          3.00         0.64\n\n== Workload: governance_conflict  (enabled_count=3) ==\n  strategy                         unique  admissible%  meanAccepted   meanRt(ms)\n  A_ours                                1       100.0%          2.00         1.09\n  B_shacl_gated_no_shadow               1       100.0%          3.00        50.10\n  C_posthoc_random                      2       100.0%          3.00         1.15\n\nWrote results/experiment_pyshacl_baseline.json\n",
         "stderr": "",
-        "elapsed_s": 13.012
+        "elapsed_s": 12.022
       },
       {
         "name": "experiment_determinism_stress",
@@ -43,7 +43,7 @@
         "returncode": 0,
         "stdout": "   N    unique(ours)   unique(shuffle)\n   2               1                 2\n   4               1                 4\n   8               1                 7\n  16               1                 9\n  32               1                 9\n  64               1                 9\n\nWrote results/experiment_determinism_stress.json\n",
         "stderr": "",
-        "elapsed_s": 0.647
+        "elapsed_s": 0.558
       },
       {
         "name": "experiment_scalability_v2",
@@ -51,10 +51,10 @@
           "C:\\Users\\Rron\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
           "experiment_scalability_v2.py"
         ],
-        "returncode": 0,
-        "stdout": "N=   10  orig=   0.012s  new=   0.001s  speedup=15.46x  [OK]\nN=   50  orig=   0.268s  new=   0.005s  speedup=52.03x  [OK]\nN=  100  orig=   1.058s  new=   0.009s  speedup=114.23x  [OK]\nN=  200  orig=   4.227s  new=   0.016s  speedup=263.41x  [OK]\nN=  400  orig=  16.620s  new=   0.029s  speedup=571.2x  [OK]\nN=  800  orig=  67.698s  new=   0.058s  speedup=1176.3x  [OK]\n\nWrote results/experiment_scalability_v2.csv and .json\n",
-        "stderr": "",
-        "elapsed_s": 91.404
+        "returncode": 2,
+        "stdout": "",
+        "stderr": "C:\\Users\\Rron\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe: can't open file 'C:\\\\Users\\\\Rron\\\\Documents\\\\python\\\\context-rdl\\\\ContextRDL\\\\src\\\\experiment_scalability_v2.py': [Errno 2] No such file or directory\n",
+        "elapsed_s": 0.022
       },
       {
         "name": "experiment_governance_v2",
@@ -65,7 +65,7 @@
         "returncode": 0,
         "stdout": "\n=== default (operator > occupant) ===\nschedule order:  ['A_unsafe', 'A_op', 'A_occ']\naccepted:        ['A_op']\nZoneA setpoint:  23.0\ndigest:          e8e977acd657fa74\n  A_unsafe: accepted=0      value= 24.0  reason=inadmissible\n  A_op: accepted=1      value= 23.0  reason=admissible\n  A_occ: accepted=0      value= 22.0  reason=shadowed_by_prior_accepted_action\n\n=== reversed (occupant > operator) ===\nschedule order:  ['A_occ', 'A_unsafe', 'A_op']\naccepted:        ['A_occ']\nZoneA setpoint:  22.0\ndigest:          577c53aa6de8be6b\n  A_occ: accepted=1      value= 22.0  reason=admissible\n  A_unsafe: accepted=0      value= 24.0  reason=shadowed_by_prior_accepted_action\n  A_op: accepted=0      value= 23.0  reason=shadowed_by_prior_accepted_action\n\nWrote results/experiment_governance_v2.json\n",
         "stderr": "",
-        "elapsed_s": 0.258
+        "elapsed_s": 0.172
       },
       {
         "name": "experiment_trace_integrity",
@@ -76,7 +76,7 @@
         "returncode": 0,
         "stdout": "Recorded trace replay:        SKIPPED (results/trace.json not found; run engine.py first)\nFresh round-trip replay:      enabled=OK schedule=OK accepted=OK decisions=OK digest=OK\n\nWrote results/experiment_trace_integrity.json\n",
         "stderr": "",
-        "elapsed_s": 0.478
+        "elapsed_s": 0.352
       }
     ]
   },
@@ -249,7 +249,7 @@
             "unique_successor_states": 1,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 5,
-            "mean_runtime_s": 0.0030580100001922498
+            "mean_runtime_s": 0.002681629992245386
           },
           {
             "strategy": "B_shacl_gated_no_shadow",
@@ -257,7 +257,7 @@
             "unique_successor_states": 1,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 6,
-            "mean_runtime_s": 0.14006414999991346
+            "mean_runtime_s": 0.1336757433329088
           },
           {
             "strategy": "C_posthoc_random",
@@ -265,7 +265,7 @@
             "unique_successor_states": 8,
             "admissible_fraction": 0.23333333333333334,
             "mean_accepted_count": 8,
-            "mean_runtime_s": 0.0015367966688548526
+            "mean_runtime_s": 0.0013273533356065552
           }
         ]
       },
@@ -279,7 +279,7 @@
             "unique_successor_states": 1,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 2,
-            "mean_runtime_s": 0.00177956332724231
+            "mean_runtime_s": 0.0011295733352502187
           },
           {
             "strategy": "B_shacl_gated_no_shadow",
@@ -287,7 +287,7 @@
             "unique_successor_states": 1,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 3,
-            "mean_runtime_s": 0.05104829999618232
+            "mean_runtime_s": 0.048852760003258784
           },
           {
             "strategy": "C_posthoc_random",
@@ -295,7 +295,7 @@
             "unique_successor_states": 2,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 3,
-            "mean_runtime_s": 0.001056286667396004
+            "mean_runtime_s": 0.0006423599901609123
           }
         ]
       },
@@ -309,7 +309,7 @@
             "unique_successor_states": 1,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 2,
-            "mean_runtime_s": 0.0013005900002705554
+            "mean_runtime_s": 0.0010850866596835355
           },
           {
             "strategy": "B_shacl_gated_no_shadow",
@@ -317,7 +317,7 @@
             "unique_successor_states": 1,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 3,
-            "mean_runtime_s": 0.05347749333595857
+            "mean_runtime_s": 0.0500964866601862
           },
           {
             "strategy": "C_posthoc_random",
@@ -325,7 +325,7 @@
             "unique_successor_states": 2,
             "admissible_fraction": 1.0,
             "mean_accepted_count": 3,
-            "mean_runtime_s": 0.000679416669299826
+            "mean_runtime_s": 0.0011547599996750554
           }
         ]
       }

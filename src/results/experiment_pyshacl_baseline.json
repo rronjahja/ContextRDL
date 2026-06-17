@@ -11,7 +11,7 @@
           "unique_successor_states": 1,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 5,
-          "mean_runtime_s": 0.0030580100001922498
+          "mean_runtime_s": 0.002681629992245386
         },
         {
           "strategy": "B_shacl_gated_no_shadow",
@@ -19,7 +19,7 @@
           "unique_successor_states": 1,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 6,
-          "mean_runtime_s": 0.14006414999991346
+          "mean_runtime_s": 0.1336757433329088
         },
         {
           "strategy": "C_posthoc_random",
@@ -27,7 +27,7 @@
           "unique_successor_states": 8,
           "admissible_fraction": 0.23333333333333334,
           "mean_accepted_count": 8,
-          "mean_runtime_s": 0.0015367966688548526
+          "mean_runtime_s": 0.0013273533356065552
         }
       ]
     },
@@ -41,7 +41,7 @@
           "unique_successor_states": 1,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 2,
-          "mean_runtime_s": 0.00177956332724231
+          "mean_runtime_s": 0.0011295733352502187
         },
         {
           "strategy": "B_shacl_gated_no_shadow",
@@ -49,7 +49,7 @@
           "unique_successor_states": 1,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 3,
-          "mean_runtime_s": 0.05104829999618232
+          "mean_runtime_s": 0.048852760003258784
         },
         {
           "strategy": "C_posthoc_random",
@@ -57,7 +57,7 @@
           "unique_successor_states": 2,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 3,
-          "mean_runtime_s": 0.001056286667396004
+          "mean_runtime_s": 0.0006423599901609123
         }
       ]
     },
@@ -71,7 +71,7 @@
           "unique_successor_states": 1,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 2,
-          "mean_runtime_s": 0.0013005900002705554
+          "mean_runtime_s": 0.0010850866596835355
         },
         {
           "strategy": "B_shacl_gated_no_shadow",
@@ -79,7 +79,7 @@
           "unique_successor_states": 1,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 3,
-          "mean_runtime_s": 0.05347749333595857
+          "mean_runtime_s": 0.0500964866601862
         },
         {
           "strategy": "C_posthoc_random",
@@ -87,7 +87,7 @@
           "unique_successor_states": 2,
           "admissible_fraction": 1.0,
           "mean_accepted_count": 3,
-          "mean_runtime_s": 0.000679416669299826
+          "mean_runtime_s": 0.0011547599996750554
         }
       ]
     }
