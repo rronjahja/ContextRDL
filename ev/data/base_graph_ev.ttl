@@ -1,0 +1,31 @@
+@prefix ex: <http://example.org/ev#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Four charging points. All start idle at 0 kW, connectors free.
+ex:CP1 a ex:ChargingPoint ;
+    ex:chargingPower "0"^^xsd:decimal ;
+    ex:connectorState "free" .
+
+ex:CP2 a ex:ChargingPoint ;
+    ex:chargingPower "0"^^xsd:decimal ;
+    ex:connectorState "free" .
+
+ex:CP3 a ex:ChargingPoint ;
+    ex:chargingPower "0"^^xsd:decimal ;
+    ex:connectorState "free" .
+
+ex:CP4 a ex:ChargingPoint ;
+    ex:chargingPower "0"^^xsd:decimal ;
+    ex:connectorState "free" .
+
+# Feeder shared by all charging points. 50 kW capacity budget.
+ex:Feeder1 a ex:Feeder ;
+    ex:feederState "normal" ;
+    ex:feederBudget "50"^^xsd:decimal .
+
+# Policy node: role-specific per-charging-point power caps.
+ex:Policy a ex:ControlPolicy ;
+    ex:driverMaxPower "22"^^xsd:decimal ;
+    ex:fleetMaxPower "22"^^xsd:decimal ;
+    ex:gridMaxPower "22"^^xsd:decimal ;
+    ex:minPower "0"^^xsd:decimal .
