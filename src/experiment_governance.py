@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from numpy import trace
 from rdflib import URIRef
 
 from engine import run_engine
 from experiment_helpers import governance_conflict_events
-
+from trace import save_trace
 
 CURRENT_SETPOINT = URIRef("http://example.org/building#currentSetpoint")
 ZONE_B = URIRef("http://example.org/building#ZoneB")
@@ -32,6 +33,9 @@ def run_case(name: str, operator_rank: int, occupant_rank: int):
         save_trace_file=False,
     )
 
+    trace_file = "results/trace_governance_conflict_%d_%d.json" % (operator_rank, occupant_rank)
+    save_trace(trace, trace_file)
+    print("Saved trace:", trace_file)
     final_zone_b = _zone_value(graph_next, ZONE_B, CURRENT_SETPOINT)
 
     print(f"\n{name}")
