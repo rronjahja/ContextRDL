@@ -1,0 +1,70 @@
+{
+  "rows": [
+    {
+      "actions": 10,
+      "accepted_orig": 10,
+      "accepted_new": 10,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "67d43a6735b5498cc413460a4f65b2c9eb0c347fea34fe2dc59dae0c3ef4bc38",
+      "time_seconds_orig": 0.012435,
+      "time_seconds_new": 0.000804,
+      "speedup_x": 15.46
+    },
+    {
+      "actions": 50,
+      "accepted_orig": 50,
+      "accepted_new": 50,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "045b6e716b370b5402e9892a0e11f0936a6f18ff5de8386bf7442615fdb12838",
+      "time_seconds_orig": 0.267887,
+      "time_seconds_new": 0.005149,
+      "speedup_x": 52.03
+    },
+    {
+      "actions": 100,
+      "accepted_orig": 100,
+      "accepted_new": 100,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "887f39ac7f9084720dc3d542474e28c635a36a15641ae16bda7bf2841d9db623",
+      "time_seconds_orig": 1.057669,
+      "time_seconds_new": 0.009259,
+      "speedup_x": 114.23
+    },
+    {
+      "actions": 200,
+      "accepted_orig": 200,
+      "accepted_new": 200,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "75569763d9d6740452cdb75f18d05da6e9b5d61a93afb42f0f138d90048ab01c",
+      "time_seconds_orig": 4.227264,
+      "time_seconds_new": 0.016048,
+      "speedup_x": 263.41
+    },
+    {
+      "actions": 400,
+      "accepted_orig": 400,
+      "accepted_new": 400,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "03559af84f4de0b0f340751e6acbc9beb4828b289b37c02b23a929c935d5abc5",
+      "time_seconds_orig": 16.620066,
+      "time_seconds_new": 0.029097,
+      "speedup_x": 571.2
+    },
+    {
+      "actions": 800,
+      "accepted_orig": 800,
+      "accepted_new": 800,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "1fb5461e3a650665b12e755d51632f478fc3316079055abf4ec76da81b6e84e7",
+      "time_seconds_orig": 67.697788,
+      "time_seconds_new": 0.057551,
+      "speedup_x": 1176.3
+    }
+  ]
+}

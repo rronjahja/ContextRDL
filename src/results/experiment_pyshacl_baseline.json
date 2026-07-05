@@ -1,0 +1,95 @@
+{
+  "workload_runs_each": 30,
+  "workloads": [
+    {
+      "workload": "default",
+      "enabled_count": 8,
+      "strategies": [
+        {
+          "strategy": "A_ours",
+          "runs": 30,
+          "unique_successor_states": 1,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 5,
+          "mean_runtime_s": 0.0030580100001922498
+        },
+        {
+          "strategy": "B_shacl_gated_no_shadow",
+          "runs": 30,
+          "unique_successor_states": 1,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 6,
+          "mean_runtime_s": 0.14006414999991346
+        },
+        {
+          "strategy": "C_posthoc_random",
+          "runs": 30,
+          "unique_successor_states": 8,
+          "admissible_fraction": 0.23333333333333334,
+          "mean_accepted_count": 8,
+          "mean_runtime_s": 0.0015367966688548526
+        }
+      ]
+    },
+    {
+      "workload": "tie_conflict",
+      "enabled_count": 3,
+      "strategies": [
+        {
+          "strategy": "A_ours",
+          "runs": 30,
+          "unique_successor_states": 1,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 2,
+          "mean_runtime_s": 0.00177956332724231
+        },
+        {
+          "strategy": "B_shacl_gated_no_shadow",
+          "runs": 30,
+          "unique_successor_states": 1,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 3,
+          "mean_runtime_s": 0.05104829999618232
+        },
+        {
+          "strategy": "C_posthoc_random",
+          "runs": 30,
+          "unique_successor_states": 2,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 3,
+          "mean_runtime_s": 0.001056286667396004
+        }
+      ]
+    },
+    {
+      "workload": "governance_conflict",
+      "enabled_count": 3,
+      "strategies": [
+        {
+          "strategy": "A_ours",
+          "runs": 30,
+          "unique_successor_states": 1,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 2,
+          "mean_runtime_s": 0.0013005900002705554
+        },
+        {
+          "strategy": "B_shacl_gated_no_shadow",
+          "runs": 30,
+          "unique_successor_states": 1,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 3,
+          "mean_runtime_s": 0.05347749333595857
+        },
+        {
+          "strategy": "C_posthoc_random",
+          "runs": 30,
+          "unique_successor_states": 2,
+          "admissible_fraction": 1.0,
+          "mean_accepted_count": 3,
+          "mean_runtime_s": 0.000679416669299826
+        }
+      ]
+    }
+  ]
+}
