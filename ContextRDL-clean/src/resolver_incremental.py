@@ -158,43 +158,7 @@ def resolve_actions_incremental(
         if record_digests:
             decision["pre_graph_digest"] = pre_digest
 
-        # Gate order follows Definition 8 exactly:
-        # (i) role filter, (ii) policy guard, (iii) conflict gate,
-        # (iv) admissibility.
-
-        # --- Gate (i): role filter ---
-        governance_cfg = (settings or {}).get("governance", {})
-        active_roles = governance_cfg.get("active_roles")
-        if governance_cfg.get("enforce_active_roles") and active_roles is not None \
-                and str(action.get("role")) not in active_roles:
-            decision.update({"accepted": False, "reason": "inactive_role"})
-            if record_digests:
-                decision.update({
-                    "post_graph_digest": pre_digest,
-                    "removed_triples": [],
-                    "inserted_triples": [],
-                })
-            decisions.append(decision)
-            continue
-
-        # --- Gate (ii): policy guard ---
-        pg_ok, pg_reason = check_policy_guard(current_graph, action)
-        if not pg_ok:
-            decision.update({
-                "accepted": False,
-                "reason": pg_reason,
-                "policy_reason": pg_reason,
-            })
-            if record_digests:
-                decision.update({
-                    "post_graph_digest": pre_digest,
-                    "removed_triples": [],
-                    "inserted_triples": [],
-                })
-            decisions.append(decision)
-            continue
-
-        # --- Gate (iii): first-writer-wins shadowing ---
+        # --- Gate 1: first-writer-wins shadowing ---
         if conflict_policy == "first_writer_wins" and target_key in accepted_targets:
             winner = accepted_targets[target_key]
             decision.update({
@@ -212,7 +176,24 @@ def resolve_actions_incremental(
             decisions.append(decision)
             continue
 
-        # --- Gate (iv): admissibility (in place, undo on reject) ---
+        # --- Gate 2: policy guard ---
+        pg_ok, pg_reason = check_policy_guard(current_graph, action)
+        if not pg_ok:
+            decision.update({
+                "accepted": False,
+                "reason": pg_reason,
+                "policy_reason": pg_reason,
+            })
+            if record_digests:
+                decision.update({
+                    "post_graph_digest": pre_digest,
+                    "removed_triples": [],
+                    "inserted_triples": [],
+                })
+            decisions.append(decision)
+            continue
+
+        # --- Gate 3: admissibility (in place, undo on reject) ---
         old_triples = list(current_graph.triples((zone, predicate, None)))
         new_triple = (zone, predicate, new_literal)
         for t in old_triples:

@@ -106,19 +106,14 @@ def resolve_actions(
             "pre_graph_digest": pre_digest,
         }
 
-        # Gate order follows Definition 8 exactly:
-        # (i) role filter, (ii) policy guard, (iii) conflict gate,
-        # (iv) admissibility. (Earlier revisions applied the conflict gate
-        # before the policy guard; the accepted set and successor digest are
-        # unaffected, but recorded reason codes are part of the trace, so
-        # the order is normative and fixed by the execution configuration.)
-        active_roles = governance_cfg.get("active_roles")
-        if governance_cfg.get("enforce_active_roles") and active_roles is not None \
-                and str(action.get("role")) not in active_roles:
+        if conflict_policy == "first_writer_wins" and target_key in accepted_targets:
+            winner = accepted_targets[target_key]
             decision.update(
                 {
                     "accepted": False,
-                    "reason": "inactive_role",
+                    "reason": "shadowed_by_prior_accepted_action",
+                    "blocked_by_aid": winner["aid"],
+                    "blocked_by_rid": winner["rid"],
                     "post_graph_digest": pre_digest,
                     "removed_triples": [],
                     "inserted_triples": [],
@@ -134,22 +129,6 @@ def resolve_actions(
                     "accepted": False,
                     "reason": policy_reason,
                     "policy_reason": policy_reason,
-                    "post_graph_digest": pre_digest,
-                    "removed_triples": [],
-                    "inserted_triples": [],
-                }
-            )
-            decisions.append(decision)
-            continue
-
-        if conflict_policy == "first_writer_wins" and target_key in accepted_targets:
-            winner = accepted_targets[target_key]
-            decision.update(
-                {
-                    "accepted": False,
-                    "reason": "shadowed_by_prior_accepted_action",
-                    "blocked_by_aid": winner["aid"],
-                    "blocked_by_rid": winner["rid"],
                     "post_graph_digest": pre_digest,
                     "removed_triples": [],
                     "inserted_triples": [],

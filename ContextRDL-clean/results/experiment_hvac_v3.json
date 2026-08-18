@@ -1,0 +1,199 @@
+{
+  "runs_per_strategy": 30,
+  "baseline": [
+    {
+      "workload": "default",
+      "enabled_count": 8,
+      "strategies": [
+        {
+          "strategy": "Ours",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 5,
+          "mean_runtime_ms": 2.64,
+          "sd_runtime_ms": 0.2
+        },
+        {
+          "strategy": "SHACL-gated, no shadowing",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 6,
+          "mean_runtime_ms": 134.65,
+          "sd_runtime_ms": 5.66
+        },
+        {
+          "strategy": "Deterministic-order, no admissibility",
+          "unique_states": 1,
+          "admissible_pct": 0.0,
+          "mean_committed": 8,
+          "mean_runtime_ms": 1.49,
+          "sd_runtime_ms": 0.38
+        },
+        {
+          "strategy": "Random-order, no admissibility",
+          "unique_states": 8,
+          "admissible_pct": 23.3,
+          "mean_committed": 8,
+          "mean_runtime_ms": 1.49,
+          "sd_runtime_ms": 0.67
+        }
+      ]
+    },
+    {
+      "workload": "tie conflict",
+      "enabled_count": 3,
+      "strategies": [
+        {
+          "strategy": "Ours",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 2,
+          "mean_runtime_ms": 1.09,
+          "sd_runtime_ms": 0.06
+        },
+        {
+          "strategy": "SHACL-gated, no shadowing",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 3,
+          "mean_runtime_ms": 49.78,
+          "sd_runtime_ms": 3.74
+        },
+        {
+          "strategy": "Deterministic-order, no admissibility",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 3,
+          "mean_runtime_ms": 0.69,
+          "sd_runtime_ms": 0.37
+        },
+        {
+          "strategy": "Random-order, no admissibility",
+          "unique_states": 2,
+          "admissible_pct": 100.0,
+          "mean_committed": 3,
+          "mean_runtime_ms": 0.62,
+          "sd_runtime_ms": 0.17
+        }
+      ]
+    },
+    {
+      "workload": "governance conflict",
+      "enabled_count": 3,
+      "strategies": [
+        {
+          "strategy": "Ours",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 2,
+          "mean_runtime_ms": 1.22,
+          "sd_runtime_ms": 0.4
+        },
+        {
+          "strategy": "SHACL-gated, no shadowing",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 3,
+          "mean_runtime_ms": 50.03,
+          "sd_runtime_ms": 3.81
+        },
+        {
+          "strategy": "Deterministic-order, no admissibility",
+          "unique_states": 1,
+          "admissible_pct": 100.0,
+          "mean_committed": 3,
+          "mean_runtime_ms": 0.64,
+          "sd_runtime_ms": 0.15
+        },
+        {
+          "strategy": "Random-order, no admissibility",
+          "unique_states": 2,
+          "admissible_pct": 100.0,
+          "mean_committed": 3,
+          "mean_runtime_ms": 0.65,
+          "sd_runtime_ms": 0.22
+        }
+      ]
+    }
+  ],
+  "r26_committed_order": {
+    "committed_in_order": [
+      {
+        "rid": "r6",
+        "zone": "ZoneC",
+        "predicate": "ventilationMode",
+        "value": "emergency"
+      },
+      {
+        "rid": "r5",
+        "zone": "ZoneC",
+        "predicate": "emergencyState",
+        "value": true
+      },
+      {
+        "rid": "r2",
+        "zone": "ZoneA",
+        "predicate": "currentSetpoint",
+        "value": 21.0
+      },
+      {
+        "rid": "r7",
+        "zone": "ZoneB",
+        "predicate": "currentSetpoint",
+        "value": 22.0
+      },
+      {
+        "rid": "r8",
+        "zone": "ZoneA",
+        "predicate": "ventilationMode",
+        "value": "off"
+      },
+      {
+        "rid": "r4",
+        "zone": "ZoneB",
+        "predicate": "currentSetpoint",
+        "value": 21.0
+      }
+    ],
+    "sixth_committed_rid": "r4"
+  },
+  "replay": {
+    "default": {
+      "enabled_match": true,
+      "schedule_match": true,
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "overall_pass": true,
+      "enabled_count": 8
+    },
+    "tie conflict": {
+      "enabled_match": true,
+      "schedule_match": true,
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "overall_pass": true,
+      "enabled_count": 3
+    },
+    "governance (op > occ)": {
+      "enabled_match": true,
+      "schedule_match": true,
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "overall_pass": true,
+      "enabled_count": 3
+    },
+    "governance (occ > occ reversed)": {
+      "enabled_match": true,
+      "schedule_match": true,
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "overall_pass": true,
+      "enabled_count": 3
+    }
+  },
+  "replay_error": null
+}

@@ -32,11 +32,6 @@ ALLOWED_VENTILATION = {"off", "normal", "high", "emergency"}
 _DEFAULT_SHAPES_PATH = os.environ.get("SHAPES_PATH", "shapes/invariants.ttl")
 
 
-def _is_decimal(value) -> bool:
-    from decimal import Decimal
-    return isinstance(value, Decimal)
-
-
 def _fmt(node) -> str:
     try:
         return node.n3()
@@ -128,17 +123,12 @@ def check_admissibility_incremental(
                 f"ZoneSetpointShape: {_fmt(zone)} currentSetpoint cardinality != 1 (found {len(setpoints)})"
             )
         else:
-            # SHACL sh:minInclusive/sh:maxInclusive violate when the value
-            # node is not comparable with a numeric bound. A plain (string)
-            # literal such as "22" therefore violates, even though float()
-            # would coerce it. Divergence found by differential testing
-            # (test_validator_differential.py); mirror SHACL exactly.
-            raw_sp = setpoints[0].toPython() if hasattr(setpoints[0], "toPython") else setpoints[0]
-            if isinstance(raw_sp, bool) or not isinstance(raw_sp, (int, float)) and not _is_decimal(raw_sp):
+            try:
+                sp_value = float(setpoints[0].toPython())
+            except Exception:
                 violations.append(f"ZoneSetpointShape: {_fmt(zone)} setpoint not numeric")
                 sp_value = None
             else:
-                sp_value = float(raw_sp)
                 if sp_value < 18.0:
                     violations.append(f"ZoneSetpointShape: {_fmt(zone)} setpoint {sp_value} < 18.0")
                 if sp_value > 26.0:

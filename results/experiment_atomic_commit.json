@@ -1,0 +1,40 @@
+{
+  "none": {
+    "committed": "fae2faf51d0f02e4a9b118a5f915231f",
+    "consistent": true,
+    "reason": "verified",
+    "step_id": "fae2faf51d0f02e4a9b118a5f915231f"
+  },
+  "after_trace": {
+    "current_after_crash": null,
+    "recovery": {
+      "committed_step": null,
+      "discarded_incomplete_steps": [
+        "fae2faf51d0f02e4a9b118a5f915231f"
+      ],
+      "verification": {
+        "consistent": true,
+        "reason": "empty store"
+      }
+    },
+    "invariant_holds": true
+  },
+  "after_state": {
+    "current_after_crash": null,
+    "recovery": {
+      "committed_step": null,
+      "discarded_incomplete_steps": [
+        "fae2faf51d0f02e4a9b118a5f915231f"
+      ],
+      "verification": {
+        "consistent": true,
+        "reason": "empty store"
+      }
+    },
+    "invariant_holds": true
+  },
+  "duplicate": {
+    "refused": true,
+    "message": "duplicate step fae2faf51d0f02e4a9b118a5f915231f: already committed (idempotence guard)"
+  }
+}

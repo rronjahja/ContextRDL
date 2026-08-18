@@ -1,0 +1,81 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix ex: <http://example.org/ev#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# --- Target-local shapes (depend only on one charging point) ---
+
+# Per-charging-point power must be present, single-valued, and within [0, 22] kW.
+ex:ChargingPowerShape a sh:NodeShape ;
+    sh:targetClass ex:ChargingPoint ;
+    sh:property [
+        sh:path ex:chargingPower ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0.0 ;
+        sh:maxInclusive 22.0 ;
+    ] .
+
+# Connector state must be present, single-valued, from an enumerated set.
+ex:ConnectorStateShape a sh:NodeShape ;
+    sh:targetClass ex:ChargingPoint ;
+    sh:property [
+        sh:path ex:connectorState ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "free" "occupied" "charging" "outOfService" ) ;
+    ] .
+
+# Feeder state must be present, single-valued, from an enumerated set.
+ex:FeederStateShape a sh:NodeShape ;
+    sh:targetClass ex:Feeder ;
+    sh:property [
+        sh:path ex:feederState ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "normal" "curtailed" ) ;
+    ] .
+
+# --- Cross-target shape 1: feeder budget ---
+# Sum of chargingPower over all charging points must not exceed the feeder budget.
+# This depends on the values of several targets at once, so admissibility must be
+# evaluated over sets of actions, not pairs.
+ex:FeederBudgetShape a sh:NodeShape ;
+    sh:targetNode ex:Feeder1 ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Sum of chargingPower over all charging points exceeds the feeder budget." ;
+        sh:select """
+            PREFIX ex: <http://example.org/ev#>
+            SELECT $this
+            WHERE {
+                {
+                    SELECT (SUM(?p) AS ?total) WHERE {
+                        ?cp a ex:ChargingPoint ;
+                            ex:chargingPower ?p .
+                    }
+                }
+                $this ex:feederBudget ?b .
+                FILTER (?total > ?b)
+            }
+        """ ;
+    ] .
+
+# --- Cross-target shape 2: emergency curtailment consistency ---
+# When the feeder is curtailed, every charging point must be at most 5 kW.
+# Couples the feeder state to every charging point.
+ex:CurtailmentConsistencyShape a sh:NodeShape ;
+    sh:targetNode ex:Feeder1 ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "When the feeder is curtailed, every chargingPower must be at most 5 kW." ;
+        sh:select """
+            PREFIX ex: <http://example.org/ev#>
+            SELECT $this
+            WHERE {
+                $this ex:feederState "curtailed" .
+                ?cp a ex:ChargingPoint ;
+                    ex:chargingPower ?p .
+                FILTER (?p > 5.0)
+            }
+        """ ;
+    ] .

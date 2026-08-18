@@ -1,0 +1,277 @@
+{
+  "valid": {
+    "scenario": "valid",
+    "start_admissible": true,
+    "start_violations": null,
+    "enabled": 8,
+    "accepted": 5,
+    "accepted_rids": [
+      "r6",
+      "r5",
+      "r2",
+      "r7",
+      "r8"
+    ],
+    "final_admissible": true,
+    "recovered": false,
+    "successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+    "decisions": [
+      {
+        "order": 1,
+        "rid": "r6",
+        "target": "ventilationMode",
+        "value": "emergency",
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 2,
+        "rid": "r5",
+        "target": "emergencyState",
+        "value": true,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 3,
+        "rid": "r2",
+        "target": "currentSetpoint",
+        "value": 21.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 4,
+        "rid": "r3",
+        "target": "ventilationMode",
+        "value": "high",
+        "accepted": false,
+        "reason": "shadowed_by_prior_accepted_action"
+      },
+      {
+        "order": 5,
+        "rid": "r7",
+        "target": "currentSetpoint",
+        "value": 22.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 6,
+        "rid": "r8",
+        "target": "ventilationMode",
+        "value": "off",
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 7,
+        "rid": "r1",
+        "target": "currentSetpoint",
+        "value": 24.0,
+        "accepted": false,
+        "reason": "policy_role_cap_violation:occupant:24.0 > 23.0"
+      },
+      {
+        "order": 8,
+        "rid": "r4",
+        "target": "currentSetpoint",
+        "value": 21.0,
+        "accepted": false,
+        "reason": "shadowed_by_prior_accepted_action"
+      }
+    ]
+  },
+  "single_violation": {
+    "scenario": "single_violation",
+    "start_admissible": false,
+    "start_violations": [
+      "Results (1):",
+      "Constraint Violation in MaxInclusiveConstraintComponent (http://www.w3.org/ns/shacl#MaxInclusiveConstraintComponent):",
+      "\tSeverity: sh:Violation",
+      "\tSource Shape: [ sh:maxInclusive Literal(\"23.0\", datatype=xsd:decimal) ; sh:path ex:currentSetpoint ]",
+      "\tFocus Node: ex:ZoneA",
+      "\tValue Node: Literal(\"25.0\", datatype=xsd:decimal)",
+      "\tResult Path: ex:currentSetpoint",
+      "\tMessage: Value is not <= Literal(\"23.0\", datatype=xsd:decimal)"
+    ],
+    "enabled": 8,
+    "accepted": 4,
+    "accepted_rids": [
+      "r2",
+      "r3",
+      "r7",
+      "r8"
+    ],
+    "final_admissible": true,
+    "recovered": true,
+    "successor_digest": "1ac8a213fb69fc1a15c817aded5471f3077da94e4f1d84d11d7de5f4be3a8ddd",
+    "decisions": [
+      {
+        "order": 1,
+        "rid": "r6",
+        "target": "ventilationMode",
+        "value": "emergency",
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 2,
+        "rid": "r5",
+        "target": "emergencyState",
+        "value": true,
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 3,
+        "rid": "r2",
+        "target": "currentSetpoint",
+        "value": 21.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 4,
+        "rid": "r3",
+        "target": "ventilationMode",
+        "value": "high",
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 5,
+        "rid": "r7",
+        "target": "currentSetpoint",
+        "value": 22.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 6,
+        "rid": "r8",
+        "target": "ventilationMode",
+        "value": "off",
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "order": 7,
+        "rid": "r1",
+        "target": "currentSetpoint",
+        "value": 27.0,
+        "accepted": false,
+        "reason": "policy_role_cap_violation:occupant:27.0 > 23.0"
+      },
+      {
+        "order": 8,
+        "rid": "r4",
+        "target": "currentSetpoint",
+        "value": 21.0,
+        "accepted": false,
+        "reason": "shadowed_by_prior_accepted_action"
+      }
+    ]
+  },
+  "double_violation": {
+    "scenario": "double_violation",
+    "start_admissible": false,
+    "start_violations": [
+      "Results (2):",
+      "Constraint Violation in MaxInclusiveConstraintComponent (http://www.w3.org/ns/shacl#MaxInclusiveConstraintComponent):",
+      "\tSeverity: sh:Violation",
+      "\tSource Shape: [ sh:maxInclusive Literal(\"23.0\", datatype=xsd:decimal) ; sh:path ex:currentSetpoint ]",
+      "\tFocus Node: ex:ZoneA",
+      "\tValue Node: Literal(\"25.0\", datatype=xsd:decimal)",
+      "\tResult Path: ex:currentSetpoint",
+      "\tMessage: Value is not <= Literal(\"23.0\", datatype=xsd:decimal)",
+      "Constraint Violation in SPARQLConstraintComponent (http://www.w3.org/ns/shacl#SPARQLConstraintComponent):",
+      "\tSeverity: sh:Violation",
+      "\tSource Shape: ex:EmergencyVentLockShape",
+      "\tFocus Node: ex:ZoneC",
+      "\tValue Node: ex:ZoneC",
+      "\tSource Constraint: [ rdf:type sh:SPARQLConstraint ; sh:message Literal(\"If emergencyState is true, ventilationMode must be emergency.\") ; sh:select Literal(\"",
+      "            PREFIX ex: <http://example.org/building#>",
+      "            SELECT $this",
+      "            WHERE {",
+      "                $this ex:emergencyState true ;",
+      "                      ex:ventilationMode ?m .",
+      "                FILTER (?m != \"emergency\")",
+      "            }",
+      "        \") ]",
+      "\tMessage: If emergencyState is true, ventilationMode must be emergency."
+    ],
+    "enabled": 8,
+    "accepted": 0,
+    "accepted_rids": [],
+    "final_admissible": false,
+    "recovered": false,
+    "successor_digest": "5dacec22f64c98869caea032aed070c7e10c29d2961bbf3f334c4ba678c3e3f0",
+    "decisions": [
+      {
+        "order": 1,
+        "rid": "r6",
+        "target": "ventilationMode",
+        "value": "emergency",
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 2,
+        "rid": "r5",
+        "target": "emergencyState",
+        "value": true,
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 3,
+        "rid": "r2",
+        "target": "currentSetpoint",
+        "value": 21.0,
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 4,
+        "rid": "r3",
+        "target": "ventilationMode",
+        "value": "high",
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 5,
+        "rid": "r7",
+        "target": "currentSetpoint",
+        "value": 22.0,
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 6,
+        "rid": "r8",
+        "target": "ventilationMode",
+        "value": "off",
+        "accepted": false,
+        "reason": "inadmissible"
+      },
+      {
+        "order": 7,
+        "rid": "r1",
+        "target": "currentSetpoint",
+        "value": 27.0,
+        "accepted": false,
+        "reason": "policy_role_cap_violation:occupant:27.0 > 23.0"
+      },
+      {
+        "order": 8,
+        "rid": "r4",
+        "target": "currentSetpoint",
+        "value": 21.0,
+        "accepted": false,
+        "reason": "inadmissible"
+      }
+    ]
+  }
+}

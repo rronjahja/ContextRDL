@@ -1,0 +1,191 @@
+{
+  "headline": {
+    "enabled_count": 3,
+    "schedule_rids": [
+      "q1",
+      "q1",
+      "q1"
+    ],
+    "accepted_rids": [
+      "q1",
+      "q1"
+    ],
+    "decisions": [
+      {
+        "rid": "q1",
+        "subject": "CP1",
+        "value": 22.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q1",
+        "subject": "CP2",
+        "value": 22.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q1",
+        "subject": "CP3",
+        "value": 22.0,
+        "accepted": false,
+        "reason": "inadmissible"
+      }
+    ],
+    "committed_powers": {
+      "CP3": 0.0,
+      "CP2": 22.0,
+      "CP4": 0.0,
+      "CP1": 22.0
+    },
+    "successor_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
+    "final_admissible": true
+  },
+  "headline_30_trials": {
+    "runs": 30,
+    "ours_unique_states": 1,
+    "ours_admissible_pct": 100.0,
+    "ours_mean_runtime_ms": 34.74730333352151,
+    "ours_sd_runtime_ms": 3.4908018797946876,
+    "random_unique_states": 1,
+    "random_admissible_pct": 0.0,
+    "deterministic_unique_states": 1,
+    "deterministic_admissible_pct": 0.0
+  },
+  "governance": {
+    "grid_over_fleet": {
+      "schedule_rids": [
+        "q3",
+        "q2"
+      ],
+      "accepted_rids": [
+        "q3"
+      ],
+      "committed_power_CP1": 10.0,
+      "final_admissible": true,
+      "decisions": [
+        {
+          "rid": "q3",
+          "value": 10.0,
+          "accepted": true,
+          "reason": "admissible"
+        },
+        {
+          "rid": "q2",
+          "value": 22.0,
+          "accepted": false,
+          "reason": "shadowed_by_prior_accepted_action"
+        }
+      ]
+    },
+    "fleet_over_grid": {
+      "schedule_rids": [
+        "q2",
+        "q3"
+      ],
+      "accepted_rids": [
+        "q2"
+      ],
+      "committed_power_CP1": 22.0,
+      "final_admissible": true,
+      "decisions": [
+        {
+          "rid": "q2",
+          "value": 22.0,
+          "accepted": true,
+          "reason": "admissible"
+        },
+        {
+          "rid": "q3",
+          "value": 10.0,
+          "accepted": false,
+          "reason": "shadowed_by_prior_accepted_action"
+        }
+      ]
+    }
+  },
+  "emergency": {
+    "enabled_count": 5,
+    "schedule": [
+      [
+        "q5",
+        "CP1",
+        5
+      ],
+      [
+        "q5",
+        "CP2",
+        5
+      ],
+      [
+        "q5",
+        "CP3",
+        5
+      ],
+      [
+        "q5",
+        "CP4",
+        5
+      ],
+      [
+        "q4",
+        "Feeder1",
+        "curtailed"
+      ]
+    ],
+    "accepted_rids": [
+      "q5",
+      "q5",
+      "q5",
+      "q5",
+      "q4"
+    ],
+    "decisions": [
+      {
+        "rid": "q5",
+        "subject": "CP1",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q5",
+        "subject": "CP2",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q5",
+        "subject": "CP3",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q5",
+        "subject": "CP4",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q4",
+        "subject": "Feeder1",
+        "value": "curtailed",
+        "accepted": true,
+        "reason": "admissible"
+      }
+    ],
+    "committed_powers": {
+      "CP1": 5.0,
+      "CP2": 5.0,
+      "CP3": 5.0,
+      "CP4": 5.0
+    },
+    "committed_feeder_state": "curtailed",
+    "successor_digest": "fb842cb23c8e4e4fe48352cca2e02d318c18deb03d318e7e42b36e344d3b3b50",
+    "final_admissible": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "default": {
+    "schedule_match": true,
+    "decisions_match": true,
+    "accepted_match": true,
+    "digest_match": true,
+    "recorded_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+    "independent_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+    "n_actions": 8
+  },
+  "tie_conflict": {
+    "schedule_match": true,
+    "decisions_match": true,
+    "accepted_match": true,
+    "digest_match": true,
+    "recorded_digest": "06957ec0ddc21d96171e253013ccc1995a9fddb593dfa58256d4127b08bf515f",
+    "independent_digest": "06957ec0ddc21d96171e253013ccc1995a9fddb593dfa58256d4127b08bf515f",
+    "n_actions": 3
+  },
+  "governance_conflict": {
+    "schedule_match": true,
+    "decisions_match": true,
+    "accepted_match": true,
+    "digest_match": true,
+    "recorded_digest": "42e9a958bcaef57342fa1ad9253c46733c7190e6e4d99d70bb702702854e3203",
+    "independent_digest": "42e9a958bcaef57342fa1ad9253c46733c7190e6e4d99d70bb702702854e3203",
+    "n_actions": 3
+  }
+}

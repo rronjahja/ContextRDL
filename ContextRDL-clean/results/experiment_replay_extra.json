@@ -1,0 +1,22 @@
+{
+  "rows": [
+    {
+      "workload": "stress N=64",
+      "n": 64,
+      "schedule_match": true,
+      "digest_match": true,
+      "enabled_recorded": 64,
+      "enabled_replayed": 64,
+      "successor_digest": "4dc41391b9203c17bae4f41e7a70d10b6ac570ba1a4078f1af80c8a74f107a1f"
+    },
+    {
+      "workload": "EV charging (headline)",
+      "enabled": 3,
+      "decisions_recorded": 3,
+      "schedule_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "successor_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9"
+    }
+  ]
+}

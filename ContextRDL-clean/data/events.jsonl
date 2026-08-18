@@ -1,0 +1,6 @@
+{"eid":"evt-001","timestamp":"2026-03-14T09:00:00Z","type":"OccupantSetpointRequest","role":"occupant","payload":{"zone":"http://example.org/building#ZoneA","delta":2}}
+{"eid":"evt-002","timestamp":"2026-03-14T09:00:00Z","type":"DemandResponsePeak","role":"operator","payload":{"zone":"http://example.org/building#ZoneA","cap":21}}
+{"eid":"evt-003","timestamp":"2026-03-14T09:00:00Z","type":"CO2Spike","role":"operator","payload":{"zone":"http://example.org/building#ZoneC","mode":"high"}}
+{"eid":"evt-004","timestamp":"2026-03-14T09:00:00Z","type":"OccupancyDetected","role":"occupant","payload":{"zone":"http://example.org/building#ZoneB"}}
+{"eid":"evt-005","timestamp":"2026-03-14T09:00:00Z","type":"EmergencyAlarm","role":"emergency","payload":{"zone":"http://example.org/building#ZoneC","state":true}}
+{"eid":"evt-006","timestamp":"2026-03-14T09:00:00Z","type":"PreheatRequest","role":"operator","payload":{"zone":"http://example.org/building#ZoneB","target":22}}

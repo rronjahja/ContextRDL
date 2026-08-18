@@ -1,0 +1,93 @@
+{
+  "rules": [
+    {
+      "rid": "q1",
+      "priority": 1,
+      "issuing_role": "driver",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?cp ?power WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"ChargeRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:cp> ?cp ; <urn:prop:power> ?power . } GRAPH <urn:state> { ?cp a ex:ChargingPoint ; ex:chargingPower ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#chargingPower",
+        "value_expr": { "kind": "copy", "var": "power" }
+      }
+    },
+    {
+      "rid": "q2",
+      "priority": 1,
+      "issuing_role": "fleet",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?cp ?power WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"FleetSchedule\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:cp> ?cp ; <urn:prop:power> ?power . } GRAPH <urn:state> { ?cp a ex:ChargingPoint ; ex:chargingPower ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#chargingPower",
+        "value_expr": { "kind": "copy", "var": "power" }
+      }
+    },
+    {
+      "rid": "q3",
+      "priority": 0,
+      "issuing_role": "grid",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?cp ?cap WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"CapacitySignal\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:cp> ?cp ; <urn:prop:cap> ?cap . } GRAPH <urn:state> { ?cp a ex:ChargingPoint ; ex:chargingPower ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#chargingPower",
+        "value_expr": { "kind": "copy", "var": "cap" }
+      }
+    },
+    {
+      "rid": "q4",
+      "priority": 1,
+      "_priority_rationale": "Curtailment tightens the cross-target curtailment-consistency invariant, so it is scheduled AFTER the load-reduction action q5 (priority 0) that brings charging points into compliance. Constraint-tightening actions follow the actions that satisfy the constraint.",
+      "issuing_role": "grid",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?feeder WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"GridEmergency\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:feeder> ?feeder . } GRAPH <urn:state> { ?feeder a ex:Feeder ; ex:feederState ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#feederState",
+        "value_expr": { "kind": "literal", "value": "curtailed" }
+      }
+    },
+    {
+      "rid": "q5",
+      "priority": 0,
+      "issuing_role": "grid",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?cp WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"GridEmergency\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts . } GRAPH <urn:state> { ?cp a ex:ChargingPoint ; ex:chargingPower ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#chargingPower",
+        "value_expr": { "kind": "literal", "value": 5 }
+      }
+    },
+    {
+      "rid": "q6",
+      "priority": 1,
+      "issuing_role": "driver",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?cp WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"PlugIn\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:cp> ?cp . } GRAPH <urn:state> { ?cp a ex:ChargingPoint ; ex:connectorState ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#connectorState",
+        "value_expr": { "kind": "literal", "value": "occupied" }
+      }
+    },
+    {
+      "rid": "q7",
+      "priority": 1,
+      "issuing_role": "fleet",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?cp WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DepartureSoon\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:cp> ?cp . } GRAPH <urn:state> { ?cp a ex:ChargingPoint ; ex:chargingPower ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#chargingPower",
+        "value_expr": { "kind": "literal", "value": 22 }
+      }
+    },
+    {
+      "rid": "q8",
+      "priority": 1,
+      "issuing_role": "fleet",
+      "condition_select": "PREFIX ex: <http://example.org/ev#> SELECT ?e ?eid ?ts ?cp WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"FaultDetected\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:cp> ?cp . } GRAPH <urn:state> { ?cp a ex:ChargingPoint ; ex:connectorState ?current . } }",
+      "delete_template": null,
+      "insert_template": {
+        "predicate": "http://example.org/ev#connectorState",
+        "value_expr": { "kind": "literal", "value": "outOfService" }
+      }
+    }
+  ]
+}

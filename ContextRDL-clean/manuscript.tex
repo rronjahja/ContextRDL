@@ -1,0 +1,1000 @@
+\documentclass{ieeeaccess}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+\usepackage{amsthm}
+\usepackage{url}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+
+\usepackage{bm}
+\makeatletter
+\AtBeginDocument{\DeclareMathVersion{bold}
+\SetSymbolFont{operators}{bold}{T1}{times}{b}{n}
+\SetSymbolFont{NewLetters}{bold}{T1}{times}{b}{it}
+\SetMathAlphabet{\mathrm}{bold}{T1}{times}{b}{n}
+\SetMathAlphabet{\mathit}{bold}{T1}{times}{b}{it}
+\SetMathAlphabet{\mathbf}{bold}{T1}{times}{b}{n}
+\SetMathAlphabet{\mathtt}{bold}{OT1}{pcr}{b}{n}
+\SetSymbolFont{symbols}{bold}{OMS}{cmsy}{b}{n}
+\renewcommand\boldmath{\@nomath\boldmath\mathversion{bold}}}
+\makeatother
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Reproducible Execution Semantics for Rule-Based Automation over Evolving Knowledge Graphs}
+
+\author{\uppercase{Rron Jahja}\authorrefmark{1},
+\uppercase{Vlado Stankovski}\authorrefmark{1}}
+
+\address[1]{University of Ljubljana, Faculty of Computer and Information Science, \\ Večna pot 113, 1000 Ljubljana, Slovenia}
+
+\markboth
+{Jahja and Stankovski: Reproducible Execution Semantics for Rule-Based Automation over Evolving Knowledge Graphs}
+{Jahja and Stankovski: Reproducible Execution Semantics for Rule-Based Automation over Evolving Knowledge Graphs}
+
+\begin{abstract}
+Rule-based knowledge graphs are increasingly used to support digital twins in many domains. However, the logic that decides how rule-triggered updates are ordered, checked, committed, and recorded is often implemented separately in application-specific middleware or service code. The novelty of this work lies in the explicit design of execution semantics for deterministic ordering, admissibility-based commitment under safety and governance constraints, and trace recording in rule-based digital twin automation.
+The semantics is specified through numbered formal definitions; the uniqueness of the schedule is proven as a lemma, the determinism of the evaluation step under fixed inputs is established as a theorem, and the relationship between the greedy commitment procedure and maximal admissible sets is characterized formally.
+
+We evaluate the proposed semantics on a building-automation scenario with eight rules and six events. The implementation produced the same admissible successor state across repeated runs on the default workload. In contrast, on the default workload, the random-order baseline without admissibility-based commitment produced eight distinct final states across thirty trials, and only 23.3\% of the trials satisfied the constraints expressed in the Shapes Constraint Language (SHACL). Under a stress test with up to sixty-four candidate actions sharing the same role, priority, and timestamp, our implementation produced the same single outcome across all trials, while a random-shuffle baseline produced up to nine distinct outcomes. A governance-conflict scenario shows that changing role precedence changes which action is preferred, while the admissibility checking and deterministic conflict handling keep the successor state valid under the defined safety and governance rules. When multiple actions target the same graph property, the deterministic conflict-handling rule preserves a reproducible and admissible outcome.
+A second scenario from the electric-vehicle-charging domain, with cross-target capacity constraints, shows that the semantics transfers unchanged and that admissibility operates on sets of actions rather than on pairs.
+For software engineers, the proposed semantics provides an explicit execution model for implementing predictable rule-based automation. For users and operators, it supports more predictable and policy-consistent system behavior.
+\end{abstract}
+
+\begin{keywords}
+semantic digital twins, event-condition-action rules, knowledge graphs, execution semantics, governance, traceability, stream reasoning
+\end{keywords}
+
+\titlepgskip=-21pt
+
+\maketitle
+\section{Introduction}
+\label{sec:introduction}
+Semantic web technologies, especially the Resource Description Framework (RDF) and related World Wide Web Consortium (W3C) standards, are widely used to represent and integrate structured information. They have also become important in digital twin architectures, where physical systems must be represented together with live data, domain knowledge, and operational constraints \cite{Karabulut2024OntologiesDigitalTwins,Ramonell2023KGraphDT}. Digital twins are digital representations of physical assets and processes. They support monitoring, simulation, decision-making, and increasingly automated control based on data \cite{Karabulut2024OntologiesDigitalTwins,Ramonell2023KGraphDT}. In this paper, a semantic digital twin is a system whose relevant state is represented as an RDF knowledge graph aligned with ontologies and constrained by explicit schemas and rules \cite{Bader2019AAS,Donkers2024OccupantDigitalTwin}. This graph is the current machine-readable representation of the twin and its operating context. Semantic digital twins often combine static system descriptions with Internet of Things (IoT) data streams to answer continuous queries, detect patterns, and support automated decisions over time \cite{DellAglio2017StreamReasoningSurvey}.
+
+Digital twins driven by data streams are highly dynamic. Sensor readings, occupant requests, operator commands, and external service signals may arrive within the same short time interval and may affect the same part of the twin. This creates a governance problem when multiple events can trigger competing actions over the same RDF graph state. In this paper, governance means the policies that determine which actions are allowed, which actions take precedence, and which resulting states remain valid under the current safety rules and role context. An evaluation step means one discrete decision cycle in which the system considers the current graph, the visible events, the applicable rules, and the active role context. The role context refers to the active roles and their precedence relations during that evaluation step. In practice, such behavior is commonly expressed through the Event-Condition-Action (ECA) model \cite{Paton1999ActiveDatabaseSystems}. An ECA rule links an event to a condition over the current graph and to an action that proposes an update. If the relevant event is detected and the condition holds, the rule becomes enabled and may produce a corresponding action instance. Because ECA rules explicitly connect events, conditions, and actions, they are a suitable basis for modelling rule-based digital twin automation. However, the ECA model by itself does not prescribe a unified procedure for ordering, validating, and committing multiple enabled actions when they arise in the same evaluation step.
+
+From a software engineering viewpoint, this is a challenge. Real deployments may involve several digital twins, or one digital twin with several controlled subsystems. Each subsystem may have its own safety rules, role priorities, and operating policies. In many implementations, the logic for ordering, validating, committing, and recording enabled actions is handled in stream processors, middleware services, or application code. As a result, the same high-level rules may behave differently across implementations. This makes twin behavior harder to predict, verify, and audit.
+
+The practical problem is that several rules may become active at the same time and may propose different updates to the same digital twin state. If the system applies these updates in different orders, it may produce different final states from the same inputs. The goal of this paper is to make that commitment step explicit: the system orders the proposed actions, checks whether each action keeps the graph valid, commits only accepted actions, and records the decisions for later inspection. Here, commitment means accepting an action and applying its update to the graph state.
+
+The hypothesis of this work is that making the execution layer explicit through deterministic ordering, admissibility-based commitment, and trace recording produces more reproducible behavior and helps keep the resulting graph within the defined safety and governance rules.
+
+Accordingly, this paper defines a stepwise execution semantics for rule-based automation over RDF knowledge graphs under governance constraints. Execution semantics means the procedure that maps the current graph, event window, rules, and role context to a committed next graph and a replayable trace. A replayable trace is a record that allows the evaluation step to be reconstructed later. For each evaluation step, the semantics defines four decisions: how enabled rule instances are constructed, how they are ordered, how each action is checked before commitment, and how the transition is recorded. Section~III gives the precise definitions.
+
+Methodologically, this work follows a design-science framing: the proposed execution semantics is the main contribution, and the evaluated implementation is used to assess whether it addresses the reliability problem. We evaluate the semantics on two domains with structurally different constraints: a building-automation (HVAC) scenario whose safety shapes are zone-local, and an electric-vehicle-charging scenario whose cross-target capacity constraints require admissibility to be decided over sets of actions rather than over individual writes or pairs.
+
+\subsection{Execution as the Main Reliability Issue}
+
+Once several rule-triggered actions are enabled in the same evaluation step, the final state depends not only on which rules match, but also on how the resulting actions are ordered, checked, and committed.
+
+A simple example illustrates this. Consider a smart home digital twin in which two events fall into the same event window. The first action, triggered by the occupant request, sets the temperature setpoint to $24^\circ$C. The second action, triggered by the demand-response signal, caps the setpoint at $21^\circ$C (reducing it if currently higher). Both events are visible in the same evaluation step, so both corresponding rules are enabled. At this point, the issue is not the arrival order of the events. The issue is the order in which the enabled actions are committed. If the increase action is committed first and the cap is then applied, the final setpoint becomes $21^\circ$C. If the cap is committed first and the increase is then applied, the final setpoint becomes $24^\circ$C. Thus, the same initial graph and the same visible events can lead to different final states unless the system defines how enabled actions are ordered and committed within one evaluation step.
+
+An action is accepted only if it is admissible and rejected otherwise. In this paper, admissibility means that an action may be committed only if the resulting RDF graph still satisfies all predefined safety and governance constraints. Admissibility therefore determines which concurrently enabled actions may be committed in one evaluation step.
+
+This example also clarifies the separation between stream semantics and execution semantics. Stream reasoning is the continuous evaluation of semantic queries and rules over time-varying RDF data produced by streaming sources. In RDF stream processing, choices such as window definition and evaluation frequency affect which data are visible at each evaluation step \cite{DellAglio2014RSPQL}. Recent studies also show clear differences across engines and argue for semantics-aware benchmarking \cite{Gruber2023StreamReasoning}. In this paper, stream semantics determines which events are visible at a given evaluation step. These visible events determine which rule instances become enabled. Execution semantics then determines how the enabled actions are ordered, checked, and committed as one next state.
+
+This separation creates concrete requirements for reliable rule-based automation over evolving RDF graphs. For a fixed RDF graph, event window, rule set, and role context, the system must define how enabled actions are constructed, how concurrent actions are ordered, how conflicts are resolved, and when actions are committed or rejected. Without explicit execution rules, the final state may depend on implicit runtime behavior rather than on a reproducible semantic procedure.
+
+This concern is consistent with earlier work in active databases and trigger systems, where execution order, coupling modes, conflict behavior, and transaction boundaries shape system semantics \cite{Paton1999ActiveDatabaseSystems}. Work on trigger-action programming in IoT systems also shows that real deployments suffer from conflicts, unintended interactions, and runtime errors \cite{Chen2024TapChecker,Xing2024CCDFTAP}. These works show why conflict analysis and deterministic execution matter. However, they do not provide a unified and reproducible execution semantics for ordering, checking, and committing rule-triggered actions over an evolving RDF graph in a semantic digital twin.
+
+For this reason, the paper focuses on execution semantics. Section~III defines the proposed semantics precisely.
+
+\subsection{Scope and positioning}
+
+This paper does not introduce a new ECA language, a new RDF update language, or a new provenance model for explaining how graph updates were produced. Its contribution is the execution layer between rule enablement and committed RDF state transition. The novelty is a deterministic procedure that maps a current RDF graph, an event window, a rule set, and a role context to one committed successor graph and a replayable trace. Fig.~\ref{fig:eca} illustrates the gap. Standard ECA defines how rules are triggered and evaluated, but not how multiple enabled actions are handled within one evaluation step. The extension proposed in this paper makes that missing layer explicit: concurrent enabled actions are deterministically ordered, checked for admissibility, and committed as one reproducible next state.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{eca.png}
+\caption{Standard ECA rule model (top) and the deterministic, governance-aware extension proposed in this paper (bottom). Boxes shown in gray are
+shared with standard ECA. Boxes shown in red with a thicker border are new stages contributed by this paper: explicit handling of concurrent enabled actions, deterministic ordering, governance and safety checking, and committed actions.}
+\label{fig:eca}
+\end{figure}
+
+\subsection{Objectives}
+
+The objectives of this paper are as follows:
+\begin{enumerate}
+\item To define a stepwise execution semantics for rule-based automation over evolving RDF knowledge graphs and to demonstrate that it produces reproducible committed states under fixed inputs.
+\item To define and evaluate a deterministic ordering mechanism for concurrent action instances, and to measure its effect on final-state consistency across repeated executions.
+\item To define and evaluate an admissibility-based commitment procedure, and to measure its effect on whether resulting states satisfy the predefined safety and governance constraints.
+\item To evaluate the impact of governance settings on the committed result under different role-precedence configurations.
+\item To evaluate trace recording by replaying recorded transitions and checking whether the same committed successor graph can be reconstructed.
+\end{enumerate}
+
+Prior work addresses related aspects separately, including streams and windows \cite{DellAglio2014RSPQL}, RDF updates and provenance \cite{Halpin2014SPARQLProvenance}, governance \cite{Kirrane2017RDFAccessControlSurvey,Costabello2012ContextAwareAccess},
+and conflict analysis \cite{Chen2024TapChecker,Xing2024CCDFTAP}. None of these works define a unified execution semantics that jointly specifies how concurrent rule-triggered actions are
+ordered, checked against constraints, committed, and recorded in one reproducible evaluation step. This is the gap addressed by the execution semantics defined in this paper.
+
+The remainder of the paper is organized as follows: Section II reviews related work; Section III defines the execution semantics; Section IV discusses governance and safety rules; Section V presents the experimental evaluation; Section VI discusses limitations; Section VII concludes.
+
+\section{Related Work}
+This section positions the paper against related work on RDF ECA execution, deterministic rule ordering, RDF stream processing, constraint-aware RDF updates, provenance, complex event processing, and transaction semantics.
+
+Poulovassilis et al. present the closest RDF-specific related work: the RDF Triggering Language (RDFTL), an ECA language for RDF \cite{papamarkos}. RDFTL defines rule triggering, condition evaluation, and schedule-based execution of rule-generated updates over RDF repositories. It also distinguishes set-oriented from instance-oriented rules, which determines how many action copies are generated and scheduled. The key difference concerns the ordering of multiple action copies. For instance-oriented rules, RDFTL states that when multiple copies of a rule's action part are generated, ``the ordering of these multiple copies of the rule's action part is arbitrary.'' RDFTL avoids this problem by assuming that such rules are well-defined, meaning that the same final RDF graph results regardless of that order. Our work does not make that assumption. Instead, it defines how enabled rule instances become action instances, how those actions are deterministically ordered, how each action is checked before state change, and how the committed transition is recorded for replay and audit.
+
+Agrawal et al. \cite{agrawal} study deterministic ordering in production rule systems. They argue that conflict resolution should not be left to random choice when several rules are triggered, because nondeterminism makes rule systems harder to understand, maintain, and extend. Their priority framework combines a default total order with user-defined precedence constraints. This guarantees repeatability: the same transactions, initial database state, rules, and priorities lead to the same rule-consideration order. Their work is important for our argument because it treats repeatable ordering as a semantic requirement when execution has effects. However, their setting is production-rule priority management in database systems, not RDF ECA execution over evolving graph state. Our paper carries this idea into semantic digital twins and combines deterministic ordering with enabled-instance construction, constraint checking before commitment, and replayable transition recording.
+
+Dell'Aglio et al. \cite{DellAglio2014RSPQL} provide the formal basis for separating stream visibility from execution commitment through the RDF Stream Processing Query Language (RSP-QL). Their work makes explicit how sliding windows, evaluation time instants, and evaluation policies determine which data are visible at each query step. This is directly relevant because, in our setting, stream semantics determines which events are visible and therefore which rule instances become enabled. However, RSP-QL remains a query-processing semantics; it does not define how multiple enabled action instances are ordered, checked against constraints, and committed as one successor RDF state.
+
+Halfeld-Ferrari et al. \cite{ferrari} are relevant to the constraint-before-commitment component of this paper. They study RDF updates under user-defined and essential RDF constraints and define update semantics and algorithms that compute side effects so that updated RDF databases preserve consistency. This supports the idea that constraint satisfaction must shape state change rather than be checked only after an update has already been accepted. Our setting differs because we study concurrent ECA execution over evolving RDF graphs and ask which enabled action instances may be committed within one evaluation step.
+
+Halpin and Cheney \cite{Halpin2014SPARQLProvenance} present related RDF-specific work on provenance in SPARQL Protocol and RDF Query Language (SPARQL) Update. In this context, provenance means information about how a graph state or update result was produced. They show how RDF updates can be linked to input and output graph versions, changed data, referenced source graphs, and metadata so that previous graph states can be reconstructed for audit and version control. This is relevant because our semantics also records state transitions for replay and audit. However, their focus is recording how SPARQL Update results were produced after updates are already defined, while our trace is integrated into the evaluation step that constructs, orders, filters, and commits concurrent ECA action instances.
+
+Beyond RDF-specific work, the active database systems literature addresses similar execution concerns at the level of relational systems. Paton's survey of active database systems \cite{Paton1999ActiveDatabaseSystems} discusses execution cycles, coupling modes, and conflict behavior for triggered rules. These concepts are related to the ordering and commitment problem studied here. Our setting differs because the state is an RDF graph, consistency is defined through domain-level constraints, and actions are generated by rule evaluation over an event window rather than by caller-issued transactions.
+
+Complex Event Processing (CEP) systems such as Esper and Apache Flink also handle windowed event streams and concurrent rule-triggered outputs \cite{CugolaMargara2012CEP}. They define event windows, pattern matching, and priority-based execution over streams. Our work shares the concern with concurrent actions within a window, but differs because rule-triggered actions modify an RDF graph that must remain valid under safety and governance constraints. Action acceptance is therefore a semantic decision rather than only an emitted side effect.
+
+Database transaction semantics, including the Atomicity, Consistency, Isolation, Durability (ACID) properties, define guarantees for consistent and durable state updates. Our execution semantics shares the concern with atomic state transition and consistency preservation, but the source of concurrency is different. Standard transaction systems handle caller-programmed transactions, while our setting handles automatically generated rule-triggered actions within the same evaluation step. Transactional RDF mechanisms such as the W3C SPARQL 1.1 Update specification \cite{SPARQL11Update} provide graph-mutation operations, but they do not define how rule-triggered updates are jointly ordered, checked, and filtered before commitment.
+
+\begin{table*}[!t]
+\caption{Positioning of this paper with respect to the closest related work}
+\label{tab:related-work-comparison}
+\centering
+\small
+\begin{tabular}{|p{1.5cm}|p{2.0cm}|p{4.3cm}|p{4.3cm}|p{3.9cm}|}
+\hline
+\textbf{Work} & \textbf{Main focus} & \textbf{What it defines} & \textbf{Does not address} & \textbf{Relation to our paper} \\
+\hline
+
+ Poulovassilis et al. \cite{papamarkos} & RDF ECA execution language & Rule triggering, condition evaluation, priority-aware scheduling, and recursive execution of RDF rule actions through an update schedule & A deterministic semantics for ordering multiple action copies of an instance-oriented rule; RDFTL leaves that ordering arbitrary and assumes well-definedness & Relevant RDF ECA work; our paper makes the commitment step explicit by defining enabled action instances, deterministic ordering, constraint checking before commitment, and replayable transition recording \\
+\hline
+
+Agrawal et al. \cite{agrawal} & Deterministic priority handling in production rule systems & A repeatable priority framework combining default total order and user-defined precedence constraints, with unique rule-consideration order under fixed inputs & RDF-specific semantics, ECA execution over evolving graphs, constraint checking, or replayable RDF transition traces & Provides prior support for deterministic ordering as a semantic requirement. Our paper carries that insight into concurrent RDF ECA commitment \\
+\hline
+
+Dell’Aglio et al. \cite{DellAglio2014RSPQL} & RDF stream processing semantics & Sliding-window semantics, evaluation-time policies, and repeated query evaluation over time-varying RDF data & Commitment semantics for concurrently enabled actions; ordering, constraint checking, and successor-state construction after visibility is fixed & Clarifies what data are visible at an evaluation step; our paper addresses the separate execution problem of how enabled ECA action instances are committed once visibility has been determined \\
+\hline
+
+Halfeld-Ferrari et al. \cite{ferrari} & Constraint-aware RDF update semantics & Update semantics and algorithms that compute side-effects so RDF updates preserve application and intrinsic RDF constraints & Concurrent ECA execution semantics, deterministic ordering of enabled actions, or replayable evaluation-step traces & Relevant RDF work for constraint-based acceptance; our paper integrates constraint checking with ordering and
+commitment inside one step semantics instead of treating update repair as a separate problem \\
+\hline
+
+Halpin and Cheney \cite{Halpin2014SPARQLProvenance} & Dynamic provenance for SPARQL Update & Provenance-aware SPARQL Update semantics linking update steps to input and output graph versions, changed data, referenced sources, and metadata & Construction, ordering, constraint-based filtering, and commitment of multiple concurrently enabled ECA action instances & Relevant RDF-specific work on transition recording; our paper integrates replayable trace recording directly into evaluation-step commitment semantics \\
+\hline
+Paton \cite{Paton1999ActiveDatabaseSystems} & Active database execution semantics & Execution cycles, coupling modes, and conflict behavior for triggered rules over relational state & RDF graph state, domain-level constraint checking, and automatically generated rule-triggered actions rather than caller-issued transactions & Provides prior work on execution cycles and triggered-rule behavior; our paper adapts this to RDF under governance constraints \\
+\hline
+
+Cugola and Margara \cite{CugolaMargara2012CEP} & Complex Event Processing & Windowing, pattern matching, and priority-based execution for concurrent rule-triggered actions over event streams & Constraint-based action acceptance and governance-aware commitment over an evolving RDF graph & Shares the concurrent-action-within-a-window concern; our paper adds constraint-based acceptance as a first-class semantic decision \\
+\hline
+
+W3C SPARQL Update \cite{SPARQL11Update} & Graph mutation and transaction semantics for RDF & Atomic, consistent update operations on RDF graphs & Joint ordering and filtering of rule-triggered updates before commitment within one evaluation step & Provides the graph-mutation mechanics that our semantics relies on; our paper adds the rule-triggered commitment layer above it \\
+\hline
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:related-work-comparison} summarizes the positioning. Each cited line of work addresses one or two aspects of the problem we study, but none defines a single execution semantics that unifies them. This paper contributes that unification for concurrent rule-triggered commitment over evolving RDF graphs under governance constraints. Section III defines this unified execution semantics.
+
+\section{Execution Semantics and Methodology}
+\label{sec:semantics}
+
+This section defines the proposed execution semantics for one evaluation step. The step starts from a fixed graph, event window, rule set, and role context. It then turns concurrently enabled rule-triggered actions into one committed next graph and one replayable trace.
+
+One evaluation step is written as a mapping from $(G_t, W_t, R, C_t)$ to $(G_{t+1}, T_t)$. Here, $G_t$ is the current RDF graph, $W_t$ is the event window, $R$ is the rule set, and $C_t$ is the active role context. The output $G_{t+1}$ is the committed successor graph, and $T_t$ is the recorded trace. Definition~\ref{def:step} formalizes this mapping.
+
+The section proceeds as follows. Section~\ref{sec:formal-model} consolidates the formal definitions and states the reproducibility theorem. The subsequent subsections walk through the stages of one evaluation step operationally: action-instance construction, deterministic ordering, admissibility-based resolution, commitment, and trace recording. The section closes with the components that must be fixed before a step begins, the scope of the guarantees with respect to entailment regimes, and the relation between the semantics and the evaluated implementation.
+
+Figure~\ref{fig:architecture} shows the architecture of an implementation that realizes the proposed execution semantics. The remainder of this section defines the stages of this mapping.
+
+\begin{figure*}[h]
+\centering
+\includegraphics[width=\textwidth]{Architectural_Diagram.png}
+\caption{Architecture of the implementation that realizes the proposed execution semantics. The top layer provides inputs: events, windowed input, rules, governance context, and the current RDF graph state $G_t$. The middle layer implements the contributed stages: rule-instance enablement, action instance construction, deterministic action ordering, sequential admissibility checking, and successor-state transition. The bottom layer produces the committed successor state $G_{t+1}$ and records a replayable execution trace used for audit, replay, and verification. Dotted arrows indicate where governance-related data and the active role context influence rule-level governance checks, ordering, runtime role filtering, and admissibility decisions.}
+\label{fig:architecture}
+\end{figure*}
+
+At each evaluation step, the execution semantics starts from four inputs: the current RDF graph, the current event window, the rule set, and the active role context. In this paper, the role context consists of the active roles and the precedence relations between them. The current graph represents the current state of the semantic digital twin. The event window contains the events that are relevant under the fixed windowing policy. The rule set defines the available event, condition, and action patterns.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{execution_semantics.png}
+\caption{Operational view of one evaluation step. Steps 1–3 run once and produce an ordered action list. The admissibility loop (step 4) iterates the list, accepting or rejecting each action under the current governance and safety constraints. Steps 5–6 commit the accepted set and record the transition trace.}
+\label{fig:execution-semantics}
+\end{figure}
+
+Figure~\ref{fig:execution-semantics} shows this flow. One evaluation step maps the current RDF graph, event window, rule set, and role context to a committed next state and a reproducible trace.
+
+The first stages build and order the candidate action list. The later stages accept or reject the actions, commit the accepted actions, and record the trace. The following subsections define these stages in detail.
+
+The central semantic principle is that these decisions must not be left implicit or depend on unspecified implementation behavior. If the same graph, the same events, the same rules, and the same governance settings are given again, the same ordered action sequence, the same accepted set, and the same resulting graph state should be obtained again. The proposed execution semantics therefore makes explicit which semantic components must remain fixed for deterministic behavior.
+
+\subsection{Formal Model}
+\label{sec:formal-model}
+
+This subsection consolidates the concepts used throughout the paper into numbered definitions and states the determinism guarantee as a theorem. The definitions are deliberately kept in plain language; the only symbols used are the four inputs and two outputs of an evaluation step, which were introduced above. The subsections that follow explain each stage operationally and describe the design choices of the evaluated implementation.
+
+\begin{definition}[Evaluation step]
+\label{def:step}
+An \emph{evaluation step} at time $t$ takes the four inputs $(G_t, W_t, R, C_t)$, namely the current RDF graph, the event window produced by the fixed windowing policy, the rule set, and the active role context, and produces two outputs: the committed successor graph $G_{t+1}$ and the recorded trace $T_t$. Throughout the paper we use the single term \emph{evaluation step} for one such application and \emph{event window} for $W_t$.
+\end{definition}
+
+\begin{definition}[ECA rule; rule set]
+\label{def:rule}
+An ECA rule consists of six parts: an event pattern over the event window, a graph condition over the current graph, a governance condition over governance-related data in the graph (such as policy-node parameters), an action constructor, an integer priority, and a rule identifier. A rule set is a finite set of ECA rules whose identifiers are pairwise distinct. The rule registry of the evaluated implementation enforces this property at load time and rejects rule files that contain duplicate identifiers; rule-identifier collisions are therefore excluded by construction.
+\end{definition}
+
+\begin{definition}[Binding; canonical binding encoding]
+\label{def:binding}
+A binding for a rule assigns concrete RDF terms and event values, including the stable identifier of the matched event, drawn from the current event window and graph, to the variables of the rule's event pattern and graph condition. The \emph{canonical binding encoding} of a binding is the textual serialization of its variable and value pairs, listed in alphabetical order of variable names, with RDF terms written in N-Triples form. Two bindings are equal exactly when their canonical encodings are identical.
+\end{definition}
+
+\begin{definition}[Rule instance]
+\label{def:instance}
+A rule instance is a rule together with one binding such that the event pattern matches an event in the current window, the graph condition holds in the current graph, and the rule's governance condition holds. The governance condition is a rule-level predicate over governance-related data in the graph, for example whether a required policy parameter is set; it is evaluated like the graph condition and does not by itself test whether the issuing role is active in the current role context. That runtime membership test is applied separately as the role filter of Definition~\ref{def:resolution}. The rule instances that satisfy all three checks at the current step are called enabled.
+\end{definition}
+
+\begin{definition}[Action instance; identity]
+\label{def:action}
+Each enabled rule instance yields exactly one action instance, which carries the proposed update (the triples to delete and the triples to insert), the originating rule identifier, the canonical binding encoding, the event-window identifier, the issuing role, and an action identifier. The \emph{identity} of an action instance is the combination of three items: rule identifier, canonical binding encoding, and window identifier. Two action instances are the same object exactly when they agree on these three items. The action identifier is computed by applying SHA-256 to the canonical serialization of these three items. Because the identifier is computed from the identity items alone, it is the same across repeated runs and across replay for the same input configuration; it is not a per-run random value. Because the canonical binding encoding includes the stable identifier of the matched event, two duplicate events with the same type, timestamp, and values still produce distinct action instances.
+\end{definition}
+
+\begin{definition}[Scheduling key]
+\label{def:key}
+The scheduling key of an action instance is the six-part tuple \texttt{(roleRank, priority, tsKey, rid, bindKey, aid)}: the role-precedence rank under the active role context, the rule priority, the event timestamp together with the window identity, the rule identifier, the canonical binding encoding, and the action identifier. Keys are compared part by part, from left to right; numeric parts use numeric order and textual parts use alphabetical (byte) order. Actions are scheduled in ascending key order.
+\end{definition}
+
+\begin{lemma}[Totality of the schedule]
+\label{lem:total}
+The scheduling key places the action instances constructed in one evaluation step into exactly one order. In particular, every evaluation step has exactly one schedule.
+\end{lemma}
+\begin{proof}
+Each part of the key is either a number or a text string, so any two keys can be compared, and part-by-part comparison orders any two distinct keys. It remains to show that two distinct action instances can never have equal keys. If two keys are equal, then in particular their rule identifiers, their canonical binding encodings, and their timestamp-and-window parts are equal. By Definition~\ref{def:action}, two action instances that agree on the rule identifier, the canonical binding encoding, and the window are the same instance. Distinct instances therefore always have distinct keys.
+\end{proof}
+
+\begin{remark}[Role of the hash]
+\label{rem:hash}
+The uniqueness of the schedule does not rest on the collision resistance of SHA-256. Comparison reaches the action identifier (the last part of the key) only after the rule identifier and the canonical binding encoding themselves, not their hashes, and the timestamp-and-window part are already equal, and in that case Lemma~\ref{lem:total} shows that the two instances are identical. The hashed identifier therefore serves as a compact, replay-stable reference in traces and logs, not as the tie-breaker that decides between distinct actions; a hash collision between distinct action instances could affect only the readability of trace references, never the schedule.
+\end{remark}
+
+\begin{definition}[Admissibility]
+\label{def:admissibility}
+The constraint set consists of the shape graph together with the governance constraints, and it is fixed before the step begins. A set of action instances is \emph{admissible} with respect to the current graph if applying the updates of all its actions to that graph, in schedule order, produces a graph that satisfies every constraint in the constraint set. A single action is admissible \emph{relative to} an already accepted set if adding it to that set still gives an admissible set.
+\end{definition}
+
+\begin{definition}[Resolution; accepted set]
+\label{def:resolution}
+The resolution procedure walks through the schedule from first to last action, starting from an empty accepted set. Each action is accepted, and added to the accepted set, exactly when it passes four gates in order: (i)~the role filter, which requires the action's issuing role to be active in the current role context $C_t$, a runtime membership test distinct from the rule-level governance condition of Definition~\ref{def:instance}, which may hold in a step where the issuing role is nonetheless inactive; (ii)~the policy guard; (iii)~the conflict gate of the implementation (first-writer-wins same-target shadowing in the evaluated implementation); and (iv)~the admissibility check of Definition~\ref{def:admissibility} relative to the actions accepted so far. An action that fails a gate is rejected and recorded with a machine-readable reason code. The committed successor graph is obtained by applying the updates of the accepted actions, in schedule order, to the current graph.
+\end{definition}
+
+\begin{definition}[Trace]
+\label{def:trace}
+The trace of an evaluation step records the input graph snapshot and its digest, the event-window identifier and its events, the active role context, the enabled rule instances, the constructed action instances, the schedule, every per-action decision with its reason code, the committed updates, and the digest of the successor graph. The digest function is specified in Section~\ref{sec:trace-recording}.
+\end{definition}
+
+\begin{theorem}[Reproducibility]
+\label{thm:repro}
+Fix a deterministic graph-evaluation semantics, a deterministic validation semantics, the windowing policy, and the constraint set. Then the evaluation step is a function of its inputs: for identical inputs $(G_t, W_t, R, C_t)$, every execution produces the same enabled rule instances, the same action instances, the same schedule, the same per-action decisions, the same successor graph $G_{t+1}$, and the same trace $T_t$.
+\end{theorem}
+\begin{proof}
+The enabled rule instances are determined by the inputs because matching is deterministic by assumption (Definition~\ref{def:instance}). The action instances are determined by the enabled instances because identifiers, canonical encodings, and window references are computed from the enabled instance in a fixed way (Definition~\ref{def:action}). The schedule is unique by Lemma~\ref{lem:total}. Walking through the schedule, the decision on each action depends only on the role context, the policy triples in the current graph, the targets of the actions accepted before it, and the verdict of the fixed validation semantics on the corresponding candidate graph; all of these are determined by the inputs and by the decisions already made. The accepted set, the successor graph, and every recorded field of the trace are therefore determined by the inputs.
+\end{proof}
+
+\subsection{Rule-Based Production of Action Instances}
+
+The rule set consists of ECA rules.
+Definitions~\ref{def:rule} to \ref{def:action} formalize the notions used here.
+
+Each rule has six parts: an event part, a graph-state condition, a rule-level governance condition, an action constructor, a priority value, and a stable rule identifier. The event part checks whether the relevant event is present in the current window. The graph-state condition checks whether the current RDF graph satisfies the rule condition. The rule-level governance condition checks governance-related data in the graph, such as policy-node parameters. Runtime active-role membership is checked later by the role filter during resolution. The action constructor defines the update proposed by the rule.
+
+A rule becomes concrete through a rule instance. A rule instance is a rule together with the concrete bindings that satisfy its event and graph conditions at the current step. A binding maps the variables in the rule to concrete values from the current event window and RDF graph. The same rule may match several times. Each match becomes a separate rule instance.
+
+This progression from one rule template to multiple concrete rule instances and action instances is illustrated in Figure~\ref{fig:rule-template}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{rule_template.png}
+\caption{From one rule template to distinct rule and action instances.}
+\label{fig:rule-template}
+\end{figure}
+
+For every enabled rule instance, the system constructs one action instance. The action instance is the object that is later scheduled, accepted or rejected, and, if accepted, committed and recorded in the trace. It contains the proposed update plus identity information: a stable action identifier, the originating rule identifier, the concrete variable bindings, the window identifier, and the issuing role context. A stable action identifier remains the same across repeated runs and replay for the same input configuration. The window identifier records which event window produced the action. This design keeps two actions distinct even when they propose the same update payload.
+
+This distinction matters for two reasons. The system must later show which concrete action instance was accepted or rejected. It must also be able to replay the same decision sequence. If two duplicate events produce the same proposed setpoint change, the system must still be able to say that two distinct action instances were created, which one was accepted, and which one was rejected. The execution semantics therefore preserves action-instance identity even when two actions propose the same graph change.
+
+Table~\ref{tab:rule-examples} shows representative rules used in the evaluated implementation. Together, these examples illustrate how different event types, issuing roles, and target properties are translated into concrete action instances during one evaluation step.
+\begin{table*}[h]
+\caption{Representative rules used in the evaluated implementation}
+\label{tab:rule-examples}
+\centering
+\begin{tabular}{|p{1.0cm}|p{1.6cm}|p{2.6cm}|p{2.5cm}|p{5.8cm}|}
+\hline
+\textbf{Rule} & \textbf{Role} & \textbf{Event type} & \textbf{Target property} & \textbf{Effect} \\
+\hline
+r1 & occupant & OccupantSetpointReq & \texttt{currentSetpoint} & Increases the current setpoint of the affected zone by the event-provided delta. \\
+\hline
+r2 & operator & DemandResponsePeak & \texttt{currentSetpoint} & Sets the current setpoint of the affected zone at the event-provided value. \\
+\hline
+r3 & operator & CO2Spike & \texttt{ventilationMode} & Sets the ventilation mode of the affected zone to the event-provided mode. \\
+\hline
+r4 & occupant & OccupancyDetected & \texttt{currentSetpoint} & Increases the current setpoint of the affected zone by 1. \\
+\hline
+r5 & emergency & EmergencyAlarm & \texttt{emergencyState} & Sets the emergency state of the affected zone to the event-provided state. \\
+\hline
+r6 & emergency & EmergencyAlarm & \texttt{ventilationMode} & Forces the ventilation mode of the affected zone to \texttt{emergency}. \\
+\hline
+r7 & operator & PreheatRequest & \texttt{currentSetpoint} & Sets the current setpoint of the affected zone to the requested target value. \\
+\hline
+r8 & operator & DemandResponsePeak & \texttt{ventilationMode} & Switches the ventilation mode of the affected zone to \texttt{off}. \\
+\hline
+\end{tabular}
+\end{table*}
+Once all enabled rule instances have been translated into action instances, the system has a candidate action set for the current evaluation step. Concurrency begins at exactly this point. If there is more than one candidate action, the system must decide how they are ordered and which subset may actually be committed.
+
+Figure~\ref{fig:example-rule-shape} shows one representative rule and two SHACL shapes it must respect, drawn directly from the evaluated implementation. The rule definition lists the event pattern it reacts to, its condition, the graph update it proposes, and its scheduling metadata. The SHACL shapes express safety rules that the graph must satisfy after the update.
+
+\begin{figure}[t]
+\small
+\begin{verbatim}
+# Rule: operator demand-response cap
+rule:     r2
+event:    DemandResponsePeak(?zone, ?value)
+role:     operator
+when:     ?zone a ex:HVAC_Zone ;
+          ex:currentSetpoint ?current .
+action:
+  DELETE { ?zone ex:currentSetpoint ?current }
+  INSERT { ?zone ex:currentSetpoint ?value }
+priority: 1
+\end{verbatim}
+
+\hrule
+\medskip
+
+\begin{verbatim}
+# ZoneA comfort cap
+ex:ZoneAComfortCapShape a sh:NodeShape ;
+    sh:targetNode ex:ZoneA ;
+    sh:property [
+        sh:path         ex:currentSetpoint ;
+        sh:datatype     xsd:decimal ;
+        sh:minInclusive 18 ;
+        sh:maxInclusive 23 ;
+    ] .
+\end{verbatim}
+
+\hrule
+\medskip
+
+\begin{verbatim}
+# Emergency ventilation consistency
+ex:EmergencyConsistencyShape a sh:NodeShape ;
+    sh:targetClass ex:HVAC_Zone ;
+    sh:sparql [
+        sh:message "Emergency state requires
+                    emergency ventilation." ;
+        sh:select """
+        SELECT $this WHERE {
+            $this ex:emergencyState true ;
+                  ex:ventilationMode ?m .
+            FILTER (?m != "emergency")
+        }
+        """ ;
+    ] .
+\end{verbatim}
+
+\caption{One rule and two SHACL shapes from the evaluated implementation. Rule~\texttt{r2} sets the setpoint of the affected zone when a demand-response peak event arrives. The comfort-cap shape requires ZoneA's setpoint to stay within [18, 23]. The emergency-consistency shape requires every zone in emergency state to use emergency ventilation, which rejects candidate graphs combining \texttt{emergencyState := true} with non-emergency ventilation modes such as \texttt{high} or \texttt{off}.}
+\label{fig:example-rule-shape}
+\end{figure}
+
+
+\subsection{Deterministic Ordering of Concurrent Action Instances}
+
+The proposed execution semantics uses deterministic scheduling. This means that candidate action instances are not left in arbitrary system order and are not resolved by nondeterministic runtime behavior. Instead, they are ordered using one fixed scheduling key.
+
+The scheduling key is the six-part tuple of Definition~\ref{def:key}; Lemma~\ref{lem:total} shows that it places the constructed action instances into exactly one order, so the resulting schedule is unique.
+Role precedence lets governance influence which action is examined first. Rule priority orders actions within the same role setting. The time component keeps event and window order explicit. The rule identifier, canonical binding encoding, and action identifier break remaining ties; as Remark~\ref{rem:hash} explains, the action identifier serves as a compact trace reference rather than as the deciding comparator between distinct actions. Because the key is fixed, the resulting action order is fixed as well.
+
+The purpose of deterministic scheduling is not merely presentation consistency. It is necessary for reproducibility. If two different executions with identical inputs are allowed to examine concurrent actions in different orders, they may commit different actions and produce different final graph states. The scheduling policy therefore affects the execution outcome under concurrency.
+
+The outcome of this step is one ordered sequence of candidate actions. This sequence is the order in which the system will consider the actions for acceptance or rejection.
+
+\subsection{Admissibility-Based Acceptance and Rejection of Action Instances}
+\label{sec:admissibility-resolution}
+
+Ordering alone is not enough. The execution semantics must also decide which actions may be committed. An action is accepted only if adding it to the already accepted actions still produces a graph that satisfies the safety and governance constraints. If the action would violate these constraints, it is rejected.
+
+Safety constraints capture requirements such as allowed value ranges, emergency consistency conditions, or other operational rules that the graph must preserve. Governance constraints capture policy-dependent restrictions, such as role-sensitive limits or precedence-dependent restrictions on which updates may be committed under the current role context. Together, these constraints define whether a candidate next graph state is admissible.
+
+The evaluated implementation also handles same-target collisions. A same-target collision occurs when two or more actions write to the same property of the same entity in one evaluation step. In this paper, this entity-property pair is called the target. The implementation uses a first-writer-wins shadowing rule: once an earlier action is accepted for a target, later actions writing to the same target are rejected.
+
+A concrete walkthrough of this procedure on the default workload is given in Section~\ref{sec:eval:walkthrough}.
+
+In the execution semantics, admissibility is checked for sets of actions, not only for single actions (Definition~\ref{def:admissibility}; the full resolution procedure is Definition~\ref{def:resolution}). Several actions that each look acceptable on their own may still produce an invalid graph when committed together. Conflicts are therefore not always purely pairwise. A larger set may become invalid even when each pair looks harmless in isolation. A set of actions is admissible when the graph produced by applying them still satisfies every defined safety and governance rule.
+
+The implementation evaluated in this paper realizes this principle through a deterministic sequential procedure. It examines the ordered action instances one by one. At each step, it tentatively adds the next action to the already accepted set and checks whether the resulting candidate graph would remain admissible. If yes, the action is accepted. If not, the action is rejected. This procedure yields one deterministic and schedule-consistent accepted set.
+
+This sequential admissibility-based resolution process is illustrated in Figure~\ref{fig:admissibility}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{accepted_rejected.png}
+\caption{Sequential admissibility-based resolution of enabled action instances.}
+\label{fig:admissibility}
+\end{figure}
+
+The execution semantics does not claim that the accepted set is globally maximal or globally optimal, and we can make the relationship to maximality precise without further notation. In the statements below, assume that every candidate action passes the role filter (actions removed by the role filter play no part in any accepted set) and treat the policy guard as part of the constraint set, since it also restricts only the value written to a single target.
+
+\begin{proposition}[Maximality under target-local constraints]
+\label{prop:maximality}
+Call a constraint \emph{target-local} if its satisfaction depends only on the value of one entity and property target, and assume every action is a single-slot rewrite of one target. Then: (a)~if no two scheduled actions write to the same target, the accepted set produced by the resolution procedure is as large as any admissible subset of the candidate actions can be; and (b)~in general, the difference in size between a largest admissible subset and the accepted set is at most the number of same-target collisions, that is, the number of candidate actions beyond the first writer of each target.
+\end{proposition}
+\begin{proof}
+(a)~Without collisions the conflict gate never fires, so every rejected action failed the admissibility check: some target-local constraint on its own target is violated by its proposed value. Because no other action writes that target, the same violation occurs in every set of actions that contains the rejected action, so no admissible subset can contain it. Every admissible subset therefore consists only of accepted actions, and the accepted set, which is itself admissible by construction, is as large as any of them.
+(b)~Group the candidate actions by target. Under target-local constraints, the admissibility of a set depends only on the last value applied to each target. The resolution procedure accepts, for each target, the first writer in schedule order whose value is admissible (earlier inadmissible writers are rejected by the admissibility gate without activating the conflict gate), and it accepts at most one writer per target. A largest admissible subset can contain at most all writers of a target, and it contains none of them exactly when no writer's value is admissible as a final value, in which case the procedure also accepts none. For each target, the difference is therefore at most the number of writers minus one, and adding up over all targets gives the stated bound.
+\end{proof}
+
+\begin{remark}[General constraints and hardness]
+\label{rem:hardness}
+For constraints that couple several targets, no similar bound holds, and this limitation is not specific to our procedure: finding a largest admissible subset is NP-hard in general, because pairwise SPARQL-based constraints can encode the conflict graph of an arbitrary maximum-independent-set instance. The resolution procedure instead guarantees, in every case, an admissible successor state, determinism (Theorem~\ref{thm:repro}), and one validation call per candidate action. We emphasize that the deviation from maximality concerns how many admissible actions are committed in one step, never whether the committed state is safe: the successor graph satisfies every constraint in all cases, every rejected action is recorded with a reason code, and a rejected request can be re-issued in a later evaluation step. For safety-critical deployments the relevant guarantee is the unconditional preservation of the constraint set; maximality affects utility, not safety.
+\end{remark}
+
+The first-writer-wins shadowing rule is a design choice of the evaluated implementation. It is not a necessary property of every implementation that follows the proposed execution semantics. We state this choice explicitly so the reader can distinguish the general execution semantics from the specific implementation choice used in the reported evaluation.
+
+\subsection{Deterministic Graph Update by Accepted Actions}
+
+Each accepted action induces a deterministic RDF update effect. In practical terms, this means that the action specifies which statements are removed and which statements are inserted. In the implementation evaluated in this paper, actions are single-slot rewrites: they replace one value of one zone-property target by deleting the previous value and inserting the new one. This simplification makes the resulting state transitions easy to inspect and replay.
+
+Once the accepted actions have been determined, they are committed in the already fixed schedule order. The current graph is updated step by step by applying each accepted action in turn. The result of this process is the next RDF graph state. Although the implementation applies the accepted actions sequentially, the evaluation step is treated semantically as one state transition from the current graph to the next graph. Intermediate internal states are not considered externally visible outcomes of the evaluation step.
+
+This distinction is important. The purpose of the execution semantics is not to model arbitrary low-level concurrency control mechanisms inside a database engine. Its purpose is to define, at the semantic level, how one evaluation step transforms the current graph into the next graph under fixed ordering and acceptance rules.
+
+\subsection{Transition Trace Recording}
+\label{sec:trace-recording}
+
+The final part of the execution semantics is trace recording. Each evaluation step produces the next RDF graph state and a structured trace that explains how that state was obtained.
+
+The trace records at least the input graph snapshot and its digest, the event-window identifier, the active role context, the enabled rule instances, the constructed action instances, the deterministic schedule, the acceptance and rejection decisions, and the committed updates. Here, a digest is a compact hash of a graph state.
+The digest function is fixed as follows. All graphs used in this paper are ground, that is, they contain no blank nodes. The canonical form of a graph state is therefore its N-Triples serialization with lines sorted in lexicographic byte order, and the digest is the SHA-256 hash of that byte sequence. Decision-level digests use the same function. Because the canonical form of a ground graph is unique, canonical-form equality is exactly graph equality. Digest equality is then used as a practical equality check under the standard collision-resistance assumption of SHA-256: equal digests are taken to witness equal canonical forms, and replay verifies a reconstructed state by recomputing its digest. For graphs containing blank nodes, the W3C RDF Dataset Canonicalization algorithm (RDFC-1.0, formerly URDNA2015) would be required in place of sorted N-Triples.
+In the evaluated implementation, the trace also records decision-level state digests, that is, compact hashes of the graph state before and after accepted actions, which supports replay-based checking of the transition outcome.
+
+Trace recording serves two purposes. First, it supports auditability. A reviewer can inspect which actions were enabled, which were accepted, which were rejected, and why. Second, it supports replay. If the graph snapshot, event window, rule set, role context, and execution settings are fixed, the recorded trace should allow the same committed outcome to be reconstructed and verified.
+
+The trace is therefore part of the execution semantics itself, because the paper's reproducibility claim depends on being able to reconstruct and verify the committed transition.
+
+\subsection{Fixed Components Before Each Evaluation Step}
+
+Before an evaluation step begins, several components must already be fixed. These are not minor implementation details: they determine which actions become possible and which next state is produced. Table~\ref{tab:fixed-components} summarizes the five components and their role in the execution semantics.
+
+\begin{table*}[h]
+\caption{Fixed components required before each evaluation step}
+\label{tab:fixed-components}
+\centering
+\begin{tabular}{|p{2.6cm}|p{5.2cm}|p{4.3cm}|p{4.0cm}|}
+\hline
+\textbf{Component} & \textbf{Definition} & \textbf{Role in the evaluation step} & \textbf{Why it must be fixed} \\
+\hline
+RDF graph state $G_t$ & The current machine-readable state of the semantic digital twin, containing facts such as zone temperatures, ventilation modes, emergency states, and policy parameters. & Provides the baseline against which rule conditions are evaluated and to which accepted actions are applied. & All downstream decisions reference $G_t$; without a single well-defined state there is no common starting point for the step. \\
+\hline
+Graph-evaluation semantics & The fixed and deterministic procedure used to evaluate rule conditions against the graph. May be direct pattern matching or a deterministic inference regime, including any ontological reasoning. & Determines which rule instances match the current graph and event window, and therefore which actions can be enabled. & The same graph condition must not evaluate differently across repeated executions; otherwise enablement becomes nondeterministic \cite{Corman2018RecursiveSHACL,Oudshoorn2026SHACLValidationOntologies}. \\
+\hline
+Validation semantics & The fixed and deterministic procedure used to check whether a candidate graph (the current graph plus accepted actions plus the action under consideration) satisfies safety and governance constraints. & Decides whether a scheduled action is admissible and may therefore be committed. Separates rule enablement from action acceptance. & Graph inference and graph validation do not play the same role and may follow different semantic assumptions; fixing validation independently is what allows an enabled action to be rejected on admissibility grounds \cite{Corman2018RecursiveSHACL,Oudshoorn2026SHACLValidationOntologies}. \\
+\hline
+Windowing policy & The fixed policy that maps the timestamped input stream to one current event window at each evaluation step $t$. & Determines which events are visible during the step and therefore which rules can be enabled. & If the window definition changes, enablement changes; the windowing function is part of the execution semantics, not a peripheral engineering choice \cite{Botan2010SECRET,DellAglio2014RSPQL}. \\
+\hline
+Role context & The currently active governance setting: which roles are active and how precedence between them is determined. & Affects runtime role filtering, action ordering, admissibility, and trace content. & If role precedence changes, the committed outcome may also change even when the graph and event window are identical; governance is part of execution logic, not an external filter. \\
+\hline
+\end{tabular}
+\end{table*}
+
+\subsection{Scope: Entailment Regimes and Validation Inputs}
+\label{sec:scope-entailment}
+
+The guarantees in this paper are stated for graph-evaluation semantics that are deterministic and entailment-free: rule conditions are evaluated by direct pattern matching over the asserted graph, as in the evaluated implementation. Systems that use ontological inference can be accommodated, but only if the entailment regime is fixed as part of the graph-evaluation semantics. Concretely, a deployment must pin the pair $(E, V)$, where $E$ specifies how rule conditions are evaluated (simple matching, or matching over a deterministic RDF Schema or Web Ontology Language RL profile materialization computed before the step begins) and $V$ specifies the validation input (the asserted graph or the materialized graph). The two choices are independent and both affect the outcome. For example, under $E={}$materialized and $V={}$asserted, an action can be enabled by inferred triples and yet be validated against a graph that does not contain them, so the same rule file can yield different enabled sets and different admissibility verdicts under different $(E,V)$ pairs \cite{Corman2018RecursiveSHACL,Oudshoorn2026SHACLValidationOntologies}. Theorem~\ref{thm:repro} therefore holds relative to a fixed $(E,V)$ configuration: reproducibility is guaranteed within a configuration, and the configuration is recorded in the trace settings so that replay uses the same pair. All experiments in Section~\ref{sec:evaluation} use $E={}$simple matching and $V={}$asserted graph.
+
+
+\subsection{Execution Guarantees Under Fixed Assumptions}
+
+Under these fixed assumptions, Theorem~\ref{thm:repro} states the central guarantee: the procedure yields, for a given input configuration, exactly one ordered candidate-action sequence, one accepted action set, one successor RDF graph state, and one transition trace.
+
+Rule enablement is deterministic because the event window, graph-evaluation implementation, graph state, and rule-level governance data are fixed. Action construction is deterministic because identifiers, bindings, and window references are derived in a fixed way. Scheduling is deterministic because the ordering key is fixed. Acceptance is deterministic because admissibility is checked using a fixed validation semantics. The next state and the trace are therefore also deterministic. This means that the same input should lead to the same committed output as long as the assumptions remain unchanged. This is the central execution guarantee that the paper contributes.
+
+\subsection{Relation between the execution semantics and the evaluated implementation}
+
+The procedure described above is the proposed execution semantics used in this paper. The experiments in Section V evaluate one implementation of the proposed execution semantics. An implementation that follows the specified ordering, admissibility, commitment, and trace-recording steps should reproduce the same ordering, acceptance, commitment, and trace behavior under the same fixed inputs.
+
+The evaluated implementation makes several explicit choices: it uses a 5-minute sliding window, direct pattern matching without additional inference, a fixed deterministic schedule key, deterministic first-writer-wins same-target shadowing, incremental admissibility checking, and replay based on recorded decision-level digests. These choices are important because they explain exactly what the reported results do and do not support.
+
+Accordingly, the experiments in Section V should be read as an evaluation of one concrete implementation of the proposed execution semantics. They show that the proposed execution semantics can be realized in a fully specified implementation whose behavior is reproducible and reviewable. They do not claim that every other possible implementation of the same execution semantics would necessarily behave identically in performance or internal technical detail.
+
+\section{Governance and Safety Rules}
+\label{sec:governance}
+
+The previous section treated the role context as one fixed input of the evaluation step; this section details how governance enters each stage of the step and how safety rules relate to admissibility.
+
+\subsection{Governance as part of the execution decision}
+
+In this paper, governance is part of the execution decision itself. It is not only checked after actions have already been chosen. Governance affects the execution semantics in four places.
+
+First, governance affects enablement. A rule may match the current event window and the current graph state, but it produces an enabled action instance only if its rule-level governance condition holds: for example, a required policy parameter being present in the graph. Whether the issuing role is currently active is a separate runtime check, applied later as the role filter (Section IV-C). This layering is consistent with access-control thinking in which permission depends not only on the requested operation, but also on the current actor and context \cite{Kirrane2017RDFAccessControlSurvey}.
+
+Second, governance affects ordering. The execution semantics uses role precedence as one component of the deterministic scheduling key. This allows the system to express stable precedence patterns such as emergency overrides, operator preference over occupant-issued actions, or any other predefined governance order. As a result, governance can change which action is considered first when several actions compete.
+
+Third, governance affects acceptance. Even if an action is enabled and scheduled, it is rejected if committing it would violate governance-related constraints. In other words, governance is part of the admissibility check itself. This is compatible with RDF access-control work in which policy constraints shape what updates or views are permitted \cite{Flouris2010AccessRDF,Gabillon2010SPARQLAccessControl}.
+
+Fourth, governance affects accountability. The recorded trace includes the relevant role context and the resulting enablement, ordering, and acceptance decisions. This makes it possible to inspect not only what the system did, but also which governance setting influenced the committed result.
+
+\subsection{Safety rules and validation}
+
+Safety rules describe conditions that the graph must preserve. Examples include value bounds, consistency relations between states, and emergency-related requirements. The execution semantics does not require one specific constraint language. It only requires the validation semantics to be fixed and deterministic. This matters because an action is accepted only if the candidate next graph satisfies the safety rules.
+
+Safety rules and admissibility are not the same thing. A safety rule states what must be true of the graph. Admissibility is the check applied to a proposed action. An action is admissible when applying it would still leave the graph satisfying every safety rule.
+SHACL-style validation is a natural way to implement this kind of checking, especially in semantic systems where graph constraints must be evaluated explicitly \cite{Corman2018RecursiveSHACL}. At the same time, safety checking is not identical to graph inference. Rule conditions may be evaluated under one graph interpretation regime, while invariant checking may follow a closed-world validation logic. If ontological background knowledge is also used, the interaction between open-world reasoning and closed-world validation must be made explicit. That interaction can change what counts as an admissible next state \cite{Oudshoorn2026SHACLValidationOntologies}.
+
+\subsection{Admissibility in the evaluated implementation}
+\label{sec:iv-gates}
+
+The evaluated implementation checks each scheduled action through four gates, applied in order. The first gate is a \emph{role filter}. It discards enabled instances whose issuing role is not active under the current governance context. The second gate is a \emph{policy guard}. It checks proposed values against role-specific minima and maxima stored as ordinary triples on a policy node (e.g., \texttt{occupantMaxSetpoint}, \texttt{operatorMaxSetpoint}). The third gate is the \emph{conflict gate}. It applies first-writer-wins same-target shadowing: once an earlier action has been accepted for a target, a later action writing to the same target is rejected. The fourth gate is the \emph{admissibility check}. It validates the graph that would result from committing the action against the SHACL shapes. These gates are separated because they catch different violations: inactive roles, role-specific value violations, same-target collisions, and graph-level rule violations. In all workloads evaluated here every issuing role is active, so the role filter never rejects an action. The gate is included in the resolver as the mechanism that enforces runtime role membership; in these runs, the role configuration makes the check automatically satisfied because no candidate action is issued by an inactive role.
+
+We provide two interchangeable implementations of the fourth gate, the admissibility check. In this paper, the shape graph means the set of SHACL shapes used to validate candidate successor graphs. A full SHACL validator executes the shape graph against each candidate and is used as the reference validator. An \emph{incremental} validator reimplements the same shapes zone-locally so that only zones touched by an action are re-checked. This is valid for the evaluated implementation because every shape has a target scope confined to a single heating, ventilation, and air conditioning (HVAC) zone or to the policy node. The two validators are selected via the \texttt{ADMISSIBILITY\_REGIME} environment variable. Section~\ref{sec:eval:validator} shows that the two validators return the same admissibility verdict on all twelve single-property changes and all forty-nine pairwise changes to the base graph.
+
+\section{Experimental Evaluation}
+\label{sec:evaluation}
+
+The evaluation examines the proposed execution semantics in several complementary ways. It tests reproducibility under fixed inputs, validity of the committed successor state, the effect of governance settings, implementation consistency, runtime behavior, and whether the execution can be replayed. In simple terms, the evaluation asks four main questions. Does the implementation produce the same successor state under fixed inputs? Does the successor state satisfy the defined safety constraints? Does governance precedence change the committed result in a controlled way? Can the recorded trace reproduce the same evaluation step?
+
+The experiments map onto the objectives of Section~I as follows. Objective~1 (reproducible committed states) is addressed by the baseline comparison (Section~\ref{sec:eval:baseline}) and the replay study (Section~\ref{sec:eval:trace}); Objective~2 (deterministic ordering) by the tie-stress study (Section~\ref{sec:eval:determinism}); Objective~3 (admissibility-based commitment) by the baseline comparison and the EV-charging scenario (Section~\ref{sec:eval:ev}); Objective~4 (governance settings) by the precedence study (Section~\ref{sec:eval:governance}); and Objective~5 (trace recording) by the replay study.
+
+In addition, we include two implementation-consistency checks: whether the incremental validator returns the same admissibility verdicts as the SHACL reference validator, and whether the reference and incremental resolvers produce the same accepted actions and successor graph. To answer these questions, we report validator agreement, unique successor states, final-state admissibility, mean accepted actions, runtime, and replay success.
+
+\subsection{Implementation configuration and workloads}
+\label{sec:eval:setup}
+
+The default state contains three HVAC zones (ZoneA, ZoneB, ZoneC) and one policy node. At the start of the step ZoneA has \texttt{currentSetpoint} 22 and ZoneB has \texttt{currentSetpoint} 20; these are the starting values the setpoint arithmetic in the examples below refers to. The default event window contains six events at the same timestamp: an occupant setpoint request for ZoneA, a demand-response cap for ZoneA, a CO$_2$ spike for ZoneC, an occupancy event for ZoneB, an emergency alarm for ZoneC, and a preheat request for ZoneB. Together these events enable eight action instances. The evaluated implementation uses a 5-minute sliding window, direct pattern matching without additional inference, the fixed scheduling key \texttt{(roleRank, priority, tsKey, rid, bindKey, aid)}, deterministic first-writer-wins same-target shadowing, and incremental admissibility checking. Each action rewrites exactly one zone-property slot.
+
+In addition to the default workload, three targeted workloads are used: a \emph{tie-conflict} workload with two operator-issued actions that have the same role, priority, and timestamp; a \emph{governance-conflict} workload with an operator cap competing against an occupant request; and a \emph{governance-clean} workload that explicitly exercises admissibility. These workloads serve different purposes. The default workload represents the main building-automation scenario. The tie-conflict and governance-conflict workloads are targeted cases for isolating order dependence and role precedence. The governance-clean workload is used to show an explicit admissibility rejection. The synthetic tied-candidate workloads in Section~\ref{sec:eval:determinism} stress the scheduler under extreme ties, while the scalability workloads in Section~\ref{sec:eval:scalability} test implementation efficiency while preserving the same execution result. Finally, a scenario from a second application domain (an electric-vehicle (EV) charging cluster) with a qualitatively different, cross-target constraint structure is defined and evaluated in Section~\ref{sec:eval:ev}.
+
+All experiments were executed on a 12th Gen Intel Core i9-12900KF (3.20~GHz) with 32~GB RAM running Windows 11, with CPython 3.14, rdflib 7.6.0, and pySHACL 0.31.0. The Python hash randomization was left at its default setting; as Section~\ref{sec:eval:determinism} discusses, determinism does not depend on it. Reported runtimes are wall-clock means with standard deviations; the number of trials is stated in each table caption.
+
+\subsection{Walkthrough of one evaluation step on the default workload}
+\label{sec:eval:walkthrough}
+
+Table~\ref{tab:default-walkthrough} provides a concrete walkthrough of one evaluation step on the default workload. Using the actual role precedence, rule priorities, and fixed scheduling key used in the evaluated implementation, it shows how eight constructed action instances are examined in order, yielding five accepted actions and three rejected later same-target writes.
+Within the emergency role, \texttt{r6} is scheduled before \texttt{r5} because it carries the lower priority number; the two write different targets (\texttt{ventilationMode} and \texttt{emergencyState}), so their relative order does not affect the committed result.
+
+\begin{table*}[h]
+\caption{Walkthrough of one evaluation step on the default workload}
+\label{tab:default-walkthrough}
+\centering
+\begin{tabular}{|p{0.9cm}|p{1.0cm}|p{2.5cm}|p{1.0cm}|p{2.6cm}|p{1.3cm}|p{5.5cm}|}
+\hline
+\textbf{Order} & \textbf{Rule} & \textbf{Triggering event} & \textbf{Zone} & \textbf{Constructed action} & \textbf{Decision} & \textbf{Reason} \\
+\hline
+1 & r6 & EmergencyAlarm & ZoneC & \texttt{ventilationMode := emergency} & Accepted & First emergency action in fixed order; candidate graph remains admissible. \\
+\hline
+2 & r5 & EmergencyAlarm & ZoneC & \texttt{emergencyState := true} & Accepted & Candidate graph remains admissible after emergency ventilation has already been set. \\
+\hline
+3 & r2 & DemandResponsePeak & ZoneA & \texttt{currentSetpoint := 21} & Accepted & First write to ZoneA \texttt{currentSetpoint}; candidate graph remains admissible. \\
+\hline
+4 & r3 & CO2Spike & ZoneC & \texttt{ventilationMode := high} & Rejected & Later same-target write to ZoneC \texttt{ventilationMode} after earlier accepted action \texttt{r6}. \\
+\hline
+5 & r7 & PreheatRequest & ZoneB & \texttt{currentSetpoint := 22} & Accepted & First write to ZoneB \texttt{currentSetpoint}; candidate graph remains admissible. \\
+\hline
+6 & r8 & DemandResponsePeak & ZoneA & \texttt{ventilationMode := off} & Accepted & First write to ZoneA \texttt{ventilationMode}; candidate graph remains admissible. \\
+\hline
+7 & r1 & OccupantSetpointReq & ZoneA & \texttt{currentSetpoint := 24} & Rejected & Later same-target write to ZoneA \texttt{currentSetpoint} after earlier accepted action \texttt{r2}. \\
+\hline
+8 & r4 & OccupancyDetected & ZoneB & \texttt{currentSetpoint := 21} & Rejected & Later same-target write to ZoneB \texttt{currentSetpoint} after earlier accepted action \texttt{r7}. \\
+\hline
+\end{tabular}
+\end{table*}
+
+The walkthrough makes the key point concrete: commitment is not determined by trigger presence alone, but by the interaction between fixed execution order, same-target conflict handling, and admissibility checking. In the evaluated implementation, each decision is recorded with a machine-readable reason code. Accepted actions carry the reason \texttt{admissible}. The three rejections in this walkthrough all carry \texttt{shadowed\_by\_prior\_accepted\_action}, which is issued by the first-writer-wins conflict gate before admissibility is evaluated. Admissibility itself never fires in this particular workload because every first writer is admissible in isolation; an admissibility-driven rejection is exhibited in Section~\ref{sec:eval:governance}.
+
+\subsection{Validator agreement}
+\label{sec:eval:validator}
+
+The paper uses two admissibility validators. The first is a SHACL validator over the shape graph. The second is an incremental zone-scoped Python validator used inside the resolver. The resolver is the component that orders candidate actions, applies conflict handling, checks admissibility, and returns the accepted actions. For the incremental validator to be a valid substitute in this implementation, both validators must return the same admissibility verdicts. We test this with twelve single-property changes of the base graph. These changes cover numeric boundaries, enumerated values, and SPARQL-based shapes. We then test the forty-nine compatible pairs generated by the test harness, that is, the well-formed pairwise changes that can be applied jointly to the base graph, to check whether combinations of changes are handled consistently.
+
+Both validators return the same verdict on all twelve single changes and all forty-nine pairwise changes (Table~\ref{tab:validator-equivalence}). We interpret this as evidence that, for the tested shape graph and changes, the incremental validator gives the same decisions as the SHACL validator.
+
+\begin{table}[t]
+\caption{Validator agreement between SHACL and the incremental validator across changes to the base graph.}
+\label{tab:validator-equivalence}
+\centering
+\small
+\begin{tabular}{|p{3.5cm}|p{1.8cm}|p{2.3cm}|}
+\hline
+\textbf{Change set} & \textbf{Agreement} & \textbf{Expectation met} \\
+\hline
+Single-property ($n{=}12$)  & 12/12 & 12/12 \\
+\hline
+Pairwise ($n{=}49$)          & 49/49 & 49/49 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Baseline comparison}
+\label{sec:eval:baseline}
+
+We compare the full implementation against three baselines that remove different parts of the commitment logic. \textbf{SHACL-gated (no shadowing)} keeps per-action admissibility checking but removes the first-writer-wins gate: each enabled action is applied in scheduled order to the working graph, SHACL validates the candidate, and non-conforming candidates are dropped; multiple accepted writes to the same target all commit (last-writer-wins). \textbf{Deterministic-order (no admissibility)} keeps the fixed scheduling key of Definition~\ref{def:key} but removes both the conflict gate and the admissibility check: all enabled actions are applied in schedule order, and SHACL is run once on the final graph to report admissibility. This baseline isolates the two factors that the random-order baseline removes jointly: differences between it and the random-order baseline are attributable to deterministic ordering alone, and differences between it and the full implementation are attributable to the commitment gates alone. \textbf{Random-order baseline (no admissibility)} removes ordering and both gates: all enabled actions are applied in random order, and SHACL is run once on the final graph to report admissibility. Each strategy runs thirty trials per workload.
+
+Table~\ref{tab:baseline} reports the number of unique successor states, admissibility rate of the final graph under SHACL, mean committed actions, and mean wall-clock runtime.
+
+\begin{table*}[t]
+\caption{Four strategies over three workloads, thirty trials per configuration. The default workload shows the strongest difference between strategies: eight distinct final states arise from random ordering, and only 23.3\% satisfy the shape graph. SHACL-gated execution also preserves final-state admissibility but invokes SHACL per action, incurring roughly a 50$\times$ runtime overhead on the default workload (134.65~ms versus 2.64~ms).}
+\label{tab:baseline}
+\centering
+\small
+\begin{tabular}{|p{3.2cm}|p{4.4cm}|p{1.5cm}|p{1.8cm}|p{1.8cm}|p{2.2cm}|}
+\hline
+\textbf{Workload} & \textbf{Strategy} & \textbf{Unique states} & \textbf{Admissible (\%)} & \textbf{Mean committed} & \textbf{Runtime (ms)} \\
+\hline
+default ($n{=}8$)             & Ours                                  & \textbf{1} & \textbf{100.0} & 5.0 & \textbf{2.64 $\pm$ 0.20} \\
+\hline
+default ($n{=}8$)             & SHACL-gated, no shadowing             & 1          & 100.0          & 6.0 & 134.65 $\pm$ 5.66 \\
+\hline
+default ($n{=}8$)             & Deterministic-order, no admissibility & 1          & 0.0            & 8.0 & 1.49 $\pm$ 0.38 \\
+\hline
+default ($n{=}8$)             & Random-order, no admissibility        & 8          & 23.3           & 8.0 & 1.49 $\pm$ 0.67 \\
+\hline
+tie conflict ($n{=}3$)        & Ours                                  & \textbf{1} & \textbf{100.0} & 2.0 & \textbf{1.09 $\pm$ 0.06} \\
+\hline
+tie conflict ($n{=}3$)        & SHACL-gated, no shadowing             & 1          & 100.0          & 3.0 & 49.78 $\pm$ 3.74 \\
+\hline
+tie conflict ($n{=}3$)        & Deterministic-order, no admissibility & 1          & 100.0          & 3.0 & 0.69 $\pm$ 0.37 \\
+\hline
+tie conflict ($n{=}3$)        & Random-order, no admissibility        & 2          & 100.0          & 3.0 & 0.62 $\pm$ 0.17 \\
+\hline
+governance conflict ($n{=}3$) & Ours                                  & \textbf{1} & \textbf{100.0} & 2.0 & \textbf{1.22 $\pm$ 0.40} \\
+\hline
+governance conflict ($n{=}3$) & SHACL-gated, no shadowing             & 1          & 100.0          & 3.0 & 50.03 $\pm$ 3.81 \\
+\hline
+governance conflict ($n{=}3$) & Deterministic-order, no admissibility & 1          & 100.0          & 3.0 & 0.64 $\pm$ 0.15 \\
+\hline
+governance conflict ($n{=}3$) & Random-order, no admissibility        & 2          & 100.0          & 3.0 & 0.65 $\pm$ 0.22 \\
+\hline
+\end{tabular}
+\end{table*}
+
+Two observations. First, on the default workload, removing admissibility causes 76.7\% of runs to produce an inadmissible final state. Two independent constraints drive this result: ZoneA's comfort cap, which is satisfied only if the operator cap rather than the occupant raise is the surviving write, and the emergency-consistency shape on ZoneC, which is satisfied only if emergency ventilation rather than the CO$_2$-spike high setting is the surviving ventilation write. Under random order without commitment gates, each condition holds with probability one-half, so roughly one-quarter of trials yield an admissible final state, matching the observed 23.3\%. Second, on the simpler tie-conflict and governance-conflict workloads every enabled action is admissible in isolation, so final-state admissibility is 100\% despite the lost determinism; the remaining measure is the number of distinct final states. SHACL-gated execution also preserves final-state admissibility on every workload but pays the cost of invoking SHACL per action.
+
+The deterministic-order baseline separates the two factors. It produces a single unique final state on every workload, confirming that the fixed scheduling key alone removes outcome multiplicity. Yet its final-state admissibility on the default workload is 0\,\%, confirming that validity is contributed by the commitment gates rather than by ordering: with the conflict and admissibility gates removed, all eight actions commit (including the occupant request that drives ZoneA above its comfort cap), so the single deterministic outcome is itself inadmissible. The random-order baseline's 76.7\,\% inadmissibility rate on the default workload therefore decomposes cleanly: ordering explains how many distinct outcomes occur, and admissibility-based commitment explains whether the outcome satisfies the constraints.
+
+A further observation concerns the committed-action counts. The SHACL-gated baseline commits six actions on the default workload where our implementation commits five. The extra commitment is the occupant action \texttt{r4}, an occupancy-detected increment on ZoneB. Every action in the evaluated implementation is a single-slot rewrite, and its inserted value is computed once, at construction time, from the zone value in $G_t$ (Definition~\ref{def:action}). Because ZoneB starts at 20, \texttt{r4} is built as a fixed write of 21 to \texttt{currentSetpoint}; it does not recompute the increment when it is later applied. In the SHACL-gated baseline, the operator preheat \texttt{r7} sets ZoneB to 22 first. Action \texttt{r4} is then applied on top, replacing 22 with its precomputed value 21. Since 21 still satisfies the comfort shape, the per-action gate accepts it, so the occupant value overwrites the operator value within the same evaluation step. The smaller committed set is preferable for two reasons. First, under last-writer-wins the final value of a target is decided by the schedule position of the last admissible writer rather than by role precedence; on the default workload a lower-precedence occupant action thereby overrides a setpoint already committed by an operator action, which is exactly the governance inversion that the precedence order is meant to exclude. Second, the evaluation step is semantically a single state transition; committing several writes to the same target makes every write except the last an unobservable side effect with no semantic role, while inflating the committed count. First-writer-wins makes the precedence-maximal admissible writer decisive and keeps every committed action observable in the successor state.
+
+
+\subsection{Determinism under ties}
+\label{sec:eval:determinism}
+
+The execution semantics is deterministic by construction: the scheduling key \texttt{(roleRank, priority, tsKey, rid, bindKey, aid)} is total over action instances (Lemma~\ref{lem:total}). The \texttt{aid} component is a collision-resistant hash of the rule, event, window identity, and bindings, and is used as the final component of the key in the evaluated implementation; as shown in Remark~\ref{rem:hash}, schedule totality does not depend on this hash. We therefore stress the scheduling key with workloads that contain ties in role, priority, and timestamp.
+
+We generate $N$ synthetic candidate actions all targeting the same zone and property, all with identical role, priority, and timestamp. Only the identity components of the scheduling key (\texttt{rid}, \texttt{bindKey}, \texttt{aid}) break the tie. For $N \in \{2, 4, 8, 16, 32, 64\}$ we run thirty trials with two schedulers: our ordered resolver and a random-shuffle baseline that bypasses \texttt{schedule\_actions} and feeds candidates to the resolver in a uniform random order. Table~\ref{tab:determinism} reports the number of distinct successor digests per configuration.
+
+\begin{table}[t]
+\caption{Determinism stress over tied candidate actions. Our implementation produces a single state across thirty trials for every $N$. The shuffle baseline produces up to nine distinct final states; the limit of nine comes from our value construction (nine distinct admissible values), not from the resolver.}
+\label{tab:determinism}
+\centering
+\small
+\begin{tabular}{|p{2.8cm}|p{2.2cm}|p{2.2cm}|}
+\hline
+\textbf{$N$ tied candidates} & \textbf{Unique states (ours)} & \textbf{Unique states (shuffle)} \\
+\hline
+ 2 & \textbf{1} & 2 \\
+\hline
+ 4 & \textbf{1} & 4 \\
+\hline
+ 8 & \textbf{1} & 7 \\
+\hline
+16 & \textbf{1} & 9 \\
+\hline
+32 & \textbf{1} & 9 \\
+\hline
+64 & \textbf{1} & 9 \\
+\hline
+\end{tabular}
+\end{table}
+
+The main result is the contrast between one reproducible outcome and several possible outcomes; the upper limit of nine in the shuffle column comes from our value construction and not from the resolver.
+
+It is worth separating what these trials demonstrate from what Theorem~\ref{thm:repro} establishes. The theorem gives \emph{semantic} reproducibility by construction: the evaluation step is a function of its inputs, so two correct implementations of the semantics must agree. The thirty-trial experiments therefore do not test the semantics; they test whether the \emph{implementation} conforms to it, that is, whether any hidden source of nondeterminism leaks into the realized schedule or decisions. In a Python implementation the concrete risks are iteration order over sets and dictionaries, per-process hash randomization, and library-internal iteration order in the RDF store. The thirty trials are repeated within one interpreter run with Python's hash randomization left at its default setting, so identical successor digests across trials indicate that the realized schedule and decisions do not depend on container iteration order. Replay (Section~\ref{sec:eval:trace}) strengthens this evidence by reconstructing the entire step in a separate interpreter process from the recorded inputs alone, which additionally rules out a dependence on the per-process hash seed.
+
+\subsection{Governance and admissibility interaction}
+\label{sec:eval:governance}
+
+We construct three candidate actions on ZoneA's \\  \texttt{currentSetpoint}: an operator-issued unsafe request \texttt{A\_unsafe} (priority 0, value 24, above the ZoneA comfort cap of 23 yet still admitted by the operator policy cap of 24, since the policy guard accepts values up to and including 24), an operator-issued safe request at the cap \texttt{A\_op} (priority 1, value 23), and an occupant-issued request \texttt{A\_occ} (priority 2, value 22). The two operator actions share a role, so their order is fixed by priority: \texttt{A\_unsafe} precedes \texttt{A\_op}.
+
+Under the default precedence (emergency~$>$~operator~$>$~occupant) the schedule is $\langle\text{A\_unsafe}, \text{A\_op}, \text{A\_occ}\rangle$. A\_unsafe passes the policy guard (24 $\leq$ \texttt{operatorMaxSetpoint}) but is explicitly rejected with reason \texttt{inadmissible} against the \texttt{ZoneAComfortCapShape}. A\_op is then accepted. A\_occ is shadowed. The committed setpoint is~23.
+
+Under reversed precedence (occupant~$>$~operator) the schedule is $\langle\text{A\_occ}, \text{A\_unsafe}, \text{A\_op}\rangle$. A\_occ is accepted first. Both A\_unsafe and A\_op are shadowed before reaching admissibility. The committed setpoint is~22.
+
+Table~\ref{tab:governance} summarizes the decision chain for both cases. This scenario demonstrates three properties jointly: (i)~admissibility is an active check, recording an explicit \texttt{inadmissible} rejection in case~1; (ii)~governance precedence changes the committed value within the admissible set (22~vs.~23); (iii)~safety is preserved under both governance configurations by different mechanisms (admissibility in case~1, shadowing in case~2). The final state is admissible in both cases.
+
+\begin{table}[t]
+\caption{Governance-clean workload, per-action decisions. Case 1: admissibility rejects the unsafe candidate directly. Case 2: the unsafe candidate is shadowed before admissibility is evaluated. Both cases end in an admissible final state.}
+\label{tab:governance}
+\centering
+\small
+\begin{tabular}{|p{2.5cm}|p{1.5cm}|p{0.9cm}|p{2.1cm}|}
+\hline
+\textbf{Case} & \textbf{Action} & \textbf{Value} & \textbf{Decision} \\
+\hline
+Case 1 (op~$>$~occ), final setpoint = 23 & A\_unsafe & 24 & \texttt{inadmissible} \\
+\hline
+                                   & A\_op     & 23 & \texttt{admissible}   \\
+\hline
+                                   & A\_occ    & 22 & shadowed              \\
+\hline
+Case 2 (occ~$>$~op), final setpoint = 22 & A\_occ    & 22 & \texttt{admissible}   \\
+\hline
+                                   & A\_unsafe & 24 & shadowed              \\
+\hline
+                                   & A\_op     & 23 & shadowed              \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Second application scenario: EV-charging cluster}
+\label{sec:eval:ev}
+
+To test whether the execution semantics carries beyond the HVAC scenario, we constructed a second scenario from a different domain with a qualitatively different constraint structure. The state contains four charging points (CP1 to CP4) with \texttt{chargingPower} and \texttt{connectorState}, a feeder node with \texttt{feederState} and a capacity budget of 50\,kW, and a policy node. The role context is grid ~$>$~ fleet ~$>$~ driver, and eight rules (Table~\ref{tab:ev-rules}) map charge requests, fleet schedules, grid capacity signals, grid emergencies, plug-in events, departure notices, and fault detections to single-slot rewrites. Rule~\texttt{q5} is a per-target rule: it matches each charging point separately and therefore yields one single-slot action instance per charging point, in keeping with the single-slot model, rather than a single multi-target action.
+
+\begin{table*}[h]
+\caption{Rules of the EV-charging scenario}
+\label{tab:ev-rules}
+\centering
+\begin{tabular}{|p{1.0cm}|p{1.4cm}|p{2.6cm}|p{2.6cm}|p{6.2cm}|}
+\hline
+\textbf{Rule} & \textbf{Role} & \textbf{Event type} & \textbf{Target property} & \textbf{Effect} \\
+\hline
+q1 & driver & ChargeRequest & \texttt{chargingPower} & Sets the charging power of the affected charging point to the requested value. \\
+\hline
+q2 & fleet & FleetSchedule & \texttt{chargingPower} & Sets the charging power of the affected charging point to the scheduled value. \\
+\hline
+q3 & grid & CapacitySignal & \texttt{chargingPower} & Caps the charging power of the affected charging point at the signaled value. \\
+\hline
+q4 & grid & GridEmergency & \texttt{feederState} & Sets the feeder state to \texttt{curtailed}. \\
+\hline
+q5 & grid & GridEmergency & \texttt{chargingPower} & Instantiates once per matched charging point and rewrites that point's \texttt{chargingPower} to 5 kW. \\
+\hline
+q6 & driver & PlugIn & \texttt{connectorState} & Sets the connector state of the affected charging point to \texttt{occupied}. \\
+\hline
+q7 & fleet & DepartureSoon & \texttt{chargingPower} & Sets the charging power of the affected charging point to 22\,kW. \\
+\hline
+q8 & fleet & FaultDetected & \texttt{connectorState} & Sets the connector state of the affected charging point to \texttt{outOfService}. \\
+\hline
+\end{tabular}
+\end{table*}
+
+The decisive difference from the HVAC scenario lies in the shape graph. In addition to target-local range and enumeration shapes (per-charging-point power within $[0, 22]$\,kW; \texttt{connectorState} drawn from an enumerated set), it contains a SPARQL-based \emph{feeder-budget} shape requiring the sum of \texttt{chargingPower} over all charging points to remain at or below the feeder budget (Figure~\ref{fig:ev-shape}), and an emergency-consistency shape requiring every \texttt{chargingPower} to be at most 5\,kW whenever the feeder is curtailed. Both shapes couple several targets, so they fall outside the target-local class of Proposition~\ref{prop:maximality} and outside the zone-local assumption of the incremental validator of Section~\ref{sec:iv-gates}; this scenario therefore uses the reference SHACL validator.
+
+\begin{figure}[h]
+\small
+\begin{verbatim}
+# Feeder budget (cross-target shape)
+ex:FeederBudgetShape a sh:NodeShape ;
+  sh:targetNode ex:Feeder1 ;
+  sh:sparql [
+    sh:select """
+      SELECT $this WHERE {
+        { SELECT (SUM(?p) AS ?total) WHERE {
+            ?cp a ex:ChargingPoint ;
+                ex:chargingPower ?p . } }
+        $this ex:feederBudget ?b .
+        FILTER (?total > ?b)
+      } """ ;
+  ] .
+\end{verbatim}
+\caption{The cross-target feeder-budget shape of the EV-charging scenario. Unlike the zone-local HVAC shapes, its verdict depends on the values of several targets at once, so admissibility must be evaluated over sets of actions.}
+\label{fig:ev-shape}
+\end{figure}
+
+
+\begin{table}[t]
+\caption{EV headline window (three 22\,kW requests), thirty trials per strategy.
+Because the conflict is cross-target, ordering does not create outcome
+multiplicity; admissibility-based commitment is the only strategy that yields a
+valid successor state.}
+\label{tab:ev-baseline}
+\centering
+\small
+\begin{tabular}{|p{3.4cm}|p{1.5cm}|p{2.0cm}|}
+\hline
+\textbf{Strategy} & \textbf{Unique states} & \textbf{Admissible (\%)} \\
+\hline
+Ours                                   & \textbf{1} & \textbf{100.0} \\
+\hline
+Deterministic-order, no admissibility  & 1          & 0.0 \\
+\hline
+Random-order, no admissibility         & 1          & 0.0 \\
+\hline
+\end{tabular}
+\end{table}
+\paragraph{Headline window: a non-pairwise conflict.}
+The headline event window contains three simultaneous charge requests of 22 kW for CP1, CP2, and CP3. The fourth charging point CP4 is idle, with \texttt{chargingPower} 0 kW at the start of the window, so the feeder-budget sum is taken over all four points. Each request is admissible in isolation and each \emph{pair} is admissible (44\,kW $\le$ 50\,kW), but the \emph{triple} is not
+(66\,kW $>$ 50\,kW). This is precisely the non-pairwise conflict structure
+discussed in Section~\ref{sec:admissibility-resolution}: no pairwise check can
+reject it. The resolution procedure accepts the first two requests in schedule order and rejects the third with reason \texttt{inadmissible}; the committed powers are CP1 = CP2 = 22 kW and CP3 = CP4 = 0 kW, so the total committed charging power is 44 kW and the successor graph is admissible. Across thirty trials the implementation produced a single
+successor state with 100\,\% final-state admissibility.
+
+This scenario also isolates the two factors more cleanly than the HVAC
+workloads could. In HVAC, ordering and admissibility were entangled because the
+competing actions wrote the \emph{same} target, so order changed the final
+value. Here the three requests write \emph{different} targets (CP1, CP2, CP3),
+so order cannot change the final graph: every application order commits all
+three writes and reaches the same 66\,kW state. Consequently the
+deterministic-order baseline and the random-order baseline both produce exactly
+one final state but that single state is \emph{inadmissible} (0\,\% of trials
+admissible for either baseline), because nothing blocks the budget violation.
+The cross-target conflict therefore decouples the two contributions of the
+semantics: ordering is no longer what distinguishes the strategies, and
+\emph{admissibility-based commitment alone} keeps the successor state valid.
+
+\paragraph{Governance window.}
+A governance-conflict case in which a grid capacity signal (cap 10\,kW) competes
+with a fleet schedule (22\,kW) on the same charging point behaves analogously to
+Section~\ref{sec:eval:governance}: precedence selects the committed value within
+the admissible set. Under grid~$>$~fleet the committed value is 10\,kW (the grid
+signal wins and the fleet schedule is shadowed); under fleet~$>$~grid it is
+22\,kW. The final state is admissible under both precedence configurations.
+
+\paragraph{Grid-emergency window: cross-target commitment order.}
+A grid emergency exercises both cross-target shapes on the committed path. From
+a state in which CP1 and CP2 are already charging at 22\,kW, a
+\texttt{GridEmergency} fires q5 (reduce every charging point to 5\,kW) and q4
+(assert feeder curtailment). The two actions interact through the
+curtailment-consistency shape: asserting curtailment while a charging point is
+still above 5\,kW would violate it. The execution semantics resolves this
+through the schedule, not through a special case: q5 carries the lower priority
+number and is committed before q4, so the load reductions bring every charging
+point to 5\,kW first, and the curtailment assertion is then admissible. The
+committed successor sets every \texttt{chargingPower} to 5\,kW and
+\texttt{feederState} to \texttt{curtailed}, and is admissible. This illustrates
+a general ordering discipline that target-local scenarios never require: a
+constraint-tightening action must be scheduled after the actions that bring its
+targets into compliance. In the rule file this is expressed declaratively as
+q5's priority being lower than q4's; no change to the resolver is involved.
+
+Replaying the recorded trace of each EV window reproduces all decisions and the
+successor digest, and the headline and emergency windows produce identical
+successor digests across independent processes, confirming that the EV results
+do not depend on per-process iteration order.
+
+Two qualitative conclusions follow. First, the execution semantics transfers
+without modification: no stage of Definition~\ref{def:resolution} is
+HVAC-specific, and the same scheduler, gates, and trace format run unchanged on
+the new rule and shape files. Second, cross-target constraints change which
+component does the work. Same-target shadowing, which dominated the HVAC
+walkthrough, is rarely decisive here; rejection shifts to the admissibility gate
+operating on \emph{sets} of actions (the budget conflict), and the commitment
+\emph{order} becomes load-bearing for cross-target safety (the emergency
+window): two behaviours the target-local HVAC scenario could not exhibit.
+
+\subsection{Scalability}
+\label{sec:eval:scalability}
+
+The reference implementation described in Section~\ref{sec:iv-gates} clones the working graph on every action and computes full-graph digests and validation, yielding $O(N^2)$ wall-clock growth. The semantics does not require this. We implemented an incremental resolver that applies each action in place on a single working graph, validates only the zones touched by the action, and undoes rejected actions by reverting the mutation. A regression test confirms that the two resolvers produce identical accepted sets and identical successor digests on six synthetic workloads ($N\in\{10, 50, 100, 200, 400, 800\}$). The comparison is between two implementations of the same semantics; its purpose is to show that the procedure does not require the graph-cloning strategy used by the reference resolver.
+
+Table~\ref{tab:scalability} reports wall-clock runtime for both resolvers. The incremental resolver runs in about 55~ms at $N{=}800$, where the reference implementation takes about 63~s; the speedup grows with $N$ and reaches roughly 1138$\times$. This indicates that the observed $O(N^2)$ behavior of the reference implementation is caused by graph cloning and full-graph validation in that implementation, rather than by the execution semantics itself.
+
+\begin{table}[t]
+\caption{Scalability comparison between the reference resolver (graph cloning, full-graph validation per action) and the incremental resolver (updates the same working graph directly, zone-scoped validation). Both produce identical accepted sets and identical successor digests at every $N$. Runtimes are wall-clock means $\pm$ one standard deviation over five trials.}
+\label{tab:scalability}
+\centering
+\small
+\begin{tabular}{|p{0.3cm}|p{1.1cm}|p{1.9cm}|p{1.9cm}|p{1.4cm}|}
+\hline
+$\mathbf{N}$ & \textbf{Accepted} & \textbf{Ref.~(s)} & \textbf{Incr.~(s)} & \textbf{Speedup} \\
+\hline
+10 &  10 &  0.012 $\pm$ 0.001 & 0.001 $\pm$ 0.000 &   15.6$\times$ \\
+\hline
+ 50 &  50 &  0.247 $\pm$ 0.003 & 0.004 $\pm$ 0.000 &   68.0$\times$ \\
+\hline
+100 & 100 &  0.979 $\pm$ 0.009 & 0.007 $\pm$ 0.000 &  137.0$\times$ \\
+\hline
+200 & 200 &  3.890 $\pm$ 0.013 & 0.015 $\pm$ 0.001 &  259.5$\times$ \\
+\hline
+400 & 400 & 15.663 $\pm$ 0.057 & 0.029 $\pm$ 0.002 &  546.4$\times$ \\
+\hline
+800 & 800 & 63.080 $\pm$ 0.296 & 0.055 $\pm$ 0.002 & 1137.8$\times$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Trace integrity}
+\label{sec:eval:trace}
+
+We implement full-implementation replay. Given a recorded trace and the canonical rule file, the replayer rebuilds the input graph and event set, re-evaluates the rules, re-schedules the actions, and re-runs the resolver. The recorded trace contains the input graph snapshot, events, settings, and governance context. The replayer then compares the newly generated enabled actions, schedule, decision list, accepted actions, and successor digest with the recorded values. This is stronger than final-state replay. Final-state replay only checks whether re-applying the accepted actions reproduces the successor digest. Full replay can also detect divergences that happen to end in the same state.
+
+We run full-implementation replay for every workload family used in this paper: the default workload, the tie-conflict workload, the governance-conflict workload, the governance-clean workload under both precedence configurations, the determinism stress workload at $N{=}64$, and the EV-charging headline workload of Section~\ref{sec:eval:ev}. For each, the replayer reconstructs the input graph and event set from the recorded trace, re-evaluates the rules, re-schedules, and re-runs the resolver, then compares the regenerated enabled instances, schedule, per-decision reason codes, accepted set, and successor digest against the recorded values. Table~\ref{tab:replay} reports the outcome: replay reproduces every recorded field exactly for all listed replay cases. Because the replayer loads the canonical rule file separately, each replay checks both the trace and the rule-file dependency. For the default workload, the reproduced successor digest is \texttt{4bbb205b\ldots3014f}.
+
+\begin{table}[t]
+\caption{Full-implementation replay across all workloads. Each check compares a regenerated artifact against the recorded trace.}
+\label{tab:replay}
+\centering
+\small
+\begin{tabular}{|p{2.6cm}|p{1.0cm}|p{1.1cm}|p{1.2cm}|p{1.0cm}|}
+\hline
+\textbf{Workload} & \textbf{Enabled} & \textbf{Schedule} & \textbf{Decisions} & \textbf{Digest} \\
+\hline
+default                  & 8/8 & match & 8/8 & match \\
+\hline
+tie conflict             & 3/3 & match & 3/3 & match \\
+\hline
+governance conflict      & 3/3 & match & 3/3 & match \\
+\hline
+governance (op $>$ occ)  & 3/3 & match & 3/3 & match \\
+\hline
+governance (occ $>$ op)  & 3/3 & match & 3/3 & match \\
+\hline
+stress $N{=}64$          & 64/64 & match & 64/64 & match \\
+\hline
+EV charging              & 3/3 & match & 3/3 & match \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\section{Discussion and Limitations}
+
+This paper defined a stepwise execution semantics for concurrent ECA commitment over evolving RDF knowledge graphs in semantic digital twins. Our contribution explains how one evaluation step produces a committed next state under concurrency: enabled rule instances become action instances, those actions are ordered deterministically, admissibility is checked before commitment, and the resulting transition is recorded for replay and audit.
+
+\subsection{Execution semantics versus the evaluated implementation}
+
+In the general execution semantics, correctness depends on whether action ordering, acceptance, commitment, and trace recording follow the specified procedure and whether the resulting graph remains admissible. The evaluated implementation is one sequential implementation of the proposed semantics. It introduces deterministic same-target shadowing before incremental admissibility checks. In particular, \texttt{first\_writer\_wins} shadowing is a design choice of the evaluated implementation rather than a claim about all implementations consistent with the proposed execution semantics. This implementation is sufficient for the workloads studied here and is described explicitly in the manuscript. However, it should not be treated as evidence for every other possible implementation of the same execution semantics.
+
+\subsection{Open-world inference and closed-world validation}
+
+Semantic digital twin systems may use ontology reasoning when evaluating rule conditions, while safety checks are often implemented through SHACL-style validation. These two mechanisms may follow different assumptions. Rule-condition evaluation may infer facts from ontologies, while validation may require explicit constraint satisfaction in the graph.
+
+For this reason, the proposed execution semantics separates rule-condition evaluation from validation. Both must be fixed before an evaluation step begins. Otherwise, the same input graph could enable different actions or reject different actions depending on the reasoning and validation settings.
+
+Section~\ref{sec:scope-entailment} makes this requirement precise: the claims of this paper are scoped to deployments that fix the pair $(E,V)$ of entailment regime and validation input, and the evaluated implementation uses simple matching over the asserted graph for both. Recent results on SHACL validation in the presence of ontologies show why leaving this pair open would undermine both enablement and admissibility \cite{Oudshoorn2026SHACLValidationOntologies}.
+
+
+\subsection{Threats to validity}
+
+
+Three threats bear acknowledging. \emph{Construct validity:} admissibility is defined here relative to the shape graph we authored; a different shape graph could change which actions are admissible, but this is by design in any constraint-based commitment framework, and Section~\ref{sec:eval:validator} shows that the incremental check is faithful to the shape graph in use. Proposition~\ref{prop:maximality} bounds the deviation of the greedy accepted set from a maximum admissible set for target-local constraints, and Remark~\ref{rem:hardness} explains why no general bound is possible. \emph{Internal validity:} the determinism stress test uses synthetic workloads with nine distinct admissible values, so the shuffle baseline's distinct-state count saturates at nine even as $N$ grows; the contrast between a single outcome and any of several is nonetheless robust, and the numerical cap is stated explicitly in the results. \emph{External validity:} the main experiments use a building HVAC scenario with three zones and eight rules; Section~\ref{sec:eval:ev} adds an EV-charging scenario with cross-target constraints, which mitigates but does not eliminate the single-scenario concern. Generalization to industrial-scale rule sets, heterogeneous rule sources, and richer cross-entity shapes requires further study; the incremental validator in particular assumes that every shape target has zone-local scope, an assumption that holds for the HVAC shape graph but not for the EV-charging shape graph, where the reference validator is used.
+
+
+\section{Conclusion}
+
+This paper presented a stepwise execution semantics for concurrent ECA commitment over evolving RDF knowledge graphs in semantic digital twins. The contribution makes the commitment policy explicit by defining how enabled rule instances become action instances, how those actions are ordered, how admissibility is checked before commitment, and how the resulting transition is recorded for replay and audit.
+
+The semantics is specified through numbered definitions; the uniqueness of the schedule and the determinism of the evaluation step are established as a lemma and a theorem, and the relation between the greedy accepted set and maximal admissible sets is characterized formally, with a proven bound for target-local constraints.
+
+We evaluated the proposed semantics on a building-automation scenario with three zones, eight rules, and six events in one event window. The evaluation examined whether the implementation produces one predictable next state when several rule-triggered actions are enabled in the same event window, and whether that state remains valid under the defined safety rules. We compared our implementation against three reduced versions: one without same-target shadowing, one with deterministic ordering but no admissibility checking, and one with random ordering and no admissibility checking. We also ran a stress test where many actions are tied on every scheduling criterion, examined a case where safety and governance pull in different directions, measured runtime at increasing workload sizes, and replayed full executions from their recorded traces.
+In addition, a second scenario from the electric-vehicle-charging domain, with cross-target capacity constraints, showed that the semantics transfers unchanged to a different domain and that admissibility operates on sets of actions rather than on pairs.
+
+
+The results support the central claim. On the default workload, our implementation produces one next state that remains valid under the defined safety rules in about 3~ms. In the random-order baseline without admissibility-based commitment, the same inputs produce eight different final states, and only about a quarter of trials satisfy the safety rules. The SHACL-gated variant without shadowing reaches an admissible final state but is substantially slower because it invokes SHACL validation per action.
+The deterministic-order variant without admissibility checking produces a single final state that is nonetheless inadmissible on the default workload, which isolates the contribution of the two components: ordering alone accounts for reproducibility, and admissibility-based commitment accounts for validity.
+
+In the stress test, our implementation still produces one outcome across 30 trials even with 64 tied actions, while a random-order version produces up to nine different outcomes on the same inputs. In the governance case, the implementation preserves validity both when operator rules take precedence (by rejecting an unsafe operator action) and when occupant rules take precedence (by preventing later actions from overwriting an earlier safe one). In the scalability experiment, the incremental resolver processes 800 synthetic actions in about 55~ms and produces the same accepted set and successor graph as the reference resolver, showing that the execution procedure can be implemented without repeated full-graph cloning. Finally, replaying recorded traces reproduces every decision and the final graph exactly across all workloads.
+
+The novelty of this work is the explicit treatment of the commitment step as part of the execution semantics. Instead of leaving the ordering, acceptance, and recording of concurrent rule-triggered actions to implementation-specific code, the proposed semantics defines these decisions as part of one reproducible evaluation step. This is significant because semantic digital twins increasingly rely on automated decisions over evolving knowledge graphs, where inconsistent execution behavior can affect predictability, auditability, and trust. By making deterministic ordering, admissibility-based commitment, and trace recording explicit, the proposed approach provides a clearer basis for building reliable rule-based automation over RDF graph states.
+
+Taken together, these results show that deterministic ordering, admissibility-based commitment, and trace recording are not only implementation details, but central parts of reliable rule-based automation over evolving RDF graphs. The broader significance of the work is that it provides a semantic basis for building digital twin systems whose automated decisions can be reproduced, checked, and explained rather than depending on unspecified runtime behavior.
+
+\section*{Data Availability}
+The complete implementation, rule files, shape graphs, all workload definitions, the experiment harness, the recorded traces, and the scripts that regenerate every table in this paper are openly available at https://github.com/rronjahja/ContextRDL.
+
+\section*{Acknowledgment}
+The authors used OpenAI's ChatGPT for language editing throughout the manuscript, limited to grammar checking, language clarity, and minor rephrasing of author-written text. The authors reviewed all suggestions and take full responsibility for the final content of the manuscript.
+
+\bibliographystyle{ieeetr}
+\bibliography{library}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{Rron.jpg}}]{Rron Jahja}
+Rron Jahja is a Ph.D. candidate at the Faculty of Computer and Information Science, University of Ljubljana, Slovenia. He received the master's degree in Software Technology from Stuttgart University of Applied Sciences, Germany. He works as a software developer with a focus on enterprise systems, integration technologies, and cloud-based applications. His research interests include semantic digital twins, knowledge graphs, rule-based automation, execution semantics, and reliable software architectures for data-driven systems.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{Vlado.jpg}}]{Vlado Stankovski}
+Vlado Stankovski is a full professor at the Faculty of Computer and Information Science, University of Ljubljana, Slovenia. He has also served in academic leadership roles, including as vice-dean. His research interests include software engineering, distributed systems, cloud and edge computing, artificial intelligence, blockchain technologies, and the design and integration of complex software systems. He has contributed to numerous national and international research projects and has been active in European research initiatives, including the Horizon 2020 projects ONTOCHAIN and TRUSTCHAIN, which focus on next-generation internet and decentralized technologies.
+\end{IEEEbiography}
+
+\EOD
+\end{document}

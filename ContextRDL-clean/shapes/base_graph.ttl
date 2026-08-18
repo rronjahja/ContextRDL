@@ -1,0 +1,29 @@
+@prefix ex: <http://example.org/building#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:ZoneA a ex:HVAC_Zone ;
+    ex:currentSetpoint "22"^^xsd:decimal ;
+    ex:occupied true ;
+    ex:co2Level "750"^^xsd:decimal ;
+    ex:ventilationMode "normal" ;
+    ex:emergencyState false .
+
+ex:ZoneB a ex:HVAC_Zone ;
+    ex:currentSetpoint "20"^^xsd:decimal ;
+    ex:occupied false ;
+    ex:co2Level "500"^^xsd:decimal ;
+    ex:ventilationMode "normal" ;
+    ex:emergencyState false .
+
+ex:ZoneC a ex:HVAC_Zone ;
+    ex:currentSetpoint "21"^^xsd:decimal ;
+    ex:occupied true ;
+    ex:co2Level "1200"^^xsd:decimal ;
+    ex:ventilationMode "normal" ;
+    ex:emergencyState false .
+
+ex:Policy a ex:ControlPolicy ;
+    ex:occupantMaxSetpoint "23"^^xsd:decimal ;
+    ex:operatorMaxSetpoint "24"^^xsd:decimal ;
+    ex:emergencyMaxSetpoint "26"^^xsd:decimal ;
+    ex:minSetpoint "18"^^xsd:decimal .

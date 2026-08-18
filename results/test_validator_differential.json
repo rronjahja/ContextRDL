@@ -1,0 +1,11 @@
+{
+  "seed": 20260817,
+  "n_random": 500,
+  "total_cases": 996,
+  "agreements": 996,
+  "agreement_rate": 1.0,
+  "agree_on_conforming": 128,
+  "agree_on_violating": 668,
+  "rollback_restored": 200,
+  "disagreements": []
+}

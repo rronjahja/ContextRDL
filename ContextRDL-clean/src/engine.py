@@ -66,17 +66,11 @@ def run_engine(
         window_meta=window_meta,
     )
     schedule = schedule_actions(enabled_actions, settings=settings)
-    resolver_settings = deepcopy(settings)
-    resolver_settings.setdefault("governance", {})
-    resolver_settings["governance"]["active_roles"] = governance_context.get("active_roles")
-    resolver_settings["governance"]["enforce_active_roles"] = governance_context.get(
-        "enforce_active_roles", False
-    )
     accepted_actions, successor_graph, decisions = resolve_actions(
         current_state,
         schedule,
         shapes_path=shapes_path,
-        settings=resolver_settings,
+        settings=settings,
     )
 
     trace = build_trace(
