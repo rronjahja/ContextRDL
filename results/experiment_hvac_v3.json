@@ -10,32 +10,32 @@
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 5,
-          "mean_runtime_ms": 2.64,
-          "sd_runtime_ms": 0.2
+          "mean_runtime_ms": 2.71,
+          "sd_runtime_ms": 0.15
         },
         {
           "strategy": "SHACL-gated, no shadowing",
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 6,
-          "mean_runtime_ms": 134.65,
-          "sd_runtime_ms": 5.66
+          "mean_runtime_ms": 137.18,
+          "sd_runtime_ms": 6.3
         },
         {
           "strategy": "Deterministic-order, no admissibility",
           "unique_states": 1,
           "admissible_pct": 0.0,
           "mean_committed": 8,
-          "mean_runtime_ms": 1.49,
-          "sd_runtime_ms": 0.38
+          "mean_runtime_ms": 2.01,
+          "sd_runtime_ms": 2.7
         },
         {
           "strategy": "Random-order, no admissibility",
           "unique_states": 8,
           "admissible_pct": 23.3,
           "mean_committed": 8,
-          "mean_runtime_ms": 1.49,
-          "sd_runtime_ms": 0.67
+          "mean_runtime_ms": 1.64,
+          "sd_runtime_ms": 1.48
         }
       ]
     },
@@ -48,32 +48,32 @@
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 2,
-          "mean_runtime_ms": 1.09,
-          "sd_runtime_ms": 0.06
+          "mean_runtime_ms": 1.19,
+          "sd_runtime_ms": 0.18
         },
         {
           "strategy": "SHACL-gated, no shadowing",
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 3,
-          "mean_runtime_ms": 49.78,
-          "sd_runtime_ms": 3.74
+          "mean_runtime_ms": 50.05,
+          "sd_runtime_ms": 4.69
         },
         {
           "strategy": "Deterministic-order, no admissibility",
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 3,
-          "mean_runtime_ms": 0.69,
-          "sd_runtime_ms": 0.37
+          "mean_runtime_ms": 0.88,
+          "sd_runtime_ms": 1.26
         },
         {
           "strategy": "Random-order, no admissibility",
           "unique_states": 2,
           "admissible_pct": 100.0,
           "mean_committed": 3,
-          "mean_runtime_ms": 0.62,
-          "sd_runtime_ms": 0.17
+          "mean_runtime_ms": 0.6,
+          "sd_runtime_ms": 0.11
         }
       ]
     },
@@ -86,23 +86,23 @@
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 2,
-          "mean_runtime_ms": 1.22,
-          "sd_runtime_ms": 0.4
+          "mean_runtime_ms": 1.23,
+          "sd_runtime_ms": 0.16
         },
         {
           "strategy": "SHACL-gated, no shadowing",
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 3,
-          "mean_runtime_ms": 50.03,
-          "sd_runtime_ms": 3.81
+          "mean_runtime_ms": 51.71,
+          "sd_runtime_ms": 4.58
         },
         {
           "strategy": "Deterministic-order, no admissibility",
           "unique_states": 1,
           "admissible_pct": 100.0,
           "mean_committed": 3,
-          "mean_runtime_ms": 0.64,
+          "mean_runtime_ms": 0.66,
           "sd_runtime_ms": 0.15
         },
         {
@@ -110,8 +110,8 @@
           "unique_states": 2,
           "admissible_pct": 100.0,
           "mean_committed": 3,
-          "mean_runtime_ms": 0.65,
-          "sd_runtime_ms": 0.22
+          "mean_runtime_ms": 0.96,
+          "sd_runtime_ms": 1.4
         }
       ]
     }
