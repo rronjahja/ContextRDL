@@ -33,6 +33,7 @@ if (HERE / "rule_engine.py").exists():
     PROJECT_ROOT = HERE.parent
 else:
     PROJECT_ROOT = HERE
+import paths  # noqa: E402  (results layout)
 os.chdir(PROJECT_ROOT)  # so relative data paths resolve like the other experiments
 
 from rdflib import Graph  # noqa: E402
@@ -71,7 +72,7 @@ def pipeline(events, settings_override=None, context_name=None):
         settings = _deep_update(settings, deepcopy(settings_override))
     context = resolve_governance_context(settings=settings, contexts_path="data/contexts.json",
                                          context_name=context_name)
-    state = load_state("shapes/base_graph.ttl")
+    state = load_state("data/base_graph.ttl")
     rules = load_rules("configs/rules.json")
     dataset, meta = build_dataset(state, events, settings=settings)
     enabled = evaluate_rules(dataset, rules, settings=settings, context=context, window_meta=meta)
@@ -199,13 +200,21 @@ def run_replay_table():
         ("default", dict(events_path="data/events.jsonl")),
         ("tie conflict", dict(events=tie_conflict_events())),
         ("governance (op > occ)", dict(events=governance_conflict_events())),
-        ("governance (occ > occ reversed)",
+        ("governance (occ > op)",
          dict(events=governance_conflict_events(),
               settings_override={"role_precedence": {"occupant": 0, "operator": 1, "emergency": 2}})),
     ]
+    trace_names = {
+        "default": "trace_default.json",
+        "tie conflict": "trace_tie_conflict.json",
+        "governance (op > occ)": "trace_governance_op_gt_occ.json",
+        "governance (occ > op)": "trace_governance_occ_gt_op.json",
+    }
     rows = {}
     for label, kw in jobs:
-        tp = f"results/trace_{label.split()[0]}_{abs(hash(label)) % 10000}.json"
+        # Deterministic file names. (An earlier revision derived the suffix from
+        # Python's per-process hash(), which produced a new file name on every run.)
+        tp = paths.hvac_trace(trace_names[label])
         run_engine(trace_path=tp, save_trace_file=True, **kw)
         rep = replay_full(trace_path=tp)
         n_enabled = rep.get("regenerated", {}).get("enabled_count")
@@ -227,7 +236,7 @@ def run_replay_table():
 
 def main():
     random.seed(1)
-    os.makedirs("results", exist_ok=True)
+    paths.ensure_dirs()
 
     workloads = [
         ("default", load_events("data/events.jsonl"), None),
@@ -251,7 +260,7 @@ def main():
         "replay": replay,
         "replay_error": replay_error,
     }
-    with open("results/experiment_hvac_v3.json", "w", encoding="utf-8") as fh:
+    with open(paths.hvac("experiment_hvac_v3.json"), "w", encoding="utf-8") as fh:
         json.dump(summary, fh, indent=2)
 
     # ---- pretty print ----
@@ -283,7 +292,14 @@ def main():
                               for k, v in r.items() if k.endswith("_match"))
             print(f"  {label:34s} enabled={r['enabled_count']}  {flags}  overall={'PASS' if r['overall_pass'] else 'FAIL'}")
 
-    print("\nWrote results/experiment_hvac_v3.json")
+    print("\nWrote", paths.relative(paths.hvac("experiment_hvac_v3.json")))
+    expected_rows = {"default", "tie conflict", "governance (op > occ)", "governance (occ > op)"}
+    ours_ok = all(s["unique_states"] == 1 and s["admissible_pct"] == 100.0
+                  for w in summary["baseline"] for s in w["strategies"] if s["strategy"] == "Ours")
+    replay_ok = (not replay_error and set(replay) >= expected_rows
+                 and all(r["overall_pass"] for r in replay.values()))
+    if not (ours_ok and replay_ok):
+        raise SystemExit("experiment_hvac_v3: a correctness check failed (see results/hvac/experiment_hvac_v3.json)")
 
 
 if __name__ == "__main__":

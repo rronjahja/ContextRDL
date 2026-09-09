@@ -20,12 +20,15 @@ was too limited. This harness compares check_admissibility_incremental
       agree before, during, and after),
   drawn from randomly generated graph states.
 
-Every case asserts identical verdicts; any disagreement is printed verbatim
+Every case asserts identical verdicts; fast-kernel comparisons and reference
+fallback checks are counted separately, so fallback is not evidence of two
+independent validators agreeing. Any disagreement is printed verbatim
 and recorded. Usage:
     python test_validator_differential.py [n_random] [seed]
-Writes results/test_validator_differential.json
+Writes results/hvac/test_validator_differential.json
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import itertools
 import json
@@ -37,7 +40,7 @@ from typing import Any, Callable, Dict, List, Tuple
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import XSD
 
-from admissibility import check_admissibility_incremental, check_admissibility_shacl
+from admissibility import check_admissibility_incremental, check_admissibility_shacl, fast_path_eligible, supports_incremental_shapes
 from dataset_builder import load_state
 
 EX = "http://example.org/building#"
@@ -119,13 +122,22 @@ def verdicts(graph: Graph) -> Tuple[bool, bool]:
 
 
 def main(n_random: int = 500, seed: int = 20260817):
-    base = load_state("shapes/base_graph.ttl")
+    base = load_state("data/base_graph.ttl")
     rng = random.Random(seed)
     disagreements: List[Dict[str, Any]] = []
     stats = {"cases": 0, "agree": 0, "conform_agree": 0, "violate_agree": 0}
+    backend_counts = {"incremental": 0, "shacl_fallback": 0}
+    backend_agreements = {"incremental": 0, "shacl_fallback": 0}
+
+    def record_backend(graph, inc, ref):
+        backend = ("incremental" if supports_incremental_shapes(SHAPES) and fast_path_eligible(graph)[0]
+                   else "shacl_fallback")
+        backend_counts[backend] += 1
+        backend_agreements[backend] += int(inc == ref)
 
     def record(tag: str, mutations: List[Mutation], graph: Graph):
         inc, ref = verdicts(graph)
+        record_backend(graph, inc, ref)
         stats["cases"] += 1
         if inc == ref:
             stats["agree"] += 1
@@ -166,6 +178,7 @@ def main(n_random: int = 500, seed: int = 20260817):
         orig = [("revert", s, p, list(g0.objects(s, p)))]
         g2 = apply_mutations(g1, orig)
         d2 = verdicts(g2)
+        record_backend(g2, *d2)
         if d0 == d2:
             rollback_ok += 1
         stats["cases"] += 1
@@ -174,10 +187,13 @@ def main(n_random: int = 500, seed: int = 20260817):
             disagreements.append({"suite": "rollback_post", "mutations": str(mut)})
 
     result = {
+        "overall_pass": not disagreements and rollback_ok == min(n_random, 200),
         "seed": seed,
         "n_random": n_random,
         "total_cases": stats["cases"],
         "agreements": stats["agree"],
+        "backend_cases": backend_counts,
+        "backend_agreements": backend_agreements,
         "agreement_rate": round(stats["agree"] / stats["cases"], 6),
         "agree_on_conforming": stats["conform_agree"],
         "agree_on_violating": stats["violate_agree"],
@@ -187,7 +203,7 @@ def main(n_random: int = 500, seed: int = 20260817):
     print(json.dumps({k: v for k, v in result.items() if k != "disagreements"}, indent=2))
     print("disagreements:", len(disagreements))
 
-    out = Path(__file__).resolve().parent.parent / "results" / "test_validator_differential.json"
+    out = Path(paths.hvac("test_validator_differential.json"))
     out.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("Wrote", out)
     return result
@@ -196,4 +212,5 @@ def main(n_random: int = 500, seed: int = 20260817):
 if __name__ == "__main__":
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 500
     s = int(sys.argv[2]) if len(sys.argv) > 2 else 20260817
-    main(n, s)
+    result = main(n, s)
+    sys.exit(0 if result["overall_pass"] else 1)

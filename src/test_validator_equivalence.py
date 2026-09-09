@@ -11,6 +11,7 @@ Run:
 Exit code 0 on success, 1 on any disagreement.
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import itertools
 import json
@@ -23,7 +24,7 @@ from rdflib.namespace import XSD
 from admissibility import check_admissibility_incremental, check_admissibility_shacl
 
 EX = "http://example.org/building#"
-BASE_GRAPH_PATH = "shapes/base_graph.ttl"
+BASE_GRAPH_PATH = "data/base_graph.ttl"
 SHAPES_PATH = "shapes/invariants.ttl"
 
 
@@ -148,8 +149,7 @@ def main():
     }
 
     import os
-    os.makedirs("results", exist_ok=True)
-    with open("results/test_validator_equivalence.json", "w", encoding="utf-8") as fh:
+    with open(paths.hvac("test_validator_equivalence.json"), "w", encoding="utf-8") as fh:
         json.dump(summary, fh, indent=2)
 
     if summary["overall_pass"]:

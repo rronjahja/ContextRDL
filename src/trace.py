@@ -10,7 +10,15 @@ from rdflib import Graph
 
 
 def canonical_triple_lines(graph: Graph) -> List[str]:
-    return sorted(f"{s.n3()} {p.n3()} {o.n3()} ." for s, p, o in graph)
+    # Literal.n3() may emit Turtle long strings, which are not N-Triples.
+    return sorted(line for line in graph.serialize(format="nt").split("\n") if line)
+
+
+def file_sha256(path: str) -> str:
+    p = Path(path)
+    if not p.is_absolute() and not p.exists():
+        p = Path(__file__).resolve().parent.parent / p
+    return hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def graph_digest(graph: Graph) -> str:
@@ -43,13 +51,64 @@ def graph_from_snapshot(snapshot: Mapping[str, Any]) -> Graph:
     return graph
 
 
+def _environment() -> Dict[str, Any]:
+    import platform
+    import sys
+    info: Dict[str, Any] = {"python": sys.version.split()[0], "platform": platform.platform()}
+    try:
+        import rdflib
+        info["rdflib"] = rdflib.__version__
+    except Exception:
+        pass
+    try:
+        import pyshacl
+        info["pyshacl"] = pyshacl.__version__
+    except Exception:
+        pass
+    root = Path(__file__).resolve().parent.parent
+    try:
+        git = root / ".git"
+        git_dir = git
+        if git.is_file():  # worktree: ".git" is a pointer file
+            git_dir = Path(git.read_text(encoding="utf-8").split("gitdir:", 1)[1].strip())
+            if not git_dir.is_absolute():
+                git_dir = (root / git_dir).resolve()
+        ref = (git_dir / "HEAD").read_text(encoding="utf-8").strip()
+        if ref.startswith("ref: "):
+            ref_path = git_dir / ref[5:]
+            common = git_dir / "commondir"
+            if not ref_path.exists() and common.exists():
+                ref_path = (git_dir / common.read_text(encoding="utf-8").strip()).resolve() / ref[5:]
+            ref = ref_path.read_text(encoding="utf-8").strip()
+        info["source_revision"] = ref
+    except Exception:
+        pass
+    # Content fingerprint of the sources actually executed (catches local
+    # modifications that the git revision alone cannot).
+    try:
+        digest = hashlib.sha256()
+        for rel in ("src", "ev", "configs", "shapes", "data"):
+            base = root / rel
+            if not base.exists():
+                continue
+            for path in sorted(base.rglob("*")):
+                if path.is_file() and path.suffix in {".py", ".json", ".ttl", ".jsonl"} and "results" not in path.parts \
+                        and "__pycache__" not in path.parts:
+                    digest.update(str(path.relative_to(root)).replace("\\", "/").encode("utf-8"))
+                    digest.update(path.read_bytes().replace(b"\r\n", b"\n"))
+        info["source_manifest_sha256"] = digest.hexdigest()
+    except Exception:
+        pass
+    return info
+
+
 def _jsonable_action(action: Mapping[str, Any]) -> Dict[str, Any]:
     return json.loads(json.dumps(action, sort_keys=True, default=str))
 
 
 def _rules_snapshot(rules: Iterable[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     snapshot: List[Dict[str, Any]] = []
-    for rule in rules:
+    for rule in sorted(rules, key=lambda item: item["rid"]):
         snapshot.append(
             {
                 "rid": rule.get("rid"),
@@ -74,14 +133,20 @@ def build_trace(
     rules: Iterable[Mapping[str, Any]] | None = None,
     events: Iterable[Mapping[str, Any]] | None = None,
 ) -> Dict[str, Any]:
-    enabled_list = [_jsonable_action(action) for action in enabled_actions]
+    enabled_list = sorted(
+        (_jsonable_action(action) for action in enabled_actions),
+        key=lambda action: (action["rid"], action["bindKey"], action.get("window_id", ""), action["aid"]),
+    )
     schedule_list = [_jsonable_action(action) for action in schedule]
     accepted_list = [_jsonable_action(action) for action in accepted_actions]
     decisions_list = json.loads(json.dumps(list(decisions), sort_keys=True, default=str))
 
     trace = {
-        "trace_version": "2.1",
+        "trace_version": "2.2",
         "settings": deepcopy(settings) if settings is not None else {},
+        # Provenance of the recording run (not part of the execution
+        # configuration; not compared by replay).
+        "environment": _environment(),
         "window": deepcopy(window_meta) if window_meta is not None else {},
         "rules": _rules_snapshot(rules or []),
         "events": json.loads(json.dumps(list(events or []), sort_keys=True, default=str)),
@@ -101,13 +166,13 @@ def build_trace(
     return trace
 
 
-def save_trace(trace: Mapping[str, Any], path: str = "results/trace.json") -> None:
+def save_trace(trace: Mapping[str, Any], path: str = "results/hvac/traces/trace.json") -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as handle:
         json.dump(trace, handle, indent=2, sort_keys=True)
 
 
-def load_trace(path: str = "results/trace.json") -> Dict[str, Any]:
+def load_trace(path: str = "results/hvac/traces/trace.json") -> Dict[str, Any]:
     p = Path(path)
     if not p.is_absolute() and not p.exists():
         p = Path(__file__).resolve().parent.parent / p

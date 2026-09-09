@@ -3,7 +3,7 @@ Independent second implementation of the scheduling and resolution stages
 (reviewer concern R1-7).
 
 Written directly from the numbered definitions in the manuscript
-(Definitions 6-8 and Section III-F), deliberately sharing NO code with the
+(Definitions 6, 8 and 9, and Section III-F), deliberately sharing NO code with the
 primary implementation: it does not import resolver, resolver_incremental,
 rule_engine, admissibility, state_transition, or trace. It shares only the
 RDF parsing library (rdflib), pySHACL as the specification validator, and
@@ -38,7 +38,7 @@ _EX = "http://example.org/building#"
 # ---------- own canonicalisation + digest (Section III-F, from the spec) ----------
 
 def canonical_lines(graph: Graph) -> List[str]:
-    return sorted(f"{s.n3()} {p.n3()} {o.n3()} ." for (s, p, o) in graph)
+    return sorted(line for line in graph.serialize(format="nt").split("\n") if line)
 
 
 def digest(graph: Graph) -> str:
@@ -81,9 +81,12 @@ def apply_single_slot(graph: Graph, action: Mapping[str, Any]) -> None:
 
 # ---------- own policy guard (Section IV-C) ----------
 
-def policy_guard(graph: Graph, action: Mapping[str, Any]) -> bool:
+def policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, str]:
+    """Returns (passed, reason class). The reason classes are the vocabulary
+    fixed by the execution configuration: a reason code is the text before
+    the first colon; implementations may append details after a colon."""
     if str(action.get("predicate")) != f"{_EX}currentSetpoint":
-        return True
+        return True, "policy_guard_not_applicable"
     caps = {
         "occupant": URIRef(f"{_EX}occupantMaxSetpoint"),
         "operator": URIRef(f"{_EX}operatorMaxSetpoint"),
@@ -91,19 +94,19 @@ def policy_guard(graph: Graph, action: Mapping[str, Any]) -> bool:
     }
     cap_pred = caps.get(str(action.get("role")))
     if cap_pred is None:
-        return True
+        return True, "policy_guard_not_applicable"
     policy = URIRef(f"{_EX}Policy")
     proposed = float(action["value"])
     for obj in graph.objects(policy, URIRef(f"{_EX}minSetpoint")):
         if proposed < float(obj.toPython()):
-            return False
+            return False, "policy_min_violation"
     for obj in graph.objects(policy, cap_pred):
         if proposed > float(obj.toPython()):
-            return False
-    return True
+            return False, "policy_role_cap_violation"
+    return True, "policy_guard_passed"
 
 
-# ---------- own admissibility: pySHACL directly (Definition 7) ----------
+# ---------- own admissibility: pySHACL directly (Definition 8) ----------
 
 def admissible(graph: Graph, shapes_graph: Graph) -> bool:
     from pyshacl import validate
@@ -112,7 +115,7 @@ def admissible(graph: Graph, shapes_graph: Graph) -> bool:
     return bool(conforms)
 
 
-# ---------- own resolution (Definition 8) ----------
+# ---------- own resolution (Definition 9; reason-code classes of Definition 11 (x)) ----------
 
 def resolve(
     input_graph: Graph,
@@ -140,15 +143,20 @@ def resolve(
         target = str(action["target_key"])
         # gate (i): role filter
         if enforce_roles and active_roles is not None and str(action.get("role")) not in active_roles:
-            decisions.append({"aid": action["aid"], "accepted": False, "reason": "inactive_role"})
+            decisions.append({"aid": action["aid"], "accepted": False, "reason": "inactive_role",
+                              "post_graph_digest": digest(working)})
             continue
         # gate (ii): policy guard
-        if not policy_guard(working, action):
-            decisions.append({"aid": action["aid"], "accepted": False, "reason": "policy"})
+        passed, reason = policy_guard(working, action)
+        if not passed:
+            decisions.append({"aid": action["aid"], "accepted": False, "reason": reason,
+                              "post_graph_digest": digest(working)})
             continue
         # gate (iii): conflict gate
         if conflict_policy == "first_writer_wins" and target in written_targets:
-            decisions.append({"aid": action["aid"], "accepted": False, "reason": "shadowed"})
+            decisions.append({"aid": action["aid"], "accepted": False,
+                              "reason": "shadowed_by_prior_accepted_action",
+                              "post_graph_digest": digest(working)})
             continue
         # gate (iv): admissibility (build candidate, validate, keep or revert)
         before = [(s, p, o) for (s, p, o) in working.triples((URIRef(str(action["zone"])),
@@ -157,7 +165,8 @@ def resolve(
         if admissible(working, shapes_graph):
             written_targets.add(target)
             accepted.append(str(action["aid"]))
-            decisions.append({"aid": action["aid"], "accepted": True, "reason": "admissible"})
+            decisions.append({"aid": action["aid"], "accepted": True, "reason": "admissible",
+                              "post_graph_digest": digest(working)})
         else:
             subject = URIRef(str(action["zone"]))
             predicate = URIRef(str(action["predicate"]))
@@ -165,7 +174,8 @@ def resolve(
                 working.remove((subject, predicate, obj))
             for triple in before:
                 working.add(triple)
-            decisions.append({"aid": action["aid"], "accepted": False, "reason": "inadmissible"})
+            decisions.append({"aid": action["aid"], "accepted": False, "reason": "inadmissible",
+                              "post_graph_digest": digest(working)})
 
     return {
         "schedule_aids": [str(a["aid"]) for a in ordered],

@@ -22,6 +22,7 @@ Expected:
   * SHUFFLE -> unique-states grows with N (bounded above by min(N, 30)).
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import copy
 import hashlib
@@ -44,8 +45,8 @@ TIMESTAMP_KEY = 0  # all tied on tsKey
 
 
 def _graph_digest(graph: Graph) -> str:
-    lines = sorted(f"{s.n3()} {p.n3()} {o.n3()} ." for s, p, o in graph)
-    return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
+    from trace import graph_digest
+    return graph_digest(graph)
 
 
 def _synth_graph() -> Graph:
@@ -172,14 +173,15 @@ def run_for_n(n: int, runs: int = 30) -> Dict[str, Any]:
 def main():
     results = [run_for_n(n) for n in (2, 4, 8, 16, 32, 64)]
 
-    os.makedirs("results", exist_ok=True)
-    with open("results/experiment_determinism_stress.json", "w", encoding="utf-8") as fh:
+    with open(paths.hvac("experiment_determinism_stress.json"), "w", encoding="utf-8") as fh:
         json.dump({"results": results}, fh, indent=2)
 
     print(f"{'N':>4s}  {'unique(ours)':>14s}  {'unique(shuffle)':>16s}")
     for r in results:
         print(f"{r['n_candidates']:>4d}  {r['unique_states_ours']:>14d}  {r['unique_states_shuffle']:>16d}")
-    print("\nWrote results/experiment_determinism_stress.json")
+    print("\nWrote", paths.relative(paths.hvac("experiment_determinism_stress.json")))
+    if not all(r["unique_states_ours"] == 1 for r in results):
+        raise SystemExit("ordered resolver produced more than one state for some N")
 
 
 if __name__ == "__main__":

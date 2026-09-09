@@ -41,6 +41,7 @@ This shows three things the original experiment does not:
      reasons (admissibility in Case 1, shadowing in Case 2).
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import hashlib
 import json
@@ -60,8 +61,8 @@ TARGET_KEY = f"{ZONE_A}|{CURRENT_SETPOINT}"
 
 
 def _graph_digest(graph: Graph) -> str:
-    lines = sorted(f"{s.n3()} {p.n3()} {o.n3()} ." for s, p, o in graph)
-    return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
+    from trace import graph_digest
+    return graph_digest(graph)
 
 
 def _make_action(rid: str, role: str, role_rank: int, priority: int, value: float,
@@ -104,7 +105,7 @@ def _build_actions(role_rank_map: Dict[str, int]) -> List[Dict[str, Any]]:
 
 
 def run_case(label: str, role_rank_map: Dict[str, int]) -> Dict[str, Any]:
-    state = load_state("shapes/base_graph.ttl")
+    state = load_state("data/base_graph.ttl")
     settings = {
         "governance": {"conflict_policy": "first_writer_wins"},
         "schedule_key": ["roleRank", "priority", "tsKey", "rid", "bindKey", "aid"],
@@ -150,8 +151,7 @@ def main():
     case_2 = run_case("reversed (occupant > operator)", reversed_)
 
     out = {"cases": [case_1, case_2]}
-    os.makedirs("results", exist_ok=True)
-    with open("results/experiment_governance_v2.json", "w", encoding="utf-8") as fh:
+    with open(paths.hvac("experiment_governance_v2.json"), "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2)
 
     for c in (case_1, case_2):
@@ -163,7 +163,10 @@ def main():
         for d in c["decisions"]:
             print(f"  {d['rid']}: accepted={d['accepted']:<5}  value={d['value']:>5}  reason={d['reason']}")
 
-    print("\nWrote results/experiment_governance_v2.json")
+    print("\nWrote", paths.relative(paths.hvac("experiment_governance_v2.json")))
+    if not (float(case_1["final_ZoneA_setpoint"]) == 23.0 and float(case_2["final_ZoneA_setpoint"]) == 22.0
+            and case_1.get("final_admissible", True) and case_2.get("final_admissible", True)):
+        raise SystemExit("governance-clean outcome differs from the expected committed setpoints")
 
 
 if __name__ == "__main__":

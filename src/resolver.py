@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from rdflib import Graph, Literal, URIRef
 
-from admissibility import check_admissibility
+from admissibility import check_admissibility, get_admissibility_regime
 from state_transition import apply_action
 from trace import graph_delta, graph_digest
 
@@ -56,7 +56,7 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
     if min_literal is not None:
         min_value = _literal_to_float(min_literal)
         if min_value is not None and proposed_value < min_value:
-            return False, f"policy_min_setpoint_violation:{proposed_value} < {min_value}"
+            return False, f"policy_min_violation:{proposed_value} < {min_value}"
 
     max_literal = _graph_value(graph, POLICY_NODE, max_predicate)
     if max_literal is not None:
@@ -73,6 +73,7 @@ def resolve_actions(
     shapes_path: str = "shapes/invariants.ttl",
     settings: Optional[Dict[str, Any]] = None,
 ) -> Tuple[List[Dict[str, Any]], Graph, List[Dict[str, Any]]]:
+    get_admissibility_regime()  # Reject invalid configuration even for an empty schedule.
     settings = settings or {}
     governance_cfg = settings.get("governance", {})
     conflict_policy = governance_cfg.get("conflict_policy", "first_writer_wins")
@@ -106,7 +107,7 @@ def resolve_actions(
             "pre_graph_digest": pre_digest,
         }
 
-        # Gate order follows Definition 8 exactly:
+        # Gate order follows Definition 9 exactly:
         # (i) role filter, (ii) policy guard, (iii) conflict gate,
         # (iv) admissibility. (Earlier revisions applied the conflict gate
         # before the policy guard; the accepted set and successor digest are
@@ -199,7 +200,7 @@ def resolve_actions(
 
 if __name__ == "__main__":
     graph = Graph()
-    graph.parse("shapes/base_graph.ttl", format="turtle")
+    graph.parse("data/base_graph.ttl", format="turtle")
 
     schedule = [
         {

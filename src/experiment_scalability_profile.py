@@ -23,9 +23,10 @@ numbers must be conditioned on:
 
 Usage:
     python experiment_scalability_profile.py [--sizes 100,200,400,800] [--repeats 3]
-Writes results/experiment_scalability_profile.json
+Writes results/hvac/experiment_scalability_profile.json
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import argparse
 import json
@@ -247,7 +248,7 @@ def main():
         print(f"points={n:>3} acc={row['accepted']:>3} rej={row['rejected']:>3} "
               f"t={row['ref_mean_s']}s ({row['per_action_ms']} ms/action)")
 
-    out = Path(__file__).resolve().parent.parent / "results" / "experiment_scalability_profile.json"
+    out = Path(paths.hvac("experiment_scalability_profile.json"))
     out.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("Wrote", out)
 

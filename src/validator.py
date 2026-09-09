@@ -12,6 +12,6 @@ def validate_graph(data_graph_path: str, shapes_graph_path: str):
 
 
 if __name__ == "__main__":
-    conforms, report = validate_graph("shapes/base_graph.ttl", "shapes/invariants.ttl")
+    conforms, report = validate_graph("data/base_graph.ttl", "shapes/invariants.ttl")
     print("Conforms:", conforms)
     print(report)

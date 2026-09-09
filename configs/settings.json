@@ -25,7 +25,8 @@
   ],
   "governance": {
     "context_name": "default",
-    "enforce_active_roles": false,
+    "enforce_active_roles": true,
     "conflict_policy": "first_writer_wins"
-  }
+  },
+  "event_delivery": "redelivery"
 }

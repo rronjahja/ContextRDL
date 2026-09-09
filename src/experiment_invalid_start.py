@@ -30,9 +30,10 @@ Expected behaviour (documented in the manuscript):
 
 Usage (from repo root or src/):
     python experiment_invalid_start.py
-Writes results/experiment_invalid_start.json
+Writes results/hvac/experiment_invalid_start.json
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import json
 import os
@@ -65,7 +66,7 @@ def _set_single_value(graph, subject, predicate, literal):
 
 
 def make_start_graph(scenario: str):
-    graph = load_state("shapes/base_graph.ttl")
+    graph = load_state("data/base_graph.ttl")
     if scenario == "valid":
         return graph
     if scenario in ("single_violation", "double_violation"):
@@ -143,10 +144,13 @@ def main():
             mark = "ACCEPT" if row["accepted"] else "reject"
             print(f"  {row['order']}. {row['rid']:<3} {row['target']:<16} := {row['value']!s:<10} {mark}  ({row['reason']})")
 
-    out = Path(__file__).resolve().parent.parent / "results" / "experiment_invalid_start.json"
+    out = Path(paths.hvac("experiment_invalid_start.json"))
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(results, indent=2), encoding="utf-8")
     print("\nWrote", out)
+    expected = {"single_violation": 4, "double_violation": 0}
+    if any(results[k]["accepted"] != v for k, v in expected.items() if k in results):
+        raise SystemExit("invalid-start outcome differs from the characterized behaviour")
     return results
 
 

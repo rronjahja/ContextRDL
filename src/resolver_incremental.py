@@ -10,8 +10,10 @@ The single change is *how* admissibility is computed:
 
   * Original: clone graph, apply action to clone, compute full digest before+after,
     run full-graph admissibility check, diff both full graphs. O(|graph|) per action.
-  * Incremental: one mutable working graph; apply in place; check admissibility only
-    over the touched zone; undo on rejection. O(1)-per-action w.r.t. graph size.
+  * Incremental: one mutable working graph; apply in place; check the touched zone
+    when the guarded fast path is eligible, otherwise validate the full graph;
+    undo on rejection. Focused validation is O(1) per action after an initial
+    full-graph pass. Per-action digests and full reference validation cost more.
 
 Equivalence against the original is asserted by ``test_resolver_equivalence.py``.
 
@@ -25,7 +27,12 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from rdflib import Graph, URIRef
 
-from admissibility import check_admissibility_incremental
+from admissibility import (
+    _check_admissibility_fast,
+    check_admissibility_shacl,
+    fast_path_preserved_by_write,
+    select_admissibility_backend,
+)
 from state_transition import make_literal
 
 
@@ -79,7 +86,7 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
 
     min_val = _as_float(_graph_value(graph, _POLICY_NODE, _MIN_SETPOINT))
     if min_val is not None and proposed < min_val:
-        return False, f"policy_min_setpoint_violation:{proposed} < {min_val}"
+        return False, f"policy_min_violation:{proposed} < {min_val}"
 
     max_val = _as_float(_graph_value(graph, _POLICY_NODE, max_pred))
     if max_val is not None and proposed > max_val:
@@ -93,13 +100,14 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
 # ---------------------------------------------------------------------------
 
 def _graph_digest(graph: Graph) -> str:
-    lines = sorted(f"{s.n3()} {p.n3()} {o.n3()} ." for s, p, o in graph)
+    lines = sorted(line for line in graph.serialize(format="nt").split("\n") if line)
     return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
 
 
 def _triple_str(triple) -> str:
-    s, p, o = triple
-    return f"{s.n3()} {p.n3()} {o.n3()} ."
+    graph = Graph()
+    graph.add(triple)
+    return graph.serialize(format="nt").rstrip("\n")
 
 
 # ---------------------------------------------------------------------------
@@ -116,12 +124,17 @@ def resolve_actions_incremental(
     settings: Optional[Dict[str, Any]] = None,
     record_digests: bool = False,
 ) -> Tuple[List[Dict[str, Any]], Graph, List[Dict[str, Any]]]:
-    """Same contract as ``resolver.resolve_actions`` but O(1)-per-action w.r.t. graph size."""
+    """Same contract as ``resolver.resolve_actions`` with guarded focused validation."""
 
     settings = settings or {}
     governance_cfg = settings.get("governance", {})
     conflict_policy = governance_cfg.get("conflict_policy", "first_writer_wins")
     schedule_key_fields = settings.get("schedule_key", DEFAULT_SCHEDULE_KEY)
+    # Respect the same requested backend and representation profile as the
+    # cloning resolver. Focused checks also require an admissible initial graph.
+    use_incremental = select_admissibility_backend(graph, shapes_path) == "incremental"
+    if use_incremental:
+        use_incremental = _check_admissibility_fast(graph)[0]
 
     # One mutable working graph -- we mutate in place and undo on rejection.
     current_graph = Graph()
@@ -158,7 +171,7 @@ def resolve_actions_incremental(
         if record_digests:
             decision["pre_graph_digest"] = pre_digest
 
-        # Gate order follows Definition 8 exactly:
+        # Gate order follows Definition 9 exactly:
         # (i) role filter, (ii) policy guard, (iii) conflict gate,
         # (iv) admissibility.
 
@@ -219,10 +232,18 @@ def resolve_actions_incremental(
             current_graph.remove(t)
         current_graph.add(new_triple)
 
-        conforms, report = check_admissibility_incremental(current_graph, focus_zones={zone})
+        candidate_uses_fast = use_incremental and fast_path_preserved_by_write(
+            current_graph, zone, predicate, new_literal)
+        if candidate_uses_fast:
+            conforms, report = _check_admissibility_fast(current_graph, focus_zones={zone})
+        else:
+            conforms, report = check_admissibility_shacl(current_graph, shapes_path)
         candidate_digest = _graph_digest(current_graph) if record_digests else None
 
         if conforms:
+            # An accepted unsupported write can change typing or the literal
+            # profile. Keep later checks global for the rest of this resolution.
+            use_incremental = candidate_uses_fast
             accepted_targets[target_key] = action
             accepted_actions.append(dict(action))
             decision.update({
@@ -234,8 +255,8 @@ def resolve_actions_incremental(
                 decision.update({
                     "candidate_graph_digest": candidate_digest,
                     "post_graph_digest": candidate_digest,
-                    "removed_triples": sorted(_triple_str(t) for t in old_triples),
-                    "inserted_triples": [_triple_str(new_triple)],
+                    "removed_triples": sorted(_triple_str(t) for t in old_triples if t != new_triple),
+                    "inserted_triples": [] if new_triple in old_triples else [_triple_str(new_triple)],
                 })
         else:
             # Undo mutation

@@ -17,9 +17,10 @@ the two full configurations.
 
 Usage:
     python experiment_runtime_controlled.py [trials]
-Writes results/experiment_runtime_controlled.json
+Writes results/hvac/experiment_runtime_controlled.json
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import json
 import statistics
@@ -105,7 +106,7 @@ def resolve_controlled(
 def build_default_schedule():
     settings = load_settings("configs/settings.json")
     context = resolve_governance_context(settings=settings, contexts_path="data/contexts.json")
-    graph_t = load_state("shapes/base_graph.ttl")
+    graph_t = load_state("data/base_graph.ttl")
     events = load_events("data/events.jsonl")
     rules = load_rules("configs/rules.json")
     dataset, window_meta = build_dataset(graph_t, events, settings=settings)
@@ -165,7 +166,7 @@ def main(trials: int = 30):
         breakdown[vname] = {k: round(v * 1000.0 / trials, 3) for k, v in sorted(phases.items())}
         print(f"phase breakdown ({vname}, per step, ms):", breakdown[vname])
 
-    out = Path(__file__).resolve().parent.parent / "results" / "experiment_runtime_controlled.json"
+    out = Path(paths.hvac("experiment_runtime_controlled.json"))
     out.write_text(json.dumps({"cells": cells, "phase_breakdown_ms": breakdown}, indent=2), encoding="utf-8")
     print("Wrote", out)
 

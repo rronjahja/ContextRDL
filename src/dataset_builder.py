@@ -135,7 +135,11 @@ def select_window_events(
     settings = settings or {}
     ordered = sort_events(events, settings.get("event_ordering", ["timestamp", "eid"]))
 
-    if not ordered:
+    if not ordered and anchor_timestamp is None:
+        # Declared policy: a step with no events AND no anchor has no instant to
+        # derive bounds from; its window identity is the literal "empty". Runs
+        # (Section III-G) always supply an anchor, so this case arises only in
+        # ad-hoc single-step invocations without events.
         meta = {
             "window_type": settings.get("window", {}).get("type", "sliding"),
             "window_id": "empty",
@@ -158,6 +162,8 @@ def select_window_events(
         anchor_dt = parse_timestamp(anchor_timestamp)
         effective_anchor = anchor_timestamp
 
+    # The window identity is derived from its bounds, so two empty windows at
+    # different anchors are different windows (and different persistence steps).
     if window_type == "sliding":
         window_start_dt, window_end_dt = _sliding_window_bounds(anchor_dt, length_minutes)
         selected = [
@@ -174,14 +180,10 @@ def select_window_events(
         ]
     else:
         selected = ordered
-        window_start_dt = parse_timestamp(str(selected[0]["timestamp"]))
-        window_end_dt = parse_timestamp(str(selected[-1]["timestamp"]))
+        window_start_dt = parse_timestamp(str(selected[0]["timestamp"])) if selected else anchor_dt
+        window_end_dt = parse_timestamp(str(selected[-1]["timestamp"])) if selected else anchor_dt
 
-    window_id = (
-        f"{window_type}:{window_start_dt.isoformat()}::{window_end_dt.isoformat()}"
-        if selected
-        else "empty"
-    )
+    window_id = f"{window_type}:{window_start_dt.isoformat()}::{window_end_dt.isoformat()}"
 
     meta = {
         "window_type": window_type,
@@ -221,7 +223,7 @@ def build_dataset(
 
 
 if __name__ == "__main__":
-    state_graph = load_state("shapes/base_graph.ttl")
+    state_graph = load_state("data/base_graph.ttl")
     events = load_events("data/events.jsonl")
     dataset, meta = build_dataset(
         state_graph,

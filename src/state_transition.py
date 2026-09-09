@@ -47,7 +47,7 @@ def apply_action(graph: Graph, action: dict) -> Graph:
 
 if __name__ == "__main__":
     graph = Graph()
-    graph.parse("shapes/base_graph.ttl", format="turtle")
+    graph.parse("data/base_graph.ttl", format="turtle")
 
     action = {
         "zone": "http://example.org/building#ZoneA",

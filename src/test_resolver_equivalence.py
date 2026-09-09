@@ -11,6 +11,7 @@ Run:
 Exit 0 on full equivalence, 1 on any mismatch.
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import hashlib
 import json
@@ -43,7 +44,7 @@ from rule_loader import load_rules
 # ---------------------------------------------------------------------------
 
 def _graph_digest(graph: Graph) -> str:
-    lines = sorted(f"{s.n3()} {p.n3()} {o.n3()} ." for s, p, o in graph)
+    lines = sorted(line for line in graph.serialize(format="nt").split("\n") if line)
     return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
 
 
@@ -74,7 +75,7 @@ def _run_workload(label: str,
         settings = _deep_update(settings, deepcopy(settings_override))
 
     context = resolve_governance_context(settings=settings, contexts_path="data/contexts.json")
-    state = load_state("shapes/base_graph.ttl")
+    state = load_state("data/base_graph.ttl")
     rules = load_rules(settings.get("paths", {}).get("rules", "configs/rules.json"))
     dataset, meta = build_dataset(state, events, settings=settings)
 
@@ -165,14 +166,13 @@ def main():
             for r in results if not r["check"]["all_match"]
         ],
     }
-    os.makedirs("results", exist_ok=True)
-    with open("results/test_resolver_equivalence.json", "w", encoding="utf-8") as fh:
+    with open(paths.hvac("test_resolver_equivalence.json"), "w", encoding="utf-8") as fh:
         json.dump(summary, fh, indent=2)
 
     if overall:
         print(f"\nALL PASSED: {len(results)} workloads match original resolver.")
     else:
-        print(f"\nFAILED: see results/test_resolver_equivalence.json for diffs.")
+        print("\nFAILED: see results/hvac/test_resolver_equivalence.json for diffs.")
     sys.exit(0 if overall else 1)
 
 

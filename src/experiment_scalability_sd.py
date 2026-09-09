@@ -18,7 +18,7 @@ By default it does 5 repeats per N. The large N values (400, 800) use the
 reference resolver, which is the O(N^2) one, so 5 repeats at N=800 can take
 a few minutes. Lower REPEATS to 3 if you want it faster; the means are stable.
 
-Writes results/experiment_scalability_sd.json and prints a summary plus the
+Writes results/hvac/experiment_scalability_sd.json and prints a summary plus the
 ready-to-paste LaTeX rows.
 """
 from __future__ import annotations
@@ -36,6 +36,7 @@ if (HERE / "experiment_scalability_v2.py").exists():
     PROJECT_ROOT = HERE.parent
 else:
     PROJECT_ROOT = HERE
+import paths  # noqa: E402  (results layout)
 os.chdir(PROJECT_ROOT)
 
 from experiment_scalability_v2 import run_case  # noqa: E402
@@ -45,26 +46,30 @@ REPEATS = 5
 
 
 def main():
-    os.makedirs("results", exist_ok=True)
+    paths.ensure_dirs()
     rows = []
 
     for n in SIZES:
-        orig_times, new_times = [], []
+        orig_times, new_times, full_times = [], [], []
         accepted = None
         digest_ok = True
         for _ in range(REPEATS):
             r = run_case(n)
             orig_times.append(r["time_seconds_orig"])
             new_times.append(r["time_seconds_new"])
+            full_times.append(r["time_seconds_new_full_trace"])
             accepted = r["accepted_new"]
-            if not (r["accepted_match"] and r["digest_match"]):
+            if not (r["accepted_match"] and r["digest_match"] and r["decisions_match_same_trace_profile"]):
                 digest_ok = False
 
         orig_mean = statistics.mean(orig_times)
         orig_sd = statistics.stdev(orig_times) if len(orig_times) > 1 else 0.0
         new_mean = statistics.mean(new_times)
         new_sd = statistics.stdev(new_times) if len(new_times) > 1 else 0.0
+        full_mean = statistics.mean(full_times)
+        full_sd = statistics.stdev(full_times) if len(full_times) > 1 else 0.0
         speedup = orig_mean / new_mean if new_mean > 0 else None
+        speedup_full = orig_mean / full_mean if full_mean > 0 else None
 
         row = {
             "N": n,
@@ -72,6 +77,9 @@ def main():
             "outcome_identical": digest_ok,
             "orig_mean_s": round(orig_mean, 3),
             "orig_sd_s": round(orig_sd, 3),
+            "new_full_trace_mean_s": round(full_mean, 3),
+            "new_full_trace_sd_s": round(full_sd, 3),
+            "speedup_same_trace_profile_x": round(speedup_full, 1) if speedup_full else None,
             "new_mean_s": round(new_mean, 3),
             "new_sd_s": round(new_sd, 3),
             "speedup_x": round(speedup, 1) if speedup else None,
@@ -79,9 +87,10 @@ def main():
         rows.append(row)
         flag = "OK" if digest_ok else "MISMATCH!"
         print(f"N={n:>4d}  ref={orig_mean:8.3f}+-{orig_sd:.3f}s  "
-              f"incr={new_mean:7.4f}+-{new_sd:.4f}s  speedup={row['speedup_x']}x  [{flag}]")
+              f"incr(same trace)={full_mean:7.3f}+-{full_sd:.3f}s ({row['speedup_same_trace_profile_x']}x)  "
+              f"incr(no digests)={new_mean:7.4f}+-{new_sd:.4f}s ({row['speedup_x']}x)  [{flag}]")
 
-    with open("results/experiment_scalability_sd.json", "w", encoding="utf-8") as fh:
+    with open(paths.hvac("experiment_scalability_sd.json"), "w", encoding="utf-8") as fh:
         json.dump({"repeats": REPEATS, "rows": rows}, fh, indent=2)
 
     # Ready-to-paste LaTeX rows for tab:scalability
@@ -91,15 +100,16 @@ def main():
     for r in rows:
         print(f"{r['N']:>3d} & {r['accepted']:>4d} & "
               f"{r['orig_mean_s']:.3f} $\\pm$ {r['orig_sd_s']:.3f} & "
+              f"{r['new_full_trace_mean_s']:.3f} $\\pm$ {r['new_full_trace_sd_s']:.3f} & "
+              f"{r['speedup_same_trace_profile_x']}$\\times$ & "
               f"{r['new_mean_s']:.3f} $\\pm$ {r['new_sd_s']:.3f} & "
               f"{r['speedup_x']}$\\times$ \\\\")
         print("\\hline")
 
+    print("\nWrote", paths.relative(paths.hvac("experiment_scalability_sd.json")))
     if not all(r["outcome_identical"] for r in rows):
-        print("\nWARNING: at least one N produced different outcomes between "
-              "resolvers. Do not use these timings until that is fixed.")
-
-    print("\nWrote results/experiment_scalability_sd.json")
+        raise SystemExit("at least one N produced different outcomes between resolvers; "
+                         "do not use these timings until that is fixed")
 
 
 if __name__ == "__main__":

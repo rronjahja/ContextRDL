@@ -14,10 +14,19 @@ apply_action) plus the reference pySHACL validator. The feeder-budget and
 curtailment shapes are cross-target, so per the paper the reference SHACL
 validator is used (the incremental zone-local validator does not apply here).
 
-The resolution loop below is structurally identical to ``resolver.resolve_actions``:
-first-writer-wins shadowing, then policy guard, then admissibility against the
-candidate successor graph. The point of the scenario is that none of these
-stages are HVAC-specific.
+The resolution loop below re-instantiates the four gates of Definition 9 in
+the normative order of the execution configuration: (i) role filter,
+(ii) policy guard, (iii) first-writer-wins conflict gate, (iv) admissibility
+against the candidate successor graph (reference pySHACL validator, because the
+EV shapes are cross-target). The scheduler and the digest routine are the
+shared, domain-agnostic code; the action constructor, the graph mutation and
+the policy guard are instantiated for the EV vocabulary. None of the stages is
+HVAC-specific.
+
+Every window is recorded as a trace (input graph snapshot, constructed action
+instances, configuration, schedule, decisions, accepted set, successor digest)
+under results/ev/traces/trace_ev_<window>.json, replayed from that file, and
+re-executed in a separate interpreter process with a different hash seed.
 
 Workloads:
   * headline    : 3 simultaneous 22 kW charge requests on CP1/CP2/CP3.
@@ -26,7 +35,7 @@ Workloads:
   * governance  : a grid capacity signal competes with a fleet schedule on the
                   same charging point; precedence selects the committed value.
 
-Outputs: ev/results/experiment_ev.json
+Outputs: results/ev/experiment_ev.json and results/ev/traces/trace_ev_*.json
 """
 from __future__ import annotations
 
@@ -50,8 +59,10 @@ HERE = Path(__file__).resolve().parent
 SRC = HERE.parent / "src"
 sys.path.insert(0, str(SRC))
 
-from rule_engine import schedule_actions  # noqa: E402  (domain-agnostic scheduler)
-from trace import graph_digest, graph_delta  # noqa: E402  (domain-agnostic digests)
+import paths  # noqa: E402  (results layout)
+from rule_engine import BINDING_PROFILE, canonical_binding, schedule_actions  # noqa: E402  (shared scheduler and identity)
+from rule_loader import validate_rules  # noqa: E402
+from trace import canonical_triple_lines, graph_digest, graph_delta  # noqa: E402  (domain-agnostic digests)
 
 EV = "http://example.org/ev#"
 URN_PROP_NS = "urn:prop:"
@@ -78,9 +89,11 @@ BASE_GRAPH_PATH = str(HERE / "data" / "base_graph_ev.ttl")
 RULES_PATH = str(HERE / "data" / "rules_ev.json")
 EVENTS_PATH = str(HERE / "data" / "events_ev.jsonl")
 
-# Default governance: grid > fleet > driver.
+# Default governance: grid > fleet > driver; all three roles active.
 ROLE_RANK = {"grid": 0, "fleet": 1, "driver": 2}
+ACTIVE_ROLES = ["grid", "fleet", "driver"]
 SCHEDULE_KEY = ["roleRank", "priority", "tsKey", "rid", "bindKey", "aid"]
+CONFLICT_POLICY = "first_writer_wins"
 
 
 # ---------------------------------------------------------------------------
@@ -126,7 +139,7 @@ def load_events(path: str) -> List[Dict[str, Any]]:
 
 
 def load_rules(path: str) -> List[Dict[str, Any]]:
-    return json.loads(Path(path).read_text(encoding="utf-8"))["rules"]
+    return validate_rules(json.loads(Path(path).read_text(encoding="utf-8"))["rules"])
 
 
 def _to_literal_for_payload(key: str, value: Any):
@@ -221,14 +234,10 @@ def create_action(
     event_id = str(bindings.get("eid") or event_uri.rsplit(":", 1)[-1])
     event_ts = str(bindings.get("ts", ""))
 
+    # Same identity construction as the HVAC pipeline (Definitions 3 and 5).
+    bind_key = _stable_json(canonical_binding(row))
+    aid = hashlib.sha256(_stable_json({"rid": rid, "bindKey": bind_key, "window_id": window_id}).encode("utf-8")).hexdigest()
     bind_key_payload = {k: bindings[k] for k in sorted(bindings) if k != "e"}
-    bind_key = _stable_json(bind_key_payload)
-
-    aid_payload = {
-        "rid": rid, "eid": event_id, "window_id": window_id,
-        "predicate": predicate, "bindings": bind_key_payload,
-    }
-    aid = hashlib.sha256(_stable_json(aid_payload).encode("utf-8")).hexdigest()
 
     return {
         "aid": aid,
@@ -247,6 +256,8 @@ def create_action(
         "tsKey": parse_ts_key(event_ts) if event_ts else 0,
         "bindKey": bind_key,
         "bindings": bind_key_payload,
+        "identity": {"rid": rid, "bindKey": bind_key, "window_id": window_id},
+        "binding_profile": BINDING_PROFILE,
     }
 
 
@@ -272,9 +283,10 @@ def evaluate_rules(
             if event_role is not None and event_role != rule_role:
                 continue
             action = create_action(rule, row, role_rank, window_id, event_role)
-            if action["aid"] in seen:
+            identity = (action["rid"], action["bindKey"], action["window_id"])
+            if identity in seen:
                 continue
-            seen.add(action["aid"])
+            seen.add(identity)
             actions.append(action)
     return actions
 
@@ -304,13 +316,19 @@ def apply_action(graph: Graph, action: Mapping[str, Any]) -> Graph:
 _SHAPES_CACHE: Optional[Graph] = None
 
 
+_SHAPES_BY_CONTENT: Dict[str, Graph] = {}
+
+
 def _shapes_graph() -> Graph:
-    global _SHAPES_CACHE
-    if _SHAPES_CACHE is None:
+    """Shape graph cached by content identity of the file currently selected
+    by SHAPES_PATH (never a stale singleton)."""
+    content = Path(SHAPES_PATH).read_bytes()
+    key = hashlib.sha256(content).hexdigest()
+    if key not in _SHAPES_BY_CONTENT:
         g = Graph()
-        g.parse(data=Path(SHAPES_PATH).read_text(encoding="utf-8"), format="turtle")
-        _SHAPES_CACHE = g
-    return _SHAPES_CACHE
+        g.parse(data=content.decode("utf-8"), format="turtle")
+        _SHAPES_BY_CONTENT[key] = g
+    return _SHAPES_BY_CONTENT[key]
 
 
 def check_admissibility_shacl(graph: Graph) -> Tuple[bool, str]:
@@ -332,7 +350,7 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
     proposed = float(action["value"])
     for obj in graph.objects(POLICY_NODE, MIN_POWER):
         if proposed < float(obj.toPython()):
-            return False, f"policy_min_power_violation:{proposed} < {float(obj.toPython())}"
+            return False, f"policy_min_violation:{proposed} < {float(obj.toPython())}"
     for obj in graph.objects(POLICY_NODE, max_pred):
         if proposed > float(obj.toPython()):
             return False, f"policy_role_cap_violation:{role}:{proposed} > {float(obj.toPython())}"
@@ -340,14 +358,16 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
 
 
 # ---------------------------------------------------------------------------
-# Resolution (structurally identical to resolver.resolve_actions)
+# Resolution (Definition 9, gates in the normative order (i)-(iv))
 # ---------------------------------------------------------------------------
 
 def resolve_actions(
     graph: Graph,
     schedule: List[Mapping[str, Any]],
-    conflict_policy: str = "first_writer_wins",
+    conflict_policy: str = CONFLICT_POLICY,
+    active_roles: Optional[List[str]] = None,
 ) -> Tuple[List[Dict[str, Any]], Graph, List[Dict[str, Any]]]:
+    active = set(ACTIVE_ROLES if active_roles is None else active_roles)
     accepted: List[Dict[str, Any]] = []
     decisions: List[Dict[str, Any]] = []
     current = Graph()
@@ -368,6 +388,21 @@ def resolve_actions(
             "pre_graph_digest": pre_digest,
         }
 
+        # (i) role filter
+        if str(action.get("role")) not in active:
+            decision.update({"accepted": False, "reason": "inactive_role", "post_graph_digest": pre_digest})
+            decisions.append(decision)
+            continue
+
+        # (ii) policy guard
+        ok, preason = check_policy_guard(current, action)
+        if not ok:
+            decision.update({"accepted": False, "reason": preason, "policy_reason": preason,
+                             "post_graph_digest": pre_digest})
+            decisions.append(decision)
+            continue
+
+        # (iii) conflict gate
         if conflict_policy == "first_writer_wins" and target_key in accepted_targets:
             w = accepted_targets[target_key]
             decision.update({"accepted": False, "reason": "shadowed_by_prior_accepted_action",
@@ -376,13 +411,7 @@ def resolve_actions(
             decisions.append(decision)
             continue
 
-        ok, preason = check_policy_guard(current, action)
-        if not ok:
-            decision.update({"accepted": False, "reason": preason, "policy_reason": preason,
-                             "post_graph_digest": pre_digest})
-            decisions.append(decision)
-            continue
-
+        # (iv) admissibility
         candidate = apply_action(current, action)
         cand_digest = graph_digest(candidate)
         conforms, report = check_admissibility_shacl(candidate)
@@ -400,6 +429,125 @@ def resolve_actions(
         decisions.append(decision)
 
     return accepted, current, decisions
+
+
+# ---------------------------------------------------------------------------
+# Trace recording, replay and cross-process re-execution (Section V-K)
+# ---------------------------------------------------------------------------
+
+def _canonical_lines(graph: Graph) -> List[str]:
+    return canonical_triple_lines(graph)
+
+
+def _graph_from_lines(lines: List[str]) -> Graph:
+    g = Graph()
+    if lines:
+        g.parse(data="\n".join(lines), format="nt")
+    return g
+
+
+def record_trace(name: str, state: Graph, enabled: List[Dict[str, Any]], role_rank: Mapping[str, int],
+                 schedule: List[Mapping[str, Any]], decisions: List[Dict[str, Any]],
+                 accepted: List[Dict[str, Any]], successor: Graph) -> str:
+    path = Path(paths.ev_trace(f"trace_ev_{name}.json"))
+    trace = {
+        "workload": f"EV charging ({name})",
+        "settings": {"schedule_key": SCHEDULE_KEY, "role_rank": dict(role_rank),
+                     "active_roles": ACTIVE_ROLES, "conflict_policy": CONFLICT_POLICY,
+                     "admissibility_regime": "shacl", "shapes": "shapes/invariants_ev.ttl",
+                     "dependencies": {"shapes_path": "shapes/invariants_ev.ttl",
+                                      "shapes_sha256": _file_sha256(HERE / "shapes" / "invariants_ev.ttl"),
+                                      "rules_path": "data/rules_ev.json",
+                                      "rules_sha256": _file_sha256(HERE / "data" / "rules_ev.json"),
+                                      "binding_profile": BINDING_PROFILE}},
+        "input_graph": {"triples": _canonical_lines(state), "digest": graph_digest(state)},
+        "actions": enabled,
+        "schedule_aids": [a["aid"] for a in schedule],
+        "decisions": _comparable(decisions),
+        "accepted_aids": [a["aid"] for a in accepted],
+        "successor_digest": graph_digest(successor),
+    }
+    path.write_text(json.dumps(trace, indent=2, default=str), encoding="utf-8")
+    return str(path)
+
+
+def _comparable(decisions: List[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """All recorded decision fields except the free-text validator report."""
+    return [json.loads(json.dumps({k: v for k, v in d.items() if k != "validation_report"},
+                                  sort_keys=True, default=str)) for d in decisions]
+
+
+def _file_sha256(path) -> str:
+    return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def replay_trace(path: str) -> Dict[str, Any]:
+    trace = json.loads(Path(path).read_text(encoding="utf-8"))
+    cfg = trace["settings"]
+    deps = cfg.get("dependencies", {})
+    state = _graph_from_lines(trace["input_graph"]["triples"])
+    dependency_ok = (graph_digest(state) == trace["input_graph"]["digest"]
+                     and cfg.get("admissibility_regime") == "shacl"
+                     and deps.get("binding_profile") == BINDING_PROFILE
+                     and _file_sha256(HERE / deps.get("shapes_path", "shapes/invariants_ev.ttl")) == deps.get("shapes_sha256")
+                     and _file_sha256(HERE / deps.get("rules_path", "data/rules_ev.json")) == deps.get("rules_sha256"))
+    # The recorded configuration drives the reconstruction: role ranks are
+    # re-derived from the recorded role-rank map, the recorded shape graph is
+    # validated against, and the recorded active-role set is applied.
+    actions = deepcopy(trace["actions"])
+    for a in actions:
+        a["roleRank"] = int(cfg["role_rank"].get(str(a.get("role")), 999))
+    schedule = schedule_actions(actions, settings={"schedule_key": cfg["schedule_key"]})
+    global SHAPES_PATH
+    previous_shapes = SHAPES_PATH
+    SHAPES_PATH = str(HERE / deps.get("shapes_path", cfg.get("shapes", "shapes/invariants_ev.ttl")))
+    try:
+        accepted, successor, decisions = resolve_actions(
+            state, schedule, conflict_policy=cfg["conflict_policy"], active_roles=cfg["active_roles"])
+    finally:
+        SHAPES_PATH = previous_shapes
+    rec = _comparable(trace["decisions"])
+    regen = _comparable(decisions)
+    return {
+        "workload": trace["workload"],
+        "trace_path": path,
+        "dependencies_match": dependency_ok,
+        "enabled_recorded": len(trace["actions"]),
+        "enabled_replayed": len(schedule),
+        "schedule_match": [a["aid"] for a in schedule] == trace["schedule_aids"],
+        "decisions_match": rec == regen,
+        "decisions_compared": len(rec),
+        "accepted_match": [a["aid"] for a in accepted] == trace["accepted_aids"],
+        "digest_match": graph_digest(successor) == trace["successor_digest"],
+        "successor_digest": trace["successor_digest"],
+    }
+
+
+def cross_process_digest(name: str, hash_seed: str = "12345") -> str:
+    """Run this window in a fresh interpreter with a different PYTHONHASHSEED
+    and return its successor digest."""
+    import subprocess
+    env = dict(os.environ, PYTHONHASHSEED=hash_seed, PYTHONDONTWRITEBYTECODE="1")
+    proc = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--digest", name],
+                          cwd=str(HERE), env=env, capture_output=True, text=True, check=True)
+    return proc.stdout.strip().splitlines()[-1]
+
+
+def run_replay_all() -> List[Dict[str, Any]]:
+    """Record, replay and cross-process re-execute every EV window."""
+    windows = {
+        "headline": lambda: run_headline(),
+        "governance_grid_over_fleet": lambda: run_governance()["grid_over_fleet"],
+        "governance_fleet_over_grid": lambda: run_governance()["fleet_over_grid"],
+        "emergency": lambda: run_emergency(),
+    }
+    rows = []
+    for name, fn in windows.items():
+        res = fn()
+        row = replay_trace(res["trace_path"])
+        row["cross_process_digest_match"] = cross_process_digest(name) == res["successor_digest"]
+        rows.append(row)
+    return rows
 
 
 # ---------------------------------------------------------------------------
@@ -442,6 +590,7 @@ def run_emergency() -> Dict[str, Any]:
                "role": "grid", "payload": {"feeder": f"{EV}Feeder1"}}]
     _state, enabled, schedule = _pipeline(events, ROLE_RANK, state=state)
     accepted, successor, decisions = resolve_actions(state, schedule)
+    trace_path = record_trace("emergency", state, enabled, ROLE_RANK, schedule, decisions, accepted, successor)
 
     powers, feeder_state = {}, None
     for s, p, o in successor:
@@ -449,8 +598,10 @@ def run_emergency() -> Dict[str, Any]:
             powers[str(s).split("#")[-1]] = float(o.toPython())
         if str(p) == f"{EV}feederState":
             feeder_state = str(o.toPython())
+    powers = dict(sorted(powers.items()))
     ok, _ = check_admissibility_shacl(successor)
     return {
+        "trace_path": trace_path,
         "enabled_count": len(enabled),
         "schedule": [(a["rid"], a["zone"].split("#")[-1], a["value"]) for a in schedule],
         "accepted_rids": [a["rid"] for a in accepted],
@@ -468,14 +619,17 @@ def run_headline() -> Dict[str, Any]:
     events = load_events(EVENTS_PATH)
     state, enabled, schedule = _pipeline(events, ROLE_RANK)
     accepted, successor, decisions = resolve_actions(state, schedule)
+    trace_path = record_trace("headline", state, enabled, ROLE_RANK, schedule, decisions, accepted, successor)
 
     committed_powers = {}
     for s, p, o in successor:
         if str(p) == CHARGING_POWER:
             committed_powers[str(s).split("#")[-1]] = float(o.toPython())
+    committed_powers = dict(sorted(committed_powers.items()))
 
     final_ok, _ = check_admissibility_shacl(successor)
     return {
+        "trace_path": trace_path,
         "enabled_count": len(enabled),
         "schedule_rids": [a["rid"] for a in schedule],
         "accepted_rids": [a["rid"] for a in accepted],
@@ -563,12 +717,15 @@ def run_governance() -> Dict[str, Any]:
                         ("fleet_over_grid", {"fleet": 0, "grid": 1, "driver": 2})):
         state, enabled, schedule = _pipeline(events, rank)
         accepted, successor, decisions = resolve_actions(state, schedule)
+        trace_path = record_trace(f"governance_{label}", state, enabled, rank, schedule, decisions, accepted, successor)
         committed = None
         for s, p, o in successor:
             if str(p) == CHARGING_POWER and str(s).endswith("CP1"):
                 committed = float(o.toPython())
         ok, _ = check_admissibility_shacl(successor)
         out[label] = {
+            "trace_path": trace_path,
+            "successor_digest": graph_digest(successor),
             "schedule_rids": [a["rid"] for a in schedule],
             "accepted_rids": [a["rid"] for a in accepted],
             "committed_power_CP1": committed,
@@ -579,17 +736,63 @@ def run_governance() -> Dict[str, Any]:
     return out
 
 
+def _digest_only(name: str) -> str:
+    if name == "headline":
+        return run_headline()["successor_digest"]
+    if name == "emergency":
+        return run_emergency()["successor_digest"]
+    if name.startswith("governance_"):
+        return run_governance()[name[len("governance_"):]]["successor_digest"]
+    raise ValueError(name)
+
+
+def verification_failures(summary: Mapping[str, Any]) -> List[str]:
+    """Fail closed on missing/failed evidence from each reported EV workload."""
+    failures = []
+    expected_windows = {f"EV charging ({name})" for name in
+                        ("headline", "emergency", "governance_grid_over_fleet",
+                         "governance_fleet_over_grid")}
+    rows = summary.get("replay", [])
+    if (len(rows) != len(expected_windows)
+            or {r.get("workload") for r in rows} != expected_windows):
+        failures.append("replay must contain each of the four expected windows exactly once")
+    replay_checks = ("dependencies_match", "schedule_match", "decisions_match",
+                     "accepted_match", "digest_match", "cross_process_digest_match")
+    for row in rows:
+        for check in replay_checks:
+            if row.get(check) is not True:
+                failures.append(f"{row.get('workload', 'unknown')}: {check}")
+    for name in ("headline", "emergency"):
+        if summary.get(name, {}).get("final_admissible") is not True:
+            failures.append(f"{name}: final_admissible")
+    for name in ("grid_over_fleet", "fleet_over_grid"):
+        if summary.get("governance", {}).get(name, {}).get("final_admissible") is not True:
+            failures.append(f"governance_{name}: final_admissible")
+    stress = summary.get("headline_30_trials", {})
+    if (stress.get("runs") != 30 or stress.get("ours_unique_states") != 1
+            or stress.get("ours_admissible_pct") != 100.0):
+        failures.append("headline trials: expected 30 admissible runs and one successor state")
+    return failures
+
+
 def main():
-    out_dir = HERE / "results"
-    out_dir.mkdir(exist_ok=True)
+    if len(sys.argv) == 3 and sys.argv[1] == "--digest":
+        print(_digest_only(sys.argv[2]))
+        return
+
+    out_dir = paths.EV
+    paths.ensure_dirs()
 
     headline = run_headline()
     stress = run_headline_30_vs_random()
     governance = run_governance()
     emergency = run_emergency()
+    replay = run_replay_all()
 
     summary = {"headline": headline, "headline_30_trials": stress,
-               "governance": governance, "emergency": emergency}
+               "governance": governance, "emergency": emergency, "replay": replay}
+    failures = verification_failures(summary)
+    summary["verification"] = {"overall_pass": not failures, "failures": failures}
     with open(out_dir / "experiment_ev.json", "w", encoding="utf-8") as fh:
         json.dump(summary, fh, indent=2)
 
@@ -623,7 +826,16 @@ def main():
     print("  committed feeder state:", emergency["committed_feeder_state"])
     print("  final admissible:", emergency["final_admissible"])
 
+    print("\n== EV replay (trace-based) and cross-process re-execution ==")
+    for r in replay:
+        print(f"  {r['workload']:<40} schedule={'match' if r['schedule_match'] else 'MISMATCH'} "
+              f"decisions={r['decisions_compared']}/{r['decisions_compared'] if r['decisions_match'] else 'MISMATCH'} "
+              f"digest={'match' if r['digest_match'] else 'MISMATCH'} "
+              f"cross-process={'match' if r['cross_process_digest_match'] else 'MISMATCH'}")
+
     print("\nWrote", out_dir / "experiment_ev.json")
+    if failures:
+        raise SystemExit("EV verification failed: " + "; ".join(failures))
 
 
 if __name__ == "__main__":

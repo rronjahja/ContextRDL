@@ -18,8 +18,9 @@ windows. Two documented event-delivery modes are compared:
                  marked processed after the step commits; processed events
                  are excluded from later step inputs, giving at-most-once
                  delivery of each physical event to an evaluation step. The
-                 ledger is recorded per step in the results and would be
-                 recorded in the trace in a deployment.
+                 delivery mode is recorded in the trace settings and the
+                 ledger in the window metadata of every step trace
+                 (results/hvac/traces/trace_multiwindow_<mode>_step<k>.json).
 
 The experiment also injects (a) an exact duplicate event (same type,
 timestamp, payload, distinct eid: an upstream retransmission), handled
@@ -34,9 +35,10 @@ windows), once under consume_once.
 
 Usage:
     python experiment_multiwindow.py [runs]
-Writes results/experiment_multiwindow.json
+Writes results/hvac/experiment_multiwindow.json
 """
 from __future__ import annotations
+import paths  # noqa: E402  (results layout)
 
 import json
 import sys
@@ -46,6 +48,8 @@ from typing import Any, Dict, List, Set
 from rdflib import URIRef
 
 from engine import run_engine
+from dataset_builder import select_window_events
+from rule_engine import load_settings
 
 EX = "http://example.org/building#"
 ZONE_B = URIRef(f"{EX}ZoneB")
@@ -85,13 +89,19 @@ def arrival_visible(log: List[Dict[str, Any]], step_index: int) -> List[Dict[str
     return log
 
 
-def r4_firings(trace: Dict[str, Any], eid: str) -> int:
-    """How often the given physical event produced an ACCEPTED r4 action."""
+OCCUPANCY_OCCURRENCE = {"evt-occB-1", "evt-occB-1-dup"}  # one physical occurrence, two log identifiers
+
+
+def r4_firings(trace: Dict[str, Any], eid) -> int:
+    """How often the given event identifier(s) produced an ACCEPTED r4 action.
+    Passing the set OCCUPANCY_OCCURRENCE counts the physical occurrence
+    regardless of which of its two identifiers won the same-target conflict."""
+    eids = {eid} if isinstance(eid, str) else set(eid)
     accepted_aids = {d["aid"] for d in trace["decisions"] if d.get("accepted")}
     n = 0
     for action in trace.get("schedule", []):
         if action.get("rid") == "r4" and action.get("aid") in accepted_aids \
-                and str(action.get("event_id", "")).endswith(eid):
+                and str(action.get("event_id", "")).split("#")[-1] in eids:
             n += 1
     return n
 
@@ -106,19 +116,35 @@ def run_sequence(mode: str) -> Dict[str, Any]:
         visible = arrival_visible(log, i)
         if mode == "consume_once":
             visible = [e for e in visible if e["eid"] not in consumed]
+        # The delivery mode is a component of the execution configuration
+        # (Definition 11 (ii)) and the processed-event ledger is part of the
+        # recorded trace (Section III-G): both are handed to run_engine so that
+        # they land in the trace settings and window metadata of every step.
+        # Events selected into this window are known before the step runs
+        # (event-time windowing over the visible log), so both the ledger
+        # before and the ledger after the step can be recorded in the trace.
+        _, meta_preview = select_window_events(visible, load_settings(), anchor)
+        selected_ids = {str(eid) for eid in meta_preview.get("selected_event_ids", [])}
+        ledger_after = (consumed | selected_ids) if mode == "consume_once" else set()
         _, schedule, accepted, graph, trace = run_engine(
             state_graph=graph,
             events=visible,
             anchor_timestamp=anchor,
-            save_trace_file=False,
+            save_trace_file=True,
+            trace_path=paths.hvac_trace(f"trace_multiwindow_{mode}_step{i + 1}.json"),
+            settings_override={"event_delivery": mode},
+            extra_window_meta={
+                "processed_event_ledger_before_step": sorted(consumed),
+                "processed_event_ledger_after_step": sorted(ledger_after),
+                "log_event_ids_visible": [e["eid"] for e in visible],
+            },
         )
-        window_eids = {str(e["eid"]) for e in trace.get("events", [])} if trace.get("events") else set()
-        if not window_eids:
-            # fall back: eids referenced by scheduled actions
-            window_eids = {str(a["event_id"]).split("#")[-1] for a in trace.get("schedule", []) if a.get("event_id")}
+        window_eids = {str(e["eid"]) for e in trace.get("events", [])}
+        assert window_eids == selected_ids, "window selection preview disagrees with the engine"
         if mode == "consume_once":
-            consumed |= {e["eid"] for e in visible
-                         if any(str(e["eid"]) in w for w in window_eids) or e["eid"] in window_eids}
+            # Exact identifier membership: a ledger entry "future" must not
+            # consume a distinct event "future-suffix", and vice versa.
+            consumed |= {str(e["eid"]) for e in visible if str(e["eid"]) in window_eids}
         zone_b = None
         for obj in graph.objects(ZONE_B, CURRENT_SETPOINT):
             zone_b = obj.toPython()
@@ -131,6 +157,8 @@ def run_sequence(mode: str) -> Dict[str, Any]:
             "accepted": len(accepted),
             "accepted_rids": [a["rid"] for a in accepted],
             "r4_firings_from_occB1": r4_firings(trace, "evt-occB-1"),
+            "r4_firings_from_occurrence": r4_firings(trace, OCCUPANCY_OCCURRENCE),
+            "accepted_r4_event_ids": [str(a.get("event_id")).split("#")[-1] for a in accepted if a["rid"] == "r4"],
             "late_event_dropped": dropped_late,
             "zoneB_setpoint": zone_b,
             "successor_digest": trace["successor_graph"]["digest"],
@@ -151,16 +179,22 @@ def main(runs: int = 30):
             "steps": example["steps"],
         }
         print(f"\n=== mode: {mode} (runs={runs}, unique sequences={len(sequences)}) ===")
-        total_r4 = sum(s["r4_firings_from_occB1"] for s in example["steps"])
+        total_r4 = sum(s["r4_firings_from_occurrence"] for s in example["steps"])
         for s in example["steps"]:
             print(f"  {s['anchor']}  enabled={s['enabled']} accepted={s['accepted']} "
                   f"{s['accepted_rids']}  ZoneB={s['zoneB_setpoint']}  late_dropped={s['late_event_dropped']}")
-        print(f"  -> physical event evt-occB-1 fired r4 {total_r4} time(s) across the run")
-        results[mode]["occB1_r4_total_firings"] = total_r4
+        print(f"  -> the occupancy occurrence (identifiers {sorted(OCCUPANCY_OCCURRENCE)}) fired r4 {total_r4} time(s) across the run")
+        results[mode]["occurrence_r4_total_firings"] = total_r4
+        results[mode]["occB1_r4_total_firings"] = sum(s["r4_firings_from_occB1"] for s in example["steps"])
 
-    out = Path(__file__).resolve().parent.parent / "results" / "experiment_multiwindow.json"
+    out = Path(paths.hvac("experiment_multiwindow.json"))
     out.write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
     print("\nWrote", out)
+    seqs = {m: [str(s["zoneB_setpoint"]) for s in results[m]["steps"]] for m in results}
+    if not (results["redelivery"]["unique_digest_sequences"] == 1 and results["consume_once"]["unique_digest_sequences"] == 1
+            and [float(x) for x in seqs["redelivery"]] == [21.0, 22.0, 23.0]
+            and [float(x) for x in seqs["consume_once"]] == [21.0, 21.0, 23.0]):
+        raise SystemExit("multi-window outcome differs from the characterized behaviour")
     return results
 
 
