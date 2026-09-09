@@ -1,0 +1,83 @@
+{
+  "repeats": 5,
+  "rows": [
+    {
+      "N": 10,
+      "accepted": 10,
+      "outcome_identical": true,
+      "orig_mean_s": 0.031,
+      "orig_sd_s": 0.003,
+      "new_full_trace_mean_s": 0.007,
+      "new_full_trace_sd_s": 0.0,
+      "speedup_same_trace_profile_x": 4.7,
+      "new_mean_s": 0.003,
+      "new_sd_s": 0.0,
+      "speedup_x": 10.2
+    },
+    {
+      "N": 50,
+      "accepted": 50,
+      "outcome_identical": true,
+      "orig_mean_s": 0.399,
+      "orig_sd_s": 0.003,
+      "new_full_trace_mean_s": 0.081,
+      "new_full_trace_sd_s": 0.001,
+      "speedup_same_trace_profile_x": 5.0,
+      "new_mean_s": 0.009,
+      "new_sd_s": 0.0,
+      "speedup_x": 42.1
+    },
+    {
+      "N": 100,
+      "accepted": 100,
+      "outcome_identical": true,
+      "orig_mean_s": 1.434,
+      "orig_sd_s": 0.014,
+      "new_full_trace_mean_s": 0.294,
+      "new_full_trace_sd_s": 0.007,
+      "speedup_same_trace_profile_x": 4.9,
+      "new_mean_s": 0.017,
+      "new_sd_s": 0.001,
+      "speedup_x": 82.5
+    },
+    {
+      "N": 200,
+      "accepted": 200,
+      "outcome_identical": true,
+      "orig_mean_s": 5.238,
+      "orig_sd_s": 0.03,
+      "new_full_trace_mean_s": 1.074,
+      "new_full_trace_sd_s": 0.012,
+      "speedup_same_trace_profile_x": 4.9,
+      "new_mean_s": 0.032,
+      "new_sd_s": 0.002,
+      "speedup_x": 162.4
+    },
+    {
+      "N": 400,
+      "accepted": 400,
+      "outcome_identical": true,
+      "orig_mean_s": 20.219,
+      "orig_sd_s": 0.191,
+      "new_full_trace_mean_s": 4.176,
+      "new_full_trace_sd_s": 0.031,
+      "speedup_same_trace_profile_x": 4.8,
+      "new_mean_s": 0.06,
+      "new_sd_s": 0.002,
+      "speedup_x": 337.2
+    },
+    {
+      "N": 800,
+      "accepted": 800,
+      "outcome_identical": true,
+      "orig_mean_s": 79.51,
+      "orig_sd_s": 0.26,
+      "new_full_trace_mean_s": 16.708,
+      "new_full_trace_sd_s": 0.127,
+      "speedup_same_trace_profile_x": 4.8,
+      "new_mean_s": 0.116,
+      "new_sd_s": 0.005,
+      "speedup_x": 684.2
+    }
+  ]
+}

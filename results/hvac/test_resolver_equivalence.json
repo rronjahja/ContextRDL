@@ -1,0 +1,48 @@
+{
+  "overall_pass": true,
+  "per_workload": [
+    {
+      "label": "default",
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "all_match": true
+    },
+    {
+      "label": "governance_reversed",
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "all_match": true
+    },
+    {
+      "label": "tie_conflict",
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "all_match": true
+    },
+    {
+      "label": "governance_conflict",
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "all_match": true
+    },
+    {
+      "label": "governance_conflict_reversed",
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "all_match": true
+    },
+    {
+      "label": "duplicate_identity",
+      "accepted_match": true,
+      "decisions_match": true,
+      "digest_match": true,
+      "all_match": true
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,613 @@
+{
+  "accepted_actions": [
+    {
+      "aid": "8e458f0dc7714ad2927199376a77d6678cf27143416b0c1051577c0c4fdadde6",
+      "bindKey": "{\"eid\":\"\\\"evt-occB-1-dup\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+      "binding_profile": "nt-1",
+      "bindings": {
+        "eid": "evt-occB-1-dup",
+        "setpoint": "20",
+        "ts": "2026-03-14T09:01:30Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-occB-1-dup",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:01:30Z",
+      "event_uri": "urn:event:evt-occB-1-dup",
+      "identity": {
+        "bindKey": "{\"eid\":\"\\\"evt-occB-1-dup\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+        "rid": "r4",
+        "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00"
+      },
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478890000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    }
+  ],
+  "decisions": [
+    {
+      "accepted": true,
+      "aid": "8e458f0dc7714ad2927199376a77d6678cf27143416b0c1051577c0c4fdadde6",
+      "candidate_graph_digest": "06e96c538314920854d6ffe4d5224cdcf96ad6309b8fbd1ad8f4164e8bbedd44",
+      "event_id": "evt-occB-1-dup",
+      "event_role": "occupant",
+      "inserted_triples": [
+        "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"21.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+      ],
+      "policy_reason": "policy_guard_passed",
+      "post_graph_digest": "06e96c538314920854d6ffe4d5224cdcf96ad6309b8fbd1ad8f4164e8bbedd44",
+      "pre_graph_digest": "fed729ffa84d90f9307f2e934cd066eb877a36d0d1557f59d294a12e4e8ffb59",
+      "reason": "admissible",
+      "removed_triples": [
+        "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"20\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+      ],
+      "rid": "r4",
+      "role": "occupant",
+      "schedule_index": 0,
+      "schedule_key": {
+        "aid": "8e458f0dc7714ad2927199376a77d6678cf27143416b0c1051577c0c4fdadde6",
+        "bindKey": "{\"eid\":\"\\\"evt-occB-1-dup\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+        "priority": 2,
+        "rid": "r4",
+        "roleRank": 2,
+        "tsKey": 1773478890000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value": 21.0,
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint"
+    },
+    {
+      "accepted": false,
+      "aid": "9ec2ee7a04e2415b592f6f0b20a6be2ff498ff08dbed048c90d3c880c3573491",
+      "blocked_by_aid": "8e458f0dc7714ad2927199376a77d6678cf27143416b0c1051577c0c4fdadde6",
+      "blocked_by_rid": "r4",
+      "event_id": "evt-occB-1",
+      "event_role": "occupant",
+      "inserted_triples": [],
+      "post_graph_digest": "06e96c538314920854d6ffe4d5224cdcf96ad6309b8fbd1ad8f4164e8bbedd44",
+      "pre_graph_digest": "06e96c538314920854d6ffe4d5224cdcf96ad6309b8fbd1ad8f4164e8bbedd44",
+      "reason": "shadowed_by_prior_accepted_action",
+      "removed_triples": [],
+      "rid": "r4",
+      "role": "occupant",
+      "schedule_index": 1,
+      "schedule_key": {
+        "aid": "9ec2ee7a04e2415b592f6f0b20a6be2ff498ff08dbed048c90d3c880c3573491",
+        "bindKey": "{\"eid\":\"\\\"evt-occB-1\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+        "priority": 2,
+        "rid": "r4",
+        "roleRank": 2,
+        "tsKey": 1773478890000000
+      },
+      "target": {
+        "predicate": "http://example.org/building#currentSetpoint",
+        "value": 21.0,
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint"
+    }
+  ],
+  "enabled_actions": [
+    {
+      "aid": "8e458f0dc7714ad2927199376a77d6678cf27143416b0c1051577c0c4fdadde6",
+      "bindKey": "{\"eid\":\"\\\"evt-occB-1-dup\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+      "binding_profile": "nt-1",
+      "bindings": {
+        "eid": "evt-occB-1-dup",
+        "setpoint": "20",
+        "ts": "2026-03-14T09:01:30Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-occB-1-dup",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:01:30Z",
+      "event_uri": "urn:event:evt-occB-1-dup",
+      "identity": {
+        "bindKey": "{\"eid\":\"\\\"evt-occB-1-dup\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+        "rid": "r4",
+        "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00"
+      },
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478890000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    },
+    {
+      "aid": "9ec2ee7a04e2415b592f6f0b20a6be2ff498ff08dbed048c90d3c880c3573491",
+      "bindKey": "{\"eid\":\"\\\"evt-occB-1\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+      "binding_profile": "nt-1",
+      "bindings": {
+        "eid": "evt-occB-1",
+        "setpoint": "20",
+        "ts": "2026-03-14T09:01:30Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-occB-1",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:01:30Z",
+      "event_uri": "urn:event:evt-occB-1",
+      "identity": {
+        "bindKey": "{\"eid\":\"\\\"evt-occB-1\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+        "rid": "r4",
+        "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00"
+      },
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478890000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    }
+  ],
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pyshacl": "0.31.0",
+    "python": "3.14.3",
+    "rdflib": "7.6.0",
+    "rules_file_sha256": "23abae25b2cd6fd27c4ffd79b194925fcd339efb5f818f4835862562d3dfe2f9",
+    "rules_path": "configs/rules.json",
+    "rules_source": "file",
+    "source_manifest_sha256": "207e9ff572ff4d63689591cc9d508f8e96132c1c654473b4ea4bf328130cdfad",
+    "source_revision": "7e50049b3af27b488a5df0a4cf69c8935b9ac2b8"
+  },
+  "events": [
+    {
+      "eid": "evt-occB-1",
+      "payload": {
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "role": "occupant",
+      "timestamp": "2026-03-14T09:01:30Z",
+      "type": "OccupancyDetected"
+    },
+    {
+      "eid": "evt-occB-1-dup",
+      "payload": {
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "role": "occupant",
+      "timestamp": "2026-03-14T09:01:30Z",
+      "type": "OccupancyDetected"
+    }
+  ],
+  "input_graph": {
+    "digest": "fed729ffa84d90f9307f2e934cd066eb877a36d0d1557f59d294a12e4e8ffb59",
+    "triple_count": 23,
+    "triples": [
+      "<http://example.org/building#Policy> <http://example.org/building#emergencyMaxSetpoint> \"26\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#minSetpoint> \"18\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#occupantMaxSetpoint> \"23\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#operatorMaxSetpoint> \"24\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#ControlPolicy> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#co2Level> \"750\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#currentSetpoint> \"22\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#co2Level> \"500\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"20\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#occupied> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneB> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#co2Level> \"1200\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#currentSetpoint> \"21\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneC> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> ."
+    ]
+  },
+  "rules": [
+    {
+      "issuing_role": "occupant",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r1",
+      "value_expr": {
+        "kind": "numeric_add",
+        "left": "setpoint",
+        "right": "delta"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r2",
+      "value_expr": {
+        "kind": "copy",
+        "var": "cap"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r3",
+      "value_expr": {
+        "kind": "copy",
+        "var": "mode"
+      }
+    },
+    {
+      "issuing_role": "occupant",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "value_expr": {
+        "constant": 1,
+        "kind": "numeric_add_constant",
+        "var": "setpoint"
+      }
+    },
+    {
+      "issuing_role": "emergency",
+      "predicate": "http://example.org/building#emergencyState",
+      "priority": 1,
+      "rid": "r5",
+      "value_expr": {
+        "kind": "copy",
+        "var": "state"
+      }
+    },
+    {
+      "issuing_role": "emergency",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 0,
+      "rid": "r6",
+      "value_expr": {
+        "kind": "literal",
+        "value": "emergency"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 1,
+      "rid": "r7",
+      "value_expr": {
+        "kind": "copy",
+        "var": "target"
+      }
+    },
+    {
+      "issuing_role": "operator",
+      "predicate": "http://example.org/building#ventilationMode",
+      "priority": 1,
+      "rid": "r8",
+      "value_expr": {
+        "kind": "literal",
+        "value": "off"
+      }
+    }
+  ],
+  "schedule": [
+    {
+      "aid": "8e458f0dc7714ad2927199376a77d6678cf27143416b0c1051577c0c4fdadde6",
+      "bindKey": "{\"eid\":\"\\\"evt-occB-1-dup\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+      "binding_profile": "nt-1",
+      "bindings": {
+        "eid": "evt-occB-1-dup",
+        "setpoint": "20",
+        "ts": "2026-03-14T09:01:30Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-occB-1-dup",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:01:30Z",
+      "event_uri": "urn:event:evt-occB-1-dup",
+      "identity": {
+        "bindKey": "{\"eid\":\"\\\"evt-occB-1-dup\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+        "rid": "r4",
+        "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00"
+      },
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478890000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    },
+    {
+      "aid": "9ec2ee7a04e2415b592f6f0b20a6be2ff498ff08dbed048c90d3c880c3573491",
+      "bindKey": "{\"eid\":\"\\\"evt-occB-1\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+      "binding_profile": "nt-1",
+      "bindings": {
+        "eid": "evt-occB-1",
+        "setpoint": "20",
+        "ts": "2026-03-14T09:01:30Z",
+        "zone": "http://example.org/building#ZoneB"
+      },
+      "event_id": "evt-occB-1",
+      "event_role": "occupant",
+      "event_ts": "2026-03-14T09:01:30Z",
+      "event_uri": "urn:event:evt-occB-1",
+      "identity": {
+        "bindKey": "{\"eid\":\"\\\"evt-occB-1\\\"\",\"setpoint\":\"\\\"20\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:01:30Z\\\"\",\"zone\":\"<http://example.org/building#ZoneB>\"}",
+        "rid": "r4",
+        "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00"
+      },
+      "predicate": "http://example.org/building#currentSetpoint",
+      "priority": 2,
+      "rid": "r4",
+      "role": "occupant",
+      "roleRank": 2,
+      "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
+      "tsKey": 1773478890000000,
+      "value": 21.0,
+      "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00",
+      "zone": "http://example.org/building#ZoneB"
+    }
+  ],
+  "settings": {
+    "admissibility_regime": "incremental",
+    "dependencies": {
+      "binding_profile": "nt-1",
+      "rules_inline": [
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?delta WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupantSetpointRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:delta> ?delta . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#currentSetpoint",
+            "value_expr": {
+              "kind": "numeric_add",
+              "left": "setpoint",
+              "right": "delta"
+            }
+          },
+          "issuing_role": "occupant",
+          "priority": 2,
+          "rid": "r1"
+        },
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?cap WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:cap> ?cap . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#currentSetpoint",
+            "value_expr": {
+              "kind": "copy",
+              "var": "cap"
+            }
+          },
+          "issuing_role": "operator",
+          "priority": 1,
+          "rid": "r2"
+        },
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"CO2Spike\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:mode> ?mode . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#ventilationMode",
+            "value_expr": {
+              "kind": "copy",
+              "var": "mode"
+            }
+          },
+          "issuing_role": "operator",
+          "priority": 1,
+          "rid": "r3"
+        },
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupancyDetected\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint ; ex:occupied false . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#currentSetpoint",
+            "value_expr": {
+              "constant": 1,
+              "kind": "numeric_add_constant",
+              "var": "setpoint"
+            }
+          },
+          "issuing_role": "occupant",
+          "priority": 2,
+          "rid": "r4"
+        },
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?state WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:state> ?state . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:emergencyState ?currentState . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#emergencyState",
+            "value_expr": {
+              "kind": "copy",
+              "var": "state"
+            }
+          },
+          "issuing_role": "emergency",
+          "priority": 1,
+          "rid": "r5"
+        },
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#ventilationMode",
+            "value_expr": {
+              "kind": "literal",
+              "value": "emergency"
+            }
+          },
+          "issuing_role": "emergency",
+          "priority": 0,
+          "rid": "r6"
+        },
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?target WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"PreheatRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:target> ?target . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#currentSetpoint",
+            "value_expr": {
+              "kind": "copy",
+              "var": "target"
+            }
+          },
+          "issuing_role": "operator",
+          "priority": 1,
+          "rid": "r7"
+        },
+        {
+          "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+          "delete_template": null,
+          "insert_template": {
+            "predicate": "http://example.org/building#ventilationMode",
+            "value_expr": {
+              "kind": "literal",
+              "value": "off"
+            }
+          },
+          "issuing_role": "operator",
+          "priority": 1,
+          "rid": "r8"
+        }
+      ],
+      "rules_sha256": "c36e065b5a29bf44cb4db97cd697cc99e1ba4eca7eb35e52601f8d3855fbfaac",
+      "shapes_path": "shapes/invariants.ttl",
+      "shapes_sha256": "1ca542668f976b88b2c8c9587d496ab0b3e3841dc0f742e9e72be9bde5c00301"
+    },
+    "entailment_regime": "none",
+    "event_delivery": "redelivery",
+    "event_ordering": [
+      "timestamp",
+      "eid"
+    ],
+    "governance": {
+      "conflict_policy": "first_writer_wins",
+      "context_name": "default",
+      "enforce_active_roles": true
+    },
+    "role_precedence": {
+      "emergency": 0,
+      "occupant": 2,
+      "operator": 1
+    },
+    "schedule_key": [
+      "roleRank",
+      "priority",
+      "tsKey",
+      "rid",
+      "bindKey",
+      "aid"
+    ],
+    "validation_regime": "shacl",
+    "window": {
+      "length_minutes": 5,
+      "step_minutes": 1,
+      "type": "sliding"
+    }
+  },
+  "successor_graph": {
+    "digest": "06e96c538314920854d6ffe4d5224cdcf96ad6309b8fbd1ad8f4164e8bbedd44",
+    "triple_count": 23,
+    "triples": [
+      "<http://example.org/building#Policy> <http://example.org/building#emergencyMaxSetpoint> \"26\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#minSetpoint> \"18\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#occupantMaxSetpoint> \"23\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://example.org/building#operatorMaxSetpoint> \"24\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#Policy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#ControlPolicy> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#co2Level> \"750\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#currentSetpoint> \"22\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneA> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#co2Level> \"500\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#currentSetpoint> \"21.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#occupied> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneB> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneB> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#co2Level> \"1200\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#currentSetpoint> \"21\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#emergencyState> \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#occupied> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .",
+      "<http://example.org/building#ZoneC> <http://example.org/building#ventilationMode> \"normal\" .",
+      "<http://example.org/building#ZoneC> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/building#HVAC_Zone> ."
+    ]
+  },
+  "summary": {
+    "accepted_count": 1,
+    "enabled_count": 2,
+    "rejected_count": 1,
+    "scheduled_count": 2
+  },
+  "trace_version": "2.2",
+  "window": {
+    "anchor_timestamp": "2026-03-14T09:04:00Z",
+    "event_delivery": "redelivery",
+    "governance_context": {
+      "active_roles": [
+        "emergency",
+        "operator",
+        "occupant"
+      ],
+      "enforce_active_roles": true,
+      "name": "default",
+      "principal": "automation-engine",
+      "role_rank": {
+        "emergency": 0,
+        "occupant": 2,
+        "operator": 1
+      }
+    },
+    "log_event_ids_visible": [
+      "evt-occB-1",
+      "evt-occB-1-dup",
+      "evt-preB-1"
+    ],
+    "processed_event_ledger_after_step": [],
+    "processed_event_ledger_before_step": [],
+    "selected_event_ids": [
+      "evt-occB-1",
+      "evt-occB-1-dup"
+    ],
+    "selected_events": [
+      {
+        "eid": "evt-occB-1",
+        "payload": {
+          "zone": "http://example.org/building#ZoneB"
+        },
+        "role": "occupant",
+        "timestamp": "2026-03-14T09:01:30Z",
+        "type": "OccupancyDetected"
+      },
+      {
+        "eid": "evt-occB-1-dup",
+        "payload": {
+          "zone": "http://example.org/building#ZoneB"
+        },
+        "role": "occupant",
+        "timestamp": "2026-03-14T09:01:30Z",
+        "type": "OccupancyDetected"
+      }
+    ],
+    "window_end": "2026-03-14T09:04:00+00:00",
+    "window_id": "sliding:2026-03-14T08:59:00+00:00::2026-03-14T09:04:00+00:00",
+    "window_start": "2026-03-14T08:59:00+00:00",
+    "window_type": "sliding"
+  }
+}

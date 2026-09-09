@@ -1,0 +1,108 @@
+{
+  "none": {
+    "committed": "fae2faf51d0f02e4a9b118a5f915231f",
+    "consistent": true,
+    "reason": "verified",
+    "step_id": "fae2faf51d0f02e4a9b118a5f915231f",
+    "chain_length": 1
+  },
+  "after_trace": {
+    "current_after_crash": null,
+    "recovery": {
+      "committed_step": null,
+      "committed_chain": [],
+      "discarded_incomplete_steps": [
+        "fae2faf51d0f02e4a9b118a5f915231f"
+      ],
+      "verification": {
+        "consistent": true,
+        "reason": "empty store"
+      }
+    },
+    "invariant_holds": true
+  },
+  "after_state": {
+    "current_after_crash": null,
+    "recovery": {
+      "committed_step": null,
+      "committed_chain": [],
+      "discarded_incomplete_steps": [
+        "fae2faf51d0f02e4a9b118a5f915231f"
+      ],
+      "verification": {
+        "consistent": true,
+        "reason": "empty store"
+      }
+    },
+    "invariant_holds": true
+  },
+  "duplicate": {
+    "refused": true,
+    "message": "duplicate step fae2faf51d0f02e4a9b118a5f915231f: already committed (idempotence guard)"
+  },
+  "committed_after_trace": {
+    "committed_step_before_crash": "fae2faf51d0f02e4a9b118a5f915231f",
+    "current_after_crash": {
+      "step_id": "fae2faf51d0f02e4a9b118a5f915231f",
+      "successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "parent_step_id": null
+    },
+    "recovery": {
+      "committed_step": "fae2faf51d0f02e4a9b118a5f915231f",
+      "committed_chain": [
+        "fae2faf51d0f02e4a9b118a5f915231f"
+      ],
+      "discarded_incomplete_steps": [
+        "20366695346997b15d4c67e47322fa10"
+      ],
+      "verification": {
+        "consistent": true,
+        "reason": "verified",
+        "step_id": "fae2faf51d0f02e4a9b118a5f915231f",
+        "chain_length": 1
+      }
+    },
+    "invariant_holds": true
+  },
+  "committed_after_state": {
+    "committed_step_before_crash": "fae2faf51d0f02e4a9b118a5f915231f",
+    "current_after_crash": {
+      "step_id": "fae2faf51d0f02e4a9b118a5f915231f",
+      "successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "parent_step_id": null
+    },
+    "recovery": {
+      "committed_step": "fae2faf51d0f02e4a9b118a5f915231f",
+      "committed_chain": [
+        "fae2faf51d0f02e4a9b118a5f915231f"
+      ],
+      "discarded_incomplete_steps": [
+        "20366695346997b15d4c67e47322fa10"
+      ],
+      "verification": {
+        "consistent": true,
+        "reason": "verified",
+        "step_id": "fae2faf51d0f02e4a9b118a5f915231f",
+        "chain_length": 1
+      }
+    },
+    "invariant_holds": true
+  },
+  "history": {
+    "committed_steps": [
+      "fae2faf51d0f02e4a9b118a5f915231f",
+      "20366695346997b15d4c67e47322fa10",
+      "bc1a3cd9ef39c33b2df483206b53febe"
+    ],
+    "chain_after_recovery": [
+      "20366695346997b15d4c67e47322fa10",
+      "bc1a3cd9ef39c33b2df483206b53febe",
+      "fae2faf51d0f02e4a9b118a5f915231f"
+    ],
+    "discarded": [],
+    "all_three_retained": true,
+    "stale_recommit_refused": true,
+    "tampered_nested_digest_detected": true,
+    "invariant_holds": true
+  }
+}

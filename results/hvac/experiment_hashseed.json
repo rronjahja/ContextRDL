@@ -1,0 +1,329 @@
+{
+  "processes": 7,
+  "unique_digests": 1,
+  "unique_decision_lists": 1,
+  "rows": [
+    {
+      "PYTHONHASHSEED": "0",
+      "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "decisions": [
+        [
+          "r6",
+          true,
+          "admissible"
+        ],
+        [
+          "r5",
+          true,
+          "admissible"
+        ],
+        [
+          "r2",
+          true,
+          "admissible"
+        ],
+        [
+          "r3",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ],
+        [
+          "r7",
+          true,
+          "admissible"
+        ],
+        [
+          "r8",
+          true,
+          "admissible"
+        ],
+        [
+          "r1",
+          false,
+          "policy_role_cap_violation:occupant:24.0 > 23.0"
+        ],
+        [
+          "r4",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ]
+      ]
+    },
+    {
+      "PYTHONHASHSEED": "1",
+      "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "decisions": [
+        [
+          "r6",
+          true,
+          "admissible"
+        ],
+        [
+          "r5",
+          true,
+          "admissible"
+        ],
+        [
+          "r2",
+          true,
+          "admissible"
+        ],
+        [
+          "r3",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ],
+        [
+          "r7",
+          true,
+          "admissible"
+        ],
+        [
+          "r8",
+          true,
+          "admissible"
+        ],
+        [
+          "r1",
+          false,
+          "policy_role_cap_violation:occupant:24.0 > 23.0"
+        ],
+        [
+          "r4",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ]
+      ]
+    },
+    {
+      "PYTHONHASHSEED": "7",
+      "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "decisions": [
+        [
+          "r6",
+          true,
+          "admissible"
+        ],
+        [
+          "r5",
+          true,
+          "admissible"
+        ],
+        [
+          "r2",
+          true,
+          "admissible"
+        ],
+        [
+          "r3",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ],
+        [
+          "r7",
+          true,
+          "admissible"
+        ],
+        [
+          "r8",
+          true,
+          "admissible"
+        ],
+        [
+          "r1",
+          false,
+          "policy_role_cap_violation:occupant:24.0 > 23.0"
+        ],
+        [
+          "r4",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ]
+      ]
+    },
+    {
+      "PYTHONHASHSEED": "42",
+      "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "decisions": [
+        [
+          "r6",
+          true,
+          "admissible"
+        ],
+        [
+          "r5",
+          true,
+          "admissible"
+        ],
+        [
+          "r2",
+          true,
+          "admissible"
+        ],
+        [
+          "r3",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ],
+        [
+          "r7",
+          true,
+          "admissible"
+        ],
+        [
+          "r8",
+          true,
+          "admissible"
+        ],
+        [
+          "r1",
+          false,
+          "policy_role_cap_violation:occupant:24.0 > 23.0"
+        ],
+        [
+          "r4",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ]
+      ]
+    },
+    {
+      "PYTHONHASHSEED": "12345",
+      "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "decisions": [
+        [
+          "r6",
+          true,
+          "admissible"
+        ],
+        [
+          "r5",
+          true,
+          "admissible"
+        ],
+        [
+          "r2",
+          true,
+          "admissible"
+        ],
+        [
+          "r3",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ],
+        [
+          "r7",
+          true,
+          "admissible"
+        ],
+        [
+          "r8",
+          true,
+          "admissible"
+        ],
+        [
+          "r1",
+          false,
+          "policy_role_cap_violation:occupant:24.0 > 23.0"
+        ],
+        [
+          "r4",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ]
+      ]
+    },
+    {
+      "PYTHONHASHSEED": "random",
+      "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "decisions": [
+        [
+          "r6",
+          true,
+          "admissible"
+        ],
+        [
+          "r5",
+          true,
+          "admissible"
+        ],
+        [
+          "r2",
+          true,
+          "admissible"
+        ],
+        [
+          "r3",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ],
+        [
+          "r7",
+          true,
+          "admissible"
+        ],
+        [
+          "r8",
+          true,
+          "admissible"
+        ],
+        [
+          "r1",
+          false,
+          "policy_role_cap_violation:occupant:24.0 > 23.0"
+        ],
+        [
+          "r4",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ]
+      ]
+    },
+    {
+      "PYTHONHASHSEED": "random",
+      "digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "decisions": [
+        [
+          "r6",
+          true,
+          "admissible"
+        ],
+        [
+          "r5",
+          true,
+          "admissible"
+        ],
+        [
+          "r2",
+          true,
+          "admissible"
+        ],
+        [
+          "r3",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ],
+        [
+          "r7",
+          true,
+          "admissible"
+        ],
+        [
+          "r8",
+          true,
+          "admissible"
+        ],
+        [
+          "r1",
+          false,
+          "policy_role_cap_violation:occupant:24.0 > 23.0"
+        ],
+        [
+          "r4",
+          false,
+          "shadowed_by_prior_accepted_action"
+        ]
+      ]
+    }
+  ]
+}
