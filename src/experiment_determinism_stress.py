@@ -71,10 +71,10 @@ def _synth_graph() -> Graph:
     # Policy node (so policy-guard defaults don't trip)
     policy = URIRef(ex + "Policy")
     g.add((policy, URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), URIRef(ex + "ControlPolicy")))
-    g.add((policy, URIRef(ex + "occupantMaxSetpoint"), Literal(26, datatype=XSD.decimal)))
-    g.add((policy, URIRef(ex + "operatorMaxSetpoint"), Literal(26, datatype=XSD.decimal)))
-    g.add((policy, URIRef(ex + "emergencyMaxSetpoint"), Literal(26, datatype=XSD.decimal)))
-    g.add((policy, URIRef(ex + "minSetpoint"), Literal(18, datatype=XSD.decimal)))
+    g.add((policy, URIRef(ex + "occupantMaxSetpoint"), Literal("26", datatype=XSD.decimal)))
+    g.add((policy, URIRef(ex + "operatorMaxSetpoint"), Literal("26", datatype=XSD.decimal)))
+    g.add((policy, URIRef(ex + "emergencyMaxSetpoint"), Literal("26", datatype=XSD.decimal)))
+    g.add((policy, URIRef(ex + "minSetpoint"), Literal("18", datatype=XSD.decimal)))
     return g
 
 

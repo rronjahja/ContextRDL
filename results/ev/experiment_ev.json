@@ -1,6 +1,6 @@
 {
   "headline": {
-    "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_headline.json",
+    "trace_path": "results/ev/traces/trace_ev_headline.json",
     "enabled_count": 3,
     "schedule_rids": [
       "q1",
@@ -15,21 +15,21 @@
       {
         "rid": "q1",
         "subject": "CP1",
-        "value": 22.0,
+        "value": "22.0",
         "accepted": true,
         "reason": "admissible"
       },
       {
         "rid": "q1",
         "subject": "CP2",
-        "value": 22.0,
+        "value": "22.0",
         "accepted": true,
         "reason": "admissible"
       },
       {
         "rid": "q1",
         "subject": "CP3",
-        "value": 22.0,
+        "value": "22.0",
         "accepted": false,
         "reason": "inadmissible"
       }
@@ -40,15 +40,15 @@
       "CP3": 0.0,
       "CP4": 0.0
     },
-    "successor_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
+    "successor_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
     "final_admissible": true
   },
   "headline_30_trials": {
     "runs": 30,
     "ours_unique_states": 1,
     "ours_admissible_pct": 100.0,
-    "ours_mean_runtime_ms": 39.06534666699978,
-    "ours_sd_runtime_ms": 3.1258216213984893,
+    "ours_mean_runtime_ms": 161.99343333137222,
+    "ours_sd_runtime_ms": 3.8443557997065354,
     "random_unique_states": 1,
     "random_admissible_pct": 0.0,
     "deterministic_unique_states": 1,
@@ -56,8 +56,8 @@
   },
   "governance": {
     "grid_over_fleet": {
-      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_grid_over_fleet.json",
-      "successor_digest": "4a12596bbce9e2501e5e288fd8ca9c2f5a009a02039bfd281f1435f057e495bf",
+      "trace_path": "results/ev/traces/trace_ev_governance_grid_over_fleet.json",
+      "successor_digest": "4031f9d842d2f3a41df0558539140a73d34725b2aeb4e3e94975777193e8b09e",
       "schedule_rids": [
         "q3",
         "q2"
@@ -70,21 +70,21 @@
       "decisions": [
         {
           "rid": "q3",
-          "value": 10.0,
+          "value": "10.0",
           "accepted": true,
           "reason": "admissible"
         },
         {
           "rid": "q2",
-          "value": 22.0,
+          "value": "22.0",
           "accepted": false,
           "reason": "shadowed_by_prior_accepted_action"
         }
       ]
     },
     "fleet_over_grid": {
-      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_fleet_over_grid.json",
-      "successor_digest": "133f4ef2e0a603135df35e60db593406488d997ff19b8e7a4e0826bac5154063",
+      "trace_path": "results/ev/traces/trace_ev_governance_fleet_over_grid.json",
+      "successor_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
       "schedule_rids": [
         "q2",
         "q3"
@@ -97,13 +97,13 @@
       "decisions": [
         {
           "rid": "q2",
-          "value": 22.0,
+          "value": "22.0",
           "accepted": true,
           "reason": "admissible"
         },
         {
           "rid": "q3",
-          "value": 10.0,
+          "value": "10.0",
           "accepted": false,
           "reason": "shadowed_by_prior_accepted_action"
         }
@@ -111,8 +111,8 @@
     }
   },
   "emergency": {
-    "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_emergency.json",
-    "enabled_count": 5,
+    "trace_path": "results/ev/traces/trace_ev_emergency.json",
+    "enabled_count": 3,
     "schedule": [
       [
         "q5",
@@ -125,24 +125,12 @@
         5
       ],
       [
-        "q5",
-        "CP3",
-        5
-      ],
-      [
-        "q5",
-        "CP4",
-        5
-      ],
-      [
         "q4",
         "Feeder1",
         "curtailed"
       ]
     ],
     "accepted_rids": [
-      "q5",
-      "q5",
       "q5",
       "q5",
       "q4"
@@ -163,20 +151,6 @@
         "reason": "admissible"
       },
       {
-        "rid": "q5",
-        "subject": "CP3",
-        "value": 5,
-        "accepted": true,
-        "reason": "admissible"
-      },
-      {
-        "rid": "q5",
-        "subject": "CP4",
-        "value": 5,
-        "accepted": true,
-        "reason": "admissible"
-      },
-      {
         "rid": "q4",
         "subject": "Feeder1",
         "value": "curtailed",
@@ -187,17 +161,17 @@
     "committed_powers": {
       "CP1": 5.0,
       "CP2": 5.0,
-      "CP3": 5.0,
-      "CP4": 5.0
+      "CP3": 0.0,
+      "CP4": 0.0
     },
     "committed_feeder_state": "curtailed",
-    "successor_digest": "fb842cb23c8e4e4fe48352cca2e02d318c18deb03d318e7e42b36e344d3b3b50",
+    "successor_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
     "final_admissible": true
   },
   "replay": [
     {
       "workload": "EV charging (headline)",
-      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_headline.json",
+      "trace_path": "results/ev/traces/trace_ev_headline.json",
       "dependencies_match": true,
       "enabled_recorded": 3,
       "enabled_replayed": 3,
@@ -206,12 +180,12 @@
       "decisions_compared": 3,
       "accepted_match": true,
       "digest_match": true,
-      "successor_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
+      "successor_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
       "cross_process_digest_match": true
     },
     {
       "workload": "EV charging (governance_grid_over_fleet)",
-      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_grid_over_fleet.json",
+      "trace_path": "results/ev/traces/trace_ev_governance_grid_over_fleet.json",
       "dependencies_match": true,
       "enabled_recorded": 2,
       "enabled_replayed": 2,
@@ -220,12 +194,12 @@
       "decisions_compared": 2,
       "accepted_match": true,
       "digest_match": true,
-      "successor_digest": "4a12596bbce9e2501e5e288fd8ca9c2f5a009a02039bfd281f1435f057e495bf",
+      "successor_digest": "4031f9d842d2f3a41df0558539140a73d34725b2aeb4e3e94975777193e8b09e",
       "cross_process_digest_match": true
     },
     {
       "workload": "EV charging (governance_fleet_over_grid)",
-      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_fleet_over_grid.json",
+      "trace_path": "results/ev/traces/trace_ev_governance_fleet_over_grid.json",
       "dependencies_match": true,
       "enabled_recorded": 2,
       "enabled_replayed": 2,
@@ -234,26 +208,38 @@
       "decisions_compared": 2,
       "accepted_match": true,
       "digest_match": true,
-      "successor_digest": "133f4ef2e0a603135df35e60db593406488d997ff19b8e7a4e0826bac5154063",
+      "successor_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
       "cross_process_digest_match": true
     },
     {
       "workload": "EV charging (emergency)",
-      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_emergency.json",
+      "trace_path": "results/ev/traces/trace_ev_emergency.json",
       "dependencies_match": true,
-      "enabled_recorded": 5,
-      "enabled_replayed": 5,
+      "enabled_recorded": 3,
+      "enabled_replayed": 3,
       "schedule_match": true,
       "decisions_match": true,
-      "decisions_compared": 5,
+      "decisions_compared": 3,
       "accepted_match": true,
       "digest_match": true,
-      "successor_digest": "fb842cb23c8e4e4fe48352cca2e02d318c18deb03d318e7e42b36e344d3b3b50",
+      "successor_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
       "cross_process_digest_match": true
     }
   ],
   "verification": {
     "overall_pass": true,
     "failures": []
+  },
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "shacl",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
   }
 }

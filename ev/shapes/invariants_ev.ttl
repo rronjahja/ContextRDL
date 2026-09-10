@@ -2,6 +2,37 @@
 @prefix ex: <http://example.org/ev#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+# A complete, unambiguous policy profile is required even on an empty window.
+ex:ControlPolicyShape a sh:NodeShape ;
+    sh:targetNode ex:Policy ;
+    sh:property [ sh:path ex:minPower ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] ;
+    sh:property [ sh:path ex:driverMaxPower ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] ;
+    sh:property [ sh:path ex:fleetMaxPower ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] ;
+    sh:property [ sh:path ex:gridMaxPower ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] ;
+    sh:property [ sh:path ex:safetyMaxPower ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] .
+
+# chargingPower is the commanded charging level for a connected vehicle.
+# Zero power is permitted for free, occupied, charging and out-of-service points.
+ex:ConnectorPowerCoherenceShape a sh:NodeShape ;
+    sh:targetClass ex:ChargingPoint ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Positive charging power requires an occupied or charging connector; outOfService requires zero power." ;
+        sh:select """
+            PREFIX ex: <http://example.org/ev#>
+            SELECT $this WHERE {
+                $this ex:connectorState ?c ; ex:chargingPower ?p .
+                FILTER ((?c = "outOfService" && ?p != 0.0) ||
+                        (?p > 0.0 && ?c NOT IN ("occupied", "charging")))
+            }
+        """ ;
+    ] .
+
 # --- Target-local shapes (depend only on one charging point) ---
 
 # Per-charging-point power must be present, single-valued, and within [0, 22] kW.
@@ -9,6 +40,8 @@ ex:ChargingPowerShape a sh:NodeShape ;
     sh:targetClass ex:ChargingPoint ;
     sh:property [
         sh:path ex:chargingPower ;
+        sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:minInclusive 0.0 ;
@@ -28,6 +61,8 @@ ex:ConnectorStateShape a sh:NodeShape ;
 # Feeder state must be present, single-valued, from an enumerated set.
 ex:FeederStateShape a sh:NodeShape ;
     sh:targetClass ex:Feeder ;
+    sh:targetNode ex:Feeder1 ;
+    sh:class ex:Feeder ;
     sh:property [
         sh:path ex:feederState ;
         sh:minCount 1 ;
@@ -41,6 +76,14 @@ ex:FeederStateShape a sh:NodeShape ;
 # evaluated over sets of actions, not pairs.
 ex:FeederBudgetShape a sh:NodeShape ;
     sh:targetNode ex:Feeder1 ;
+    # A missing or malformed budget must not make the aggregate vacuously true.
+    sh:property [
+        sh:path ex:feederBudget ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ;
+        sh:minInclusive 0.0 ;
+    ] ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Sum of chargingPower over all charging points exceeds the feeder budget." ;

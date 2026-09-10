@@ -10,6 +10,7 @@ from rdflib import Literal, URIRef
 from rdflib.plugins.serializers.nt import _quoteLiteral
 
 from dataset_builder import WINDOW_ALIAS_IRI, parse_timestamp, prop_uri
+from numeric_profile import decimal_add
 
 
 DEFAULT_SCHEDULE_KEY = [
@@ -121,10 +122,6 @@ def _timestamp_key(value: str) -> int:
     return int(dt.astimezone(timezone.utc).timestamp() * 1_000_000)
 
 
-def _numeric(value: Any) -> float:
-    return float(value)
-
-
 def _lookup_event_role(dataset: Any, event_uri: str) -> Optional[str]:
     if not event_uri:
         return None
@@ -155,14 +152,10 @@ def build_action_value(rule: Mapping[str, Any], bindings: Mapping[str, Any]) -> 
         return value_expr["value"]
 
     if kind == "numeric_add":
-        left = _numeric(bindings[value_expr["left"]])
-        right = _numeric(bindings[value_expr["right"]])
-        return left + right
+        return decimal_add(bindings[value_expr["left"]], bindings[value_expr["right"]])
 
     if kind == "numeric_add_constant":
-        left = _numeric(bindings[value_expr["var"]])
-        constant = _numeric(value_expr["constant"])
-        return left + constant
+        return decimal_add(bindings[value_expr["var"]], value_expr["constant"])
 
     raise ValueError(f"Unsupported value expression kind: {kind}")
 
@@ -240,23 +233,14 @@ def evaluate_rules(
 
     for rule in rules:
         rule_role = rule["issuing_role"]
-        # Active-role membership is NOT decided here. Enablement checks the
-        # rule-level governance condition only (the matched event must carry
-        # the rule's issuing role); the runtime membership test is gate (i)
-        # of the resolver (Definition 9), so that an action issued by an
-        # inactive role is constructed, rejected, and recorded in the trace
-        # with reason code ``inactive_role`` instead of silently vanishing.
+        # The shipped SELECT conditions include event-role compatibility.
+        # Active-role membership remains a recorded runtime decision at gate (i).
 
         results = dataset.query(rule["condition_select"])
         for row in results:
             bindings = _row_to_bindings(row)
             event_uri = str(bindings.get("e", ""))
             event_role = _lookup_event_role(dataset, event_uri)
-
-            # Rule-level governance condition of the evaluated rule set: the
-            # matched event must declare the rule's issuing role.
-            if event_role is not None and event_role != rule_role:
-                continue
 
             action = create_action(
                 rule,

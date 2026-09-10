@@ -1,0 +1,8 @@
+[PASS] default: accepted=True decisions=True digest=True
+[PASS] governance_reversed: accepted=True decisions=True digest=True
+[PASS] tie_conflict: accepted=True decisions=True digest=True
+[PASS] governance_conflict: accepted=True decisions=True digest=True
+[PASS] governance_conflict_reversed: accepted=True decisions=True digest=True
+[PASS] duplicate_identity: accepted=True decisions=True digest=True
+
+ALL PASSED: 6 workloads match original resolver.

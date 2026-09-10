@@ -1,4 +1,12 @@
 {
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.31.0",
+    "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+    "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+  },
   "accepted_only": [
     {
       "N": 100,
@@ -7,10 +15,20 @@
       "enabled": 100,
       "accepted": 100,
       "rejected": 0,
-      "incr_mean_s": 0.0569,
-      "incr_sd_s": 0.0022,
-      "peak_heap_mib": 0.54,
-      "trace_kib": 750.5,
+      "runtime_samples_s": [
+        0.08947989999433048,
+        0.08564950000436511,
+        0.08824830000230577
+      ],
+      "peak_heap_samples_bytes": [
+        586235,
+        582362,
+        577418
+      ],
+      "incr_mean_s": 0.0878,
+      "incr_sd_s": 0.002,
+      "peak_heap_mib": 0.56,
+      "trace_kib": 751.8,
       "successor_digest": "edd030a9c5972bdd"
     },
     {
@@ -20,10 +38,20 @@
       "enabled": 200,
       "accepted": 200,
       "rejected": 0,
-      "incr_mean_s": 0.1075,
-      "incr_sd_s": 0.0007,
-      "peak_heap_mib": 1.02,
-      "trace_kib": 1496.5,
+      "runtime_samples_s": [
+        0.17048519999661949,
+        0.16947169999184553,
+        0.17137359999469481
+      ],
+      "peak_heap_samples_bytes": [
+        1085006,
+        1084566,
+        1079638
+      ],
+      "incr_mean_s": 0.1704,
+      "incr_sd_s": 0.001,
+      "peak_heap_mib": 1.03,
+      "trace_kib": 1499.3,
       "successor_digest": "94b8e134670a4ac1"
     },
     {
@@ -33,10 +61,20 @@
       "enabled": 400,
       "accepted": 400,
       "rejected": 0,
-      "incr_mean_s": 0.2138,
-      "incr_sd_s": 0.0016,
-      "peak_heap_mib": 2.16,
-      "trace_kib": 2988.7,
+      "runtime_samples_s": [
+        0.33478340000147,
+        0.3396509000012884,
+        0.3660870000021532
+      ],
+      "peak_heap_samples_bytes": [
+        2292754,
+        2289922,
+        2299122
+      ],
+      "incr_mean_s": 0.3468,
+      "incr_sd_s": 0.0168,
+      "peak_heap_mib": 2.19,
+      "trace_kib": 2994.2,
       "successor_digest": "0dae3272aa15781f"
     },
     {
@@ -46,10 +84,20 @@
       "enabled": 800,
       "accepted": 800,
       "rejected": 0,
-      "incr_mean_s": 0.3995,
-      "incr_sd_s": 0.0026,
-      "peak_heap_mib": 4.06,
-      "trace_kib": 5973.1,
+      "runtime_samples_s": [
+        0.6745661000022665,
+        0.7150391000031959,
+        0.6664922999916598
+      ],
+      "peak_heap_samples_bytes": [
+        4308426,
+        4326026,
+        4307146
+      ],
+      "incr_mean_s": 0.6854,
+      "incr_sd_s": 0.026,
+      "peak_heap_mib": 4.13,
+      "trace_kib": 5984.0,
       "successor_digest": "8df61f8a40b07382"
     }
   ],
@@ -61,10 +109,20 @@
       "enabled": 100,
       "accepted": 50,
       "rejected": 50,
-      "incr_mean_s": 0.042,
-      "incr_sd_s": 0.0008,
-      "peak_heap_mib": 0.46,
-      "trace_kib": 660.8,
+      "runtime_samples_s": [
+        0.06502680000266992,
+        0.06403550000686664,
+        0.06426640000427142
+      ],
+      "peak_heap_samples_bytes": [
+        516454,
+        515630,
+        504702
+      ],
+      "incr_mean_s": 0.0644,
+      "incr_sd_s": 0.0005,
+      "peak_heap_mib": 0.49,
+      "trace_kib": 661.9,
       "successor_digest": "e5acc0706ff823dc"
     },
     {
@@ -74,10 +132,20 @@
       "enabled": 200,
       "accepted": 100,
       "rejected": 100,
-      "incr_mean_s": 0.0797,
-      "incr_sd_s": 0.002,
-      "peak_heap_mib": 0.89,
-      "trace_kib": 1317.2,
+      "runtime_samples_s": [
+        0.12387029999808874,
+        0.1236911999876611,
+        0.1426427000114927
+      ],
+      "peak_heap_samples_bytes": [
+        945470,
+        952350,
+        952302
+      ],
+      "incr_mean_s": 0.1301,
+      "incr_sd_s": 0.0109,
+      "peak_heap_mib": 0.91,
+      "trace_kib": 1319.5,
       "successor_digest": "ffb4c0db8767d82a"
     },
     {
@@ -87,10 +155,20 @@
       "enabled": 400,
       "accepted": 200,
       "rejected": 200,
-      "incr_mean_s": 0.1568,
-      "incr_sd_s": 0.0019,
-      "peak_heap_mib": 1.83,
-      "trace_kib": 2629.9,
+      "runtime_samples_s": [
+        0.24500070000067353,
+        0.26485730000422336,
+        0.24076410000270698
+      ],
+      "peak_heap_samples_bytes": [
+        2019450,
+        2030450,
+        2011554
+      ],
+      "incr_mean_s": 0.2502,
+      "incr_sd_s": 0.0129,
+      "peak_heap_mib": 1.94,
+      "trace_kib": 2634.6,
       "successor_digest": "4d8524651b1f25bd"
     },
     {
@@ -100,10 +178,20 @@
       "enabled": 800,
       "accepted": 400,
       "rejected": 400,
-      "incr_mean_s": 0.3242,
-      "incr_sd_s": 0.012,
-      "peak_heap_mib": 3.6,
-      "trace_kib": 5255.5,
+      "runtime_samples_s": [
+        0.4819019999995362,
+        0.507267299995874,
+        0.4805975000053877
+      ],
+      "peak_heap_samples_bytes": [
+        3776130,
+        3786946,
+        3768490
+      ],
+      "incr_mean_s": 0.4899,
+      "incr_sd_s": 0.015,
+      "peak_heap_mib": 3.61,
+      "trace_kib": 5264.9,
       "successor_digest": "c2aaea699b03b4a8"
     }
   ],
@@ -113,36 +201,68 @@
       "graph_triples": 17,
       "accepted": 4,
       "rejected": 4,
-      "ref_mean_s": 0.065,
-      "ref_sd_s": 0.015,
-      "per_action_ms": 8.15
+      "runtime_samples_s": [
+        0.07210249999479856,
+        0.05037040000024717,
+        0.05038889999559615
+      ],
+      "ref_mean_s": 0.058,
+      "ref_sd_s": 0.013,
+      "per_action_ms": 7.2
     },
     {
       "points": 16,
       "graph_triples": 33,
       "accepted": 8,
       "rejected": 8,
-      "ref_mean_s": 0.125,
-      "ref_sd_s": 0.002,
-      "per_action_ms": 7.84
+      "runtime_samples_s": [
+        0.13772440000320785,
+        0.11028059999807738,
+        0.11843200000294019
+      ],
+      "ref_mean_s": 0.122,
+      "ref_sd_s": 0.014,
+      "per_action_ms": 7.63
     },
     {
       "points": 32,
       "graph_triples": 65,
       "accepted": 16,
       "rejected": 16,
-      "ref_mean_s": 0.287,
-      "ref_sd_s": 0.013,
-      "per_action_ms": 8.98
+      "runtime_samples_s": [
+        0.2600185000046622,
+        0.2677317000052426,
+        0.2677564999903552
+      ],
+      "ref_mean_s": 0.265,
+      "ref_sd_s": 0.004,
+      "per_action_ms": 8.29
     },
     {
       "points": 64,
       "graph_triples": 129,
       "accepted": 32,
       "rejected": 32,
-      "ref_mean_s": 0.706,
-      "ref_sd_s": 0.021,
-      "per_action_ms": 11.03
+      "runtime_samples_s": [
+        0.6876058000052581,
+        0.6828414999909,
+        0.6879426000086823
+      ],
+      "ref_mean_s": 0.686,
+      "ref_sd_s": 0.003,
+      "per_action_ms": 10.72
     }
-  ]
+  ],
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "incremental",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
 }

@@ -1,0 +1,80 @@
+{
+  "cases": [
+    {
+      "case": "default (operator > occupant)",
+      "role_rank_map": {
+        "emergency": 0,
+        "operator": 1,
+        "occupant": 2
+      },
+      "schedule_order": [
+        "A_unsafe",
+        "A_op",
+        "A_occ"
+      ],
+      "accepted_rids": [
+        "A_op"
+      ],
+      "final_ZoneA_setpoint": 23.0,
+      "successor_digest": "e8e977acd657fa74ce09bdfb85abdee0cd0713854c8ce13ef3d3a424a7a79f74",
+      "decisions": [
+        {
+          "rid": "A_unsafe",
+          "accepted": false,
+          "reason": "inadmissible",
+          "value": 24.0
+        },
+        {
+          "rid": "A_op",
+          "accepted": true,
+          "reason": "admissible",
+          "value": 23.0
+        },
+        {
+          "rid": "A_occ",
+          "accepted": false,
+          "reason": "shadowed_by_prior_accepted_action",
+          "value": 22.0
+        }
+      ]
+    },
+    {
+      "case": "reversed (occupant > operator)",
+      "role_rank_map": {
+        "emergency": 0,
+        "operator": 2,
+        "occupant": 1
+      },
+      "schedule_order": [
+        "A_occ",
+        "A_unsafe",
+        "A_op"
+      ],
+      "accepted_rids": [
+        "A_occ"
+      ],
+      "final_ZoneA_setpoint": 22.0,
+      "successor_digest": "577c53aa6de8be6bf18f25aab49c15499dd158ad4a69b678f43aab3018cb1bcb",
+      "decisions": [
+        {
+          "rid": "A_occ",
+          "accepted": true,
+          "reason": "admissible",
+          "value": 22.0
+        },
+        {
+          "rid": "A_unsafe",
+          "accepted": false,
+          "reason": "shadowed_by_prior_accepted_action",
+          "value": 24.0
+        },
+        {
+          "rid": "A_op",
+          "accepted": false,
+          "reason": "shadowed_by_prior_accepted_action",
+          "value": 23.0
+        }
+      ]
+    }
+  ]
+}

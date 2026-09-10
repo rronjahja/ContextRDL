@@ -1,18 +1,10 @@
-"""
-HVAC v3 harness: produces every remaining number for the resubmission.
+"""HVAC comparisons with explicit order, transaction and validation controls.
 
-Four parts:
-  1. Baseline+ : adds the DETERMINISTIC-ORDER (no admissibility) baseline to the
-     existing three strategies, and reports mean +/- stdev runtime for ALL
-     strategies, over three workloads (default, tie, governance). (R1.4, R1.6)
-  2. R2.6 check: reports, for the SHACL-gated (no shadowing) strategy on the
-     default workload, the ORDER of committed actions, so the manuscript can
-     state whether the 6th committed action is r1 or r4. (R2.6)
-  3. Scalability stdev: re-runs the two resolvers a few times per N to report
-     mean +/- stdev. (R1.6)  [optional/quick: small repeat count]
-  4. Replay table: generates a trace per workload (default, tie, governance op>occ,
-     governance occ>op, stress N=64) and runs full replay on each, reporting the
-     per-field match counts for the replay table. (R1.7)
+Measure seven strategies over default, tie and governance workloads, retaining
+raw timings and successor digests. Check per-event and per-action arrival-order
+relations against the configured resolver, report committed-action order for
+the SHACL-only ablation, and generate workload traces for full pipeline replay.
+The dedicated scalability harnesses supply the separate scalability tables.
 """
 from __future__ import annotations
 
@@ -47,7 +39,8 @@ from rule_engine import (  # noqa: E402
 )
 from rule_loader import load_rules  # noqa: E402
 from state_transition import apply_action  # noqa: E402
-from trace import graph_digest  # noqa: E402
+from trace import graph_digest, _environment  # noqa: E402
+from policy_profile import validate_hvac_policy
 
 SHAPES = "shapes/invariants.ttl"
 RUNS = 30
@@ -73,6 +66,8 @@ def pipeline(events, settings_override=None, context_name=None):
     context = resolve_governance_context(settings=settings, contexts_path="data/contexts.json",
                                          context_name=context_name)
     state = load_state("data/base_graph.ttl")
+    validate_hvac_policy(state)
+    settings.setdefault("governance", {})["active_roles"] = context["active_roles"]
     rules = load_rules("configs/rules.json")
     dataset, meta = build_dataset(state, events, settings=settings)
     enabled = evaluate_rules(dataset, rules, settings=settings, context=context, window_meta=meta)
@@ -116,7 +111,9 @@ def strat_deterministic_no_adm(state, enabled, settings):
 
 
 def strat_random_no_adm(state, enabled):
-    order = list(enabled)
+    # Canonical starting order makes the seeded finite sample reproducible
+    # independently of the SPARQL result iterator.
+    order = sorted(enabled, key=lambda action: action["aid"])
     random.shuffle(order)
     working = Graph()
     for t in state:
@@ -126,8 +123,46 @@ def strat_random_no_adm(state, enabled):
     return working, len(order)
 
 
+def strat_arrival_validated(state, enabled, events, per_event):
+    """Ingestion order; validate one action or all writes from one event.
+
+    Query enablement and snapshot payloads are shared. These strategies omit
+    runtime role, numeric-policy and first-writer-wins gates. An invalid unit
+    is discarded in its entirety. No deployed RDF store is invoked here.
+    """
+    ingestion = {}
+    for index, event in enumerate(events):
+        ingestion.setdefault(event["eid"], index)
+    ordered = sorted(enabled, key=lambda action: (ingestion[action["event_id"]],
+                     action["rid"], action["bindKey"], action["aid"]))
+    units = []
+    for action in ordered:
+        if per_event and units and units[-1][0]["event_id"] == action["event_id"]:
+            units[-1].append(action)
+        else:
+            units.append([action])
+    working, accepted = state, 0
+    for unit in units:
+        candidate = working
+        for action in unit:
+            candidate = apply_action(candidate, action)
+        if check_admissibility_shacl(candidate, SHAPES)[0]:
+            working, accepted = candidate, accepted + len(unit)
+    return working, accepted
+
+
+def strat_shuffled_four_gates(state, schedule, settings, rng):
+    ordered = list(schedule)
+    rng.shuffle(ordered)
+    return strat_ours(state, ordered, settings)
+
+
 def measure(name, runner, runs=RUNS):
     digests, admissible, accepted, times = set(), 0, [], []
+    rng_state = random.getstate()
+    for _ in range(2):
+        runner()
+    random.setstate(rng_state)
     for _ in range(runs):
         t0 = time.perf_counter()
         succ, acc = runner()
@@ -144,22 +179,53 @@ def measure(name, runner, runs=RUNS):
         "mean_committed": round(statistics.mean(accepted), 1),
         "mean_runtime_ms": round(1000.0 * statistics.mean(times), 2),
         "sd_runtime_ms": round(1000.0 * (statistics.stdev(times) if len(times) > 1 else 0.0), 2),
+        "runtime_samples_ms": [1000.0 * value for value in times],
+        "warmup_runs": 2,
     }
 
 
 def run_workload(label, events, override=None):
     state, enabled, schedule, settings = pipeline(events, override)
+    order_rng = random.Random(20260910)
     return {
         "workload": label,
         "enabled_count": len(enabled),
         "strategies": [
             measure("Ours", lambda: strat_ours(state, schedule, settings)),
-            measure("SHACL-gated, no shadowing", lambda: strat_shacl_gated(state, enabled, settings)),
-            measure("Deterministic-order, no admissibility",
+            measure("SHACL only, fixed order", lambda: strat_shacl_gated(state, enabled, settings)),
+            measure("Fixed order, no gates",
                     lambda: strat_deterministic_no_adm(state, enabled, settings)),
-            measure("Random-order, no admissibility", lambda: strat_random_no_adm(state, enabled)),
+            measure("Shuffled order, no gates", lambda: strat_random_no_adm(state, enabled)),
+            measure("Arrival order, per-action SHACL", lambda: strat_arrival_validated(state, enabled, events, False)),
+            measure("Arrival order, per-event SHACL", lambda: strat_arrival_validated(state, enabled, events, True)),
+            measure("Shuffled order, all four gates", lambda: strat_shuffled_four_gates(state, schedule, settings, order_rng)),
         ],
     }
+
+
+def transaction_comparison():
+    fixtures = [
+        ("default", load_events("data/events.jsonl"), None, True, False),
+        ("tie conflict", tie_conflict_events(), None, False, False),
+        ("governance op > occ", governance_conflict_events(), None, True, True),
+        ("governance occ > op", governance_conflict_events(),
+         {"role_precedence": {"emergency": 0, "occupant": 1, "operator": 2}}, False, False),
+    ]
+    rows = []
+    for label, events, override, event_same, action_same in fixtures:
+        state, enabled, schedule, settings = pipeline(events, override)
+        successor, count = strat_ours(state, schedule, settings)
+        reference_digest = graph_digest(successor)
+        row = {"workload": label, "resolver_digest": reference_digest, "resolver_committed": count}
+        for name, grouped, expected in (("per_event", True, event_same), ("per_action", False, action_same)):
+            candidate, count = strat_arrival_validated(state, enabled, events, grouped)
+            digest = graph_digest(candidate)
+            assert (digest == reference_digest) == expected, (label, name)
+            assert check_admissibility_shacl(candidate, SHAPES)[0]
+            row[name] = {"digest": digest, "matches_resolver": digest == reference_digest,
+                         "committed": count, "final_admissible": True}
+        rows.append(row)
+    return rows
 
 
 # ---------------------------------------------------------------------------
@@ -235,6 +301,7 @@ def run_replay_table():
 # ---------------------------------------------------------------------------
 
 def main():
+    os.environ["ADMISSIBILITY_REGIME"] = "shacl"
     random.seed(1)
     paths.ensure_dirs()
 
@@ -254,18 +321,21 @@ def main():
         replay_error = f"{type(e).__name__}: {e}"
 
     summary = {
+        "environment": _environment(),
+        "admissibility_regime": "shacl",
         "runs_per_strategy": RUNS,
         "baseline": baseline,
         "r26_committed_order": r26,
         "replay": replay,
         "replay_error": replay_error,
+        "transaction_comparison": transaction_comparison(),
     }
     with open(paths.hvac("experiment_hvac_v3.json"), "w", encoding="utf-8") as fh:
-        json.dump(summary, fh, indent=2)
+        json.dump(summary, fh, indent=2, default=str)
 
     # ---- pretty print ----
     print("=" * 72)
-    print("PART 1: BASELINE (4 strategies, mean +/- sd runtime)")
+    print("PART 1: BASELINE (7 strategies, mean +/- sd runtime)")
     print("=" * 72)
     for w in baseline:
         print(f"\n-- {w['workload']} (enabled={w['enabled_count']}) --")
@@ -296,9 +366,11 @@ def main():
     expected_rows = {"default", "tie conflict", "governance (op > occ)", "governance (occ > op)"}
     ours_ok = all(s["unique_states"] == 1 and s["admissible_pct"] == 100.0
                   for w in summary["baseline"] for s in w["strategies"] if s["strategy"] == "Ours")
+    validated_ok = all(s["admissible_pct"] == 100.0 for w in summary["baseline"] for s in w["strategies"]
+                       if s["strategy"] not in {"Fixed order, no gates", "Shuffled order, no gates"})
     replay_ok = (not replay_error and set(replay) >= expected_rows
                  and all(r["overall_pass"] for r in replay.values()))
-    if not (ours_ok and replay_ok):
+    if not (ours_ok and replay_ok and validated_ok):
         raise SystemExit("experiment_hvac_v3: a correctness check failed (see results/hvac/experiment_hvac_v3.json)")
 
 

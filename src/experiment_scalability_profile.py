@@ -43,7 +43,7 @@ from dataset_builder import build_dataset
 from resolver_incremental import resolve_actions_incremental
 from rule_engine import evaluate_rules, load_settings, resolve_governance_context, schedule_actions
 from rule_loader import load_rules
-from trace import build_trace, graph_digest
+from trace import _environment, build_trace, graph_digest
 
 EX = Namespace("http://example.org/building#")
 EV = Namespace("http://example.org/ev#")
@@ -61,10 +61,10 @@ def build_state(num_zones: int) -> Graph:
         g.add((zone, EX.ventilationMode, Literal("normal")))
         g.add((zone, EX.emergencyState, Literal(False, datatype=XSD.boolean)))
     g.add((EX.Policy, RDF.type, EX.ControlPolicy))
-    g.add((EX.Policy, EX.occupantMaxSetpoint, Literal(23.0, datatype=XSD.decimal)))
-    g.add((EX.Policy, EX.operatorMaxSetpoint, Literal(24.0, datatype=XSD.decimal)))
-    g.add((EX.Policy, EX.emergencyMaxSetpoint, Literal(26.0, datatype=XSD.decimal)))
-    g.add((EX.Policy, EX.minSetpoint, Literal(18.0, datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.occupantMaxSetpoint, Literal("23.0", datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.operatorMaxSetpoint, Literal("24.0", datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.emergencyMaxSetpoint, Literal("26.0", datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.minSetpoint, Literal("18.0", datatype=XSD.decimal)))
     return g
 
 
@@ -127,6 +127,8 @@ def run_local_case(num_actions: int, reject_fraction: float, repeats: int) -> Di
         "enabled": len(enabled),
         "accepted": len(accepted),
         "rejected": len(enabled) - len(accepted),
+        "runtime_samples_s": times,
+        "peak_heap_samples_bytes": peaks,
         "incr_mean_s": round(statistics.mean(times), 4),
         "incr_sd_s": round(statistics.stdev(times), 4) if repeats > 1 else 0.0,
         "peak_heap_mib": round(max(peaks) / (1024 * 1024), 2),
@@ -209,6 +211,7 @@ def run_cross_target_case(num_points: int, repeats: int) -> Dict[str, object]:
         "graph_triples": num_points * 2 + 1,
         "accepted": accepted_counts[-1],
         "rejected": num_points - accepted_counts[-1],
+        "runtime_samples_s": times,
         "ref_mean_s": round(statistics.mean(times), 3),
         "ref_sd_s": round(statistics.stdev(times), 3) if repeats > 1 else 0.0,
         "per_action_ms": round(1000 * statistics.mean(times) / num_points, 2),
@@ -224,7 +227,7 @@ def main():
     sizes = [int(s) for s in args.sizes.split(",")]
     cross_sizes = [int(s) for s in args.cross_sizes.split(",")]
 
-    result = {"accepted_only": [], "mixed_rejection": [], "cross_target": []}
+    result = {"environment": _environment(), "accepted_only": [], "mixed_rejection": [], "cross_target": []}
 
     print("--- A: accepted-only, zone-local, incremental resolver ---")
     for n in sizes:

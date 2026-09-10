@@ -40,6 +40,7 @@ import paths  # noqa: E402  (results layout)
 os.chdir(PROJECT_ROOT)
 
 from experiment_scalability_v2 import run_case  # noqa: E402
+from trace import _environment
 
 SIZES = [10, 50, 100, 200, 400, 800]
 REPEATS = 5
@@ -83,6 +84,8 @@ def main():
             "new_mean_s": round(new_mean, 3),
             "new_sd_s": round(new_sd, 3),
             "speedup_x": round(speedup, 1) if speedup else None,
+            "samples_seconds": {"cloning": orig_times, "incremental_same_trace": full_times,
+                                "incremental_without_digests": new_times},
         }
         rows.append(row)
         flag = "OK" if digest_ok else "MISMATCH!"
@@ -91,7 +94,9 @@ def main():
               f"incr(no digests)={new_mean:7.4f}+-{new_sd:.4f}s ({row['speedup_x']}x)  [{flag}]")
 
     with open(paths.hvac("experiment_scalability_sd.json"), "w", encoding="utf-8") as fh:
-        json.dump({"repeats": REPEATS, "rows": rows}, fh, indent=2)
+        json.dump({"environment": _environment(),
+                   "admissibility_regime": os.environ.get("ADMISSIBILITY_REGIME", "incremental"),
+                   "repeats": REPEATS, "rows": rows}, fh, indent=2)
 
     # Ready-to-paste LaTeX rows for tab:scalability
     print("\n" + "=" * 60)

@@ -20,7 +20,7 @@ def load_rules(path: str) -> List[Dict[str, Any]]:
     if not p.is_absolute() and not p.exists():
         p = Path(__file__).resolve().parent.parent / p
     with open(p, "r", encoding="utf-8") as handle:
-        data = json.load(handle)
+        data = json.load(handle, parse_float=str)
     return validate_rules(data["rules"])
 
 

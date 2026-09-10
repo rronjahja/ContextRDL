@@ -1,0 +1,28 @@
+== context default: active=['emergency', 'operator', 'occupant'] accepted=['r6', 'r5', 'r2', 'r7', 'r8'] digest=4bbb205b597f replay=PASS
+   r6  emergency accept  admissible
+   r5  emergency accept  admissible
+   r2  operator  accept  admissible
+   r3  operator  reject  shadowed_by_prior_accepted_action
+   r7  operator  accept  admissible
+   r8  operator  accept  admissible
+   r1  occupant  reject  policy_role_cap_violation
+   r4  occupant  reject  shadowed_by_prior_accepted_action
+== context occupant-inactive: active=['emergency', 'operator'] accepted=['r6', 'r5', 'r2', 'r7', 'r8'] digest=4bbb205b597f replay=PASS
+   r6  emergency accept  admissible
+   r5  emergency accept  admissible
+   r2  operator  accept  admissible
+   r3  operator  reject  shadowed_by_prior_accepted_action
+   r7  operator  accept  admissible
+   r8  operator  accept  admissible
+   r1  occupant  reject  inactive_role
+   r4  occupant  reject  inactive_role
+== context operator-inactive: active=['emergency', 'occupant'] accepted=['r6', 'r5', 'r4'] digest=05dbe40cdbc1 replay=PASS
+   r6  emergency accept  admissible
+   r5  emergency accept  admissible
+   r2  operator  reject  inactive_role
+   r3  operator  reject  inactive_role
+   r7  operator  reject  inactive_role
+   r8  operator  reject  inactive_role
+   r1  occupant  reject  policy_role_cap_violation
+   r4  occupant  accept  admissible
+Wrote results/hvac/experiment_role_filter.json

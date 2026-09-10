@@ -48,6 +48,7 @@ import sys
 import time
 from copy import deepcopy
 from datetime import timezone
+from decimal import localcontext, InvalidOperation
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
@@ -62,6 +63,9 @@ sys.path.insert(0, str(SRC))
 import paths  # noqa: E402  (results layout)
 from rule_engine import BINDING_PROFILE, canonical_binding, schedule_actions  # noqa: E402  (shared scheduler and identity)
 from rule_loader import validate_rules  # noqa: E402
+from policy_profile import policy_literal, validate_policy_profile, validate_conflict_policy, PolicyProfileError
+from numeric_profile import (NUMERIC_PROFILE, decimal_value, decimal_literal, decimal_add,
+                             validation_decimal_context)
 from trace import canonical_triple_lines, graph_digest, graph_delta  # noqa: E402  (domain-agnostic digests)
 
 EV = "http://example.org/ev#"
@@ -73,6 +77,7 @@ POLICY_NODE = URIRef(f"{EV}Policy")
 CHARGING_POWER = f"{EV}chargingPower"
 MIN_POWER = URIRef(f"{EV}minPower")
 ROLE_MAX_PREDICATES = {
+    "safety": URIRef(f"{EV}safetyMaxPower"),
     "driver": URIRef(f"{EV}driverMaxPower"),
     "fleet": URIRef(f"{EV}fleetMaxPower"),
     "grid": URIRef(f"{EV}gridMaxPower"),
@@ -89,9 +94,10 @@ BASE_GRAPH_PATH = str(HERE / "data" / "base_graph_ev.ttl")
 RULES_PATH = str(HERE / "data" / "rules_ev.json")
 EVENTS_PATH = str(HERE / "data" / "events_ev.jsonl")
 
-# Default governance: grid > fleet > driver; all three roles active.
-ROLE_RANK = {"grid": 0, "fleet": 1, "driver": 2}
-ACTIVE_ROLES = ["grid", "fleet", "driver"]
+# Fault shutdown precedes all grid and charging commands. FaultDetected events
+# are issued by the safety role; event roles are trusted upstream inputs.
+ROLE_RANK = {"safety": 0, "grid": 1, "fleet": 2, "driver": 3}
+ACTIVE_ROLES = ["safety", "grid", "fleet", "driver"]
 SCHEDULE_KEY = ["roleRank", "priority", "tsKey", "rid", "bindKey", "aid"]
 CONFLICT_POLICY = "first_writer_wins"
 
@@ -134,25 +140,25 @@ def load_events(path: str) -> List[Dict[str, Any]]:
     for line in Path(path).read_text(encoding="utf-8").splitlines():
         s = line.strip()
         if s:
-            events.append(json.loads(s))
+            events.append(json.loads(s, parse_float=str))
     return events
 
 
 def load_rules(path: str) -> List[Dict[str, Any]]:
-    return validate_rules(json.loads(Path(path).read_text(encoding="utf-8"))["rules"])
+    return validate_rules(json.loads(Path(path).read_text(encoding="utf-8"), parse_float=str)["rules"])
 
 
 def _to_literal_for_payload(key: str, value: Any):
     if key in URI_PAYLOAD_KEYS:
         return URIRef(str(value))
     if key in NUMERIC_PAYLOAD_KEYS:
-        return Literal(float(value), datatype=XSD.decimal)
+        return decimal_literal(value)
     if isinstance(value, bool):
         return Literal(value, datatype=XSD.boolean)
     if isinstance(value, int):
         return Literal(value)
     if isinstance(value, float):
-        return Literal(value, datatype=XSD.decimal)
+        return decimal_literal(value)
     return Literal(str(value))
 
 
@@ -204,9 +210,9 @@ def build_action_value(rule: Mapping[str, Any], bindings: Mapping[str, Any]) -> 
     if kind == "literal":
         return ve["value"]
     if kind == "numeric_add":
-        return float(bindings[ve["left"]]) + float(bindings[ve["right"]])
+        return decimal_add(bindings[ve["left"]], bindings[ve["right"]])
     if kind == "numeric_add_constant":
-        return float(bindings[ve["var"]]) + float(ve["constant"])
+        return decimal_add(bindings[ve["var"]], ve["constant"])
     raise ValueError(f"Unsupported value_expr kind: {kind}")
 
 
@@ -280,8 +286,7 @@ def evaluate_rules(
                 rv = alias.value(URIRef(event_uri), prop_uri("role"))
                 if rv is not None:
                     event_role = str(rv.toPython()) if isinstance(rv, Literal) else str(rv)
-            if event_role is not None and event_role != rule_role:
-                continue
+            # Event-role compatibility is part of each shipped SELECT query.
             action = create_action(rule, row, role_rank, window_id, event_role)
             identity = (action["rid"], action["bindKey"], action["window_id"])
             if identity in seen:
@@ -293,7 +298,7 @@ def evaluate_rules(
 
 def make_literal(predicate: str, value: Any) -> Literal:
     if predicate in DECIMAL_PREDICATES:
-        return Literal(float(value), datatype=XSD.decimal)
+        return decimal_literal(value)
     return Literal(str(value))
 
 
@@ -333,10 +338,16 @@ def _shapes_graph() -> Graph:
 
 def check_admissibility_shacl(graph: Graph) -> Tuple[bool, str]:
     from pyshacl import validate
-    conforms, _g, text = validate(
-        data_graph=graph, shacl_graph=_shapes_graph(),
-        inference=None, advanced=True, debug=False,
-    )
+    # The aggregate uses decimal addition, with precision derived from the
+    # graph rather than the process-wide decimal context.
+    try:
+        with localcontext(validation_decimal_context(graph)):
+            conforms, _g, text = validate(
+                data_graph=graph, shacl_graph=_shapes_graph(),
+                inference=None, advanced=True, debug=False,
+            )
+    except InvalidOperation:
+        return False, "Reference validation error: decimal comparison failed; candidate refused"
     return bool(conforms), text
 
 
@@ -347,13 +358,13 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
     max_pred = ROLE_MAX_PREDICATES.get(role)
     if max_pred is None:
         return True, "policy_guard_not_applicable"
-    proposed = float(action["value"])
-    for obj in graph.objects(POLICY_NODE, MIN_POWER):
-        if proposed < float(obj.toPython()):
-            return False, f"policy_min_violation:{proposed} < {float(obj.toPython())}"
-    for obj in graph.objects(POLICY_NODE, max_pred):
-        if proposed > float(obj.toPython()):
-            return False, f"policy_role_cap_violation:{role}:{proposed} > {float(obj.toPython())}"
+    proposed = decimal_value(action["value"])
+    minimum = decimal_value(policy_literal(graph, POLICY_NODE, MIN_POWER))
+    maximum = decimal_value(policy_literal(graph, POLICY_NODE, max_pred))
+    if proposed < minimum:
+        return False, f"policy_min_violation:{proposed} < {minimum}"
+    if proposed > maximum:
+        return False, f"policy_role_cap_violation:{role}:{proposed} > {maximum}"
     return True, "policy_guard_passed"
 
 
@@ -361,12 +372,22 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
 # Resolution (Definition 9, gates in the normative order (i)-(iv))
 # ---------------------------------------------------------------------------
 
+def validate_ev_configuration(graph: Graph) -> None:
+    """Mandatory policy and fixed-feeder parameters, even on an empty step."""
+    validate_policy_profile(graph, POLICY_NODE, (MIN_POWER, *ROLE_MAX_PREDICATES.values()))
+    budget = policy_literal(graph, URIRef(EV + "Feeder1"), URIRef(EV + "feederBudget"))
+    if decimal_value(budget) < 0:
+        raise PolicyProfileError("feederBudget: expected a nonnegative decimal")
+
+
 def resolve_actions(
     graph: Graph,
     schedule: List[Mapping[str, Any]],
     conflict_policy: str = CONFLICT_POLICY,
     active_roles: Optional[List[str]] = None,
 ) -> Tuple[List[Dict[str, Any]], Graph, List[Dict[str, Any]]]:
+    validate_conflict_policy(conflict_policy)
+    validate_ev_configuration(graph)
     active = set(ACTIVE_ROLES if active_roles is None else active_roles)
     accepted: List[Dict[str, Any]] = []
     decisions: List[Dict[str, Any]] = []
@@ -448,18 +469,20 @@ def _graph_from_lines(lines: List[str]) -> Graph:
 
 def record_trace(name: str, state: Graph, enabled: List[Dict[str, Any]], role_rank: Mapping[str, int],
                  schedule: List[Mapping[str, Any]], decisions: List[Dict[str, Any]],
-                 accepted: List[Dict[str, Any]], successor: Graph) -> str:
+                 accepted: List[Dict[str, Any]], successor: Graph,
+                 active_roles: Optional[List[str]] = None) -> str:
     path = Path(paths.ev_trace(f"trace_ev_{name}.json"))
     trace = {
         "workload": f"EV charging ({name})",
         "settings": {"schedule_key": SCHEDULE_KEY, "role_rank": dict(role_rank),
-                     "active_roles": ACTIVE_ROLES, "conflict_policy": CONFLICT_POLICY,
+                     "active_roles": ACTIVE_ROLES if active_roles is None else active_roles,
+                     "conflict_policy": CONFLICT_POLICY,
                      "admissibility_regime": "shacl", "shapes": "shapes/invariants_ev.ttl",
                      "dependencies": {"shapes_path": "shapes/invariants_ev.ttl",
                                       "shapes_sha256": _file_sha256(HERE / "shapes" / "invariants_ev.ttl"),
                                       "rules_path": "data/rules_ev.json",
                                       "rules_sha256": _file_sha256(HERE / "data" / "rules_ev.json"),
-                                      "binding_profile": BINDING_PROFILE}},
+                                      "binding_profile": BINDING_PROFILE, "numeric_profile": NUMERIC_PROFILE}},
         "input_graph": {"triples": _canonical_lines(state), "digest": graph_digest(state)},
         "actions": enabled,
         "schedule_aids": [a["aid"] for a in schedule],
@@ -489,6 +512,7 @@ def replay_trace(path: str) -> Dict[str, Any]:
     dependency_ok = (graph_digest(state) == trace["input_graph"]["digest"]
                      and cfg.get("admissibility_regime") == "shacl"
                      and deps.get("binding_profile") == BINDING_PROFILE
+                     and deps.get("numeric_profile") == NUMERIC_PROFILE
                      and _file_sha256(HERE / deps.get("shapes_path", "shapes/invariants_ev.ttl")) == deps.get("shapes_sha256")
                      and _file_sha256(HERE / deps.get("rules_path", "data/rules_ev.json")) == deps.get("rules_sha256"))
     # The recorded configuration drives the reconstruction: role ranks are
@@ -558,6 +582,7 @@ def _pipeline(events: List[Dict[str, Any]], role_rank: Mapping[str, int],
               state: Optional[Graph] = None):
     if state is None:
         state = load_state(BASE_GRAPH_PATH)
+    validate_ev_configuration(state)
     rules = load_rules(RULES_PATH)
     dataset, meta = build_dataset(state, events)
     enabled = evaluate_rules(dataset, rules, role_rank, meta["window_id"])
@@ -565,7 +590,7 @@ def _pipeline(events: List[Dict[str, Any]], role_rank: Mapping[str, int],
     return state, enabled, schedule
 
 
-def _primed_state(charging: Mapping[str, float]) -> Graph:
+def _primed_state(charging: Mapping[str, float], connectors: Optional[Mapping[str, str]] = None) -> Graph:
     """Base EV graph with some charging points already drawing power."""
     g = load_state(BASE_GRAPH_PATH)
     for cp, val in charging.items():
@@ -573,14 +598,18 @@ def _primed_state(charging: Mapping[str, float]) -> Graph:
         p = URIRef(CHARGING_POWER)
         for t in list(g.triples((s, p, None))):
             g.remove(t)
-        g.add((s, p, Literal(float(val), datatype=XSD.decimal)))
+        g.add((s, p, decimal_literal(val)))
+        if decimal_value(val) > 0:
+            g.set((s, URIRef(f"{EV}connectorState"), Literal("charging")))
+    for cp, label in (connectors or {}).items():
+        g.set((URIRef(f"{EV}{cp}"), URIRef(f"{EV}connectorState"), Literal(label)))
     return g
 
 
 def run_emergency() -> Dict[str, Any]:
     """
     Grid-emergency window. State is primed with CP1=CP2=22 kW. A GridEmergency
-    fires q5 (reduce every CP to 5 kW, priority 0) and q4 (assert curtailment,
+    fires q5 (reduce points above 5 kW to 5 kW, priority 0) and q4 (assert curtailment,
     priority 1). The lower priority number on q5 means load reductions are
     committed BEFORE curtailment is asserted, so the cross-target
     curtailment-consistency shape is satisfied along the committed path.
@@ -713,8 +742,8 @@ def governance_events(target_cp: str = "http://example.org/ev#CP1") -> List[Dict
 def run_governance() -> Dict[str, Any]:
     events = governance_events()
     out = {}
-    for label, rank in (("grid_over_fleet", {"grid": 0, "fleet": 1, "driver": 2}),
-                        ("fleet_over_grid", {"fleet": 0, "grid": 1, "driver": 2})):
+    for label, rank in (("grid_over_fleet", ROLE_RANK),
+                        ("fleet_over_grid", {"safety": 0, "fleet": 1, "grid": 2, "driver": 3})):
         state, enabled, schedule = _pipeline(events, rank)
         accepted, successor, decisions = resolve_actions(state, schedule)
         trace_path = record_trace(f"governance_{label}", state, enabled, rank, schedule, decisions, accepted, successor)
@@ -794,7 +823,7 @@ def main():
     failures = verification_failures(summary)
     summary["verification"] = {"overall_pass": not failures, "failures": failures}
     with open(out_dir / "experiment_ev.json", "w", encoding="utf-8") as fh:
-        json.dump(summary, fh, indent=2)
+        json.dump(summary, fh, indent=2, default=str)
 
     print("== EV headline window (3x 22kW on CP1/CP2/CP3) ==")
     print("  enabled:", headline["enabled_count"], "| schedule:", headline["schedule_rids"])

@@ -1,0 +1,259 @@
+{
+  "headline": {
+    "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_headline.json",
+    "enabled_count": 3,
+    "schedule_rids": [
+      "q1",
+      "q1",
+      "q1"
+    ],
+    "accepted_rids": [
+      "q1",
+      "q1"
+    ],
+    "decisions": [
+      {
+        "rid": "q1",
+        "subject": "CP1",
+        "value": 22.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q1",
+        "subject": "CP2",
+        "value": 22.0,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q1",
+        "subject": "CP3",
+        "value": 22.0,
+        "accepted": false,
+        "reason": "inadmissible"
+      }
+    ],
+    "committed_powers": {
+      "CP1": 22.0,
+      "CP2": 22.0,
+      "CP3": 0.0,
+      "CP4": 0.0
+    },
+    "successor_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
+    "final_admissible": true
+  },
+  "headline_30_trials": {
+    "runs": 30,
+    "ours_unique_states": 1,
+    "ours_admissible_pct": 100.0,
+    "ours_mean_runtime_ms": 39.06534666699978,
+    "ours_sd_runtime_ms": 3.1258216213984893,
+    "random_unique_states": 1,
+    "random_admissible_pct": 0.0,
+    "deterministic_unique_states": 1,
+    "deterministic_admissible_pct": 0.0
+  },
+  "governance": {
+    "grid_over_fleet": {
+      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_grid_over_fleet.json",
+      "successor_digest": "4a12596bbce9e2501e5e288fd8ca9c2f5a009a02039bfd281f1435f057e495bf",
+      "schedule_rids": [
+        "q3",
+        "q2"
+      ],
+      "accepted_rids": [
+        "q3"
+      ],
+      "committed_power_CP1": 10.0,
+      "final_admissible": true,
+      "decisions": [
+        {
+          "rid": "q3",
+          "value": 10.0,
+          "accepted": true,
+          "reason": "admissible"
+        },
+        {
+          "rid": "q2",
+          "value": 22.0,
+          "accepted": false,
+          "reason": "shadowed_by_prior_accepted_action"
+        }
+      ]
+    },
+    "fleet_over_grid": {
+      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_fleet_over_grid.json",
+      "successor_digest": "133f4ef2e0a603135df35e60db593406488d997ff19b8e7a4e0826bac5154063",
+      "schedule_rids": [
+        "q2",
+        "q3"
+      ],
+      "accepted_rids": [
+        "q2"
+      ],
+      "committed_power_CP1": 22.0,
+      "final_admissible": true,
+      "decisions": [
+        {
+          "rid": "q2",
+          "value": 22.0,
+          "accepted": true,
+          "reason": "admissible"
+        },
+        {
+          "rid": "q3",
+          "value": 10.0,
+          "accepted": false,
+          "reason": "shadowed_by_prior_accepted_action"
+        }
+      ]
+    }
+  },
+  "emergency": {
+    "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_emergency.json",
+    "enabled_count": 5,
+    "schedule": [
+      [
+        "q5",
+        "CP1",
+        5
+      ],
+      [
+        "q5",
+        "CP2",
+        5
+      ],
+      [
+        "q5",
+        "CP3",
+        5
+      ],
+      [
+        "q5",
+        "CP4",
+        5
+      ],
+      [
+        "q4",
+        "Feeder1",
+        "curtailed"
+      ]
+    ],
+    "accepted_rids": [
+      "q5",
+      "q5",
+      "q5",
+      "q5",
+      "q4"
+    ],
+    "decisions": [
+      {
+        "rid": "q5",
+        "subject": "CP1",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q5",
+        "subject": "CP2",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q5",
+        "subject": "CP3",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q5",
+        "subject": "CP4",
+        "value": 5,
+        "accepted": true,
+        "reason": "admissible"
+      },
+      {
+        "rid": "q4",
+        "subject": "Feeder1",
+        "value": "curtailed",
+        "accepted": true,
+        "reason": "admissible"
+      }
+    ],
+    "committed_powers": {
+      "CP1": 5.0,
+      "CP2": 5.0,
+      "CP3": 5.0,
+      "CP4": 5.0
+    },
+    "committed_feeder_state": "curtailed",
+    "successor_digest": "fb842cb23c8e4e4fe48352cca2e02d318c18deb03d318e7e42b36e344d3b3b50",
+    "final_admissible": true
+  },
+  "replay": [
+    {
+      "workload": "EV charging (headline)",
+      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_headline.json",
+      "dependencies_match": true,
+      "enabled_recorded": 3,
+      "enabled_replayed": 3,
+      "schedule_match": true,
+      "decisions_match": true,
+      "decisions_compared": 3,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
+      "cross_process_digest_match": true
+    },
+    {
+      "workload": "EV charging (governance_grid_over_fleet)",
+      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_grid_over_fleet.json",
+      "dependencies_match": true,
+      "enabled_recorded": 2,
+      "enabled_replayed": 2,
+      "schedule_match": true,
+      "decisions_match": true,
+      "decisions_compared": 2,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "4a12596bbce9e2501e5e288fd8ca9c2f5a009a02039bfd281f1435f057e495bf",
+      "cross_process_digest_match": true
+    },
+    {
+      "workload": "EV charging (governance_fleet_over_grid)",
+      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_governance_fleet_over_grid.json",
+      "dependencies_match": true,
+      "enabled_recorded": 2,
+      "enabled_replayed": 2,
+      "schedule_match": true,
+      "decisions_match": true,
+      "decisions_compared": 2,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "133f4ef2e0a603135df35e60db593406488d997ff19b8e7a4e0826bac5154063",
+      "cross_process_digest_match": true
+    },
+    {
+      "workload": "EV charging (emergency)",
+      "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\ev\\traces\\trace_ev_emergency.json",
+      "dependencies_match": true,
+      "enabled_recorded": 5,
+      "enabled_replayed": 5,
+      "schedule_match": true,
+      "decisions_match": true,
+      "decisions_compared": 5,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "fb842cb23c8e4e4fe48352cca2e02d318c18deb03d318e7e42b36e344d3b3b50",
+      "cross_process_digest_match": true
+    }
+  ],
+  "verification": {
+    "overall_pass": true,
+    "failures": []
+  }
+}

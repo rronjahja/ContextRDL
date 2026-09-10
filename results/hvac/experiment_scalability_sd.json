@@ -1,4 +1,13 @@
 {
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.31.0",
+    "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+    "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+  },
+  "admissibility_regime": "incremental",
   "repeats": 5,
   "rows": [
     {
@@ -6,78 +15,228 @@
       "accepted": 10,
       "outcome_identical": true,
       "orig_mean_s": 0.031,
-      "orig_sd_s": 0.003,
+      "orig_sd_s": 0.0,
       "new_full_trace_mean_s": 0.007,
       "new_full_trace_sd_s": 0.0,
-      "speedup_same_trace_profile_x": 4.7,
-      "new_mean_s": 0.003,
+      "speedup_same_trace_profile_x": 4.3,
+      "new_mean_s": 0.004,
       "new_sd_s": 0.0,
-      "speedup_x": 10.2
+      "speedup_x": 8.4,
+      "samples_seconds": {
+        "cloning": [
+          0.031018599998787977,
+          0.0313867999939248,
+          0.031297299996367656,
+          0.03079809999326244,
+          0.030835099998512305
+        ],
+        "incremental_same_trace": [
+          0.0070896999968681484,
+          0.007131899998057634,
+          0.007100900009390898,
+          0.00785409999662079,
+          0.007139599998481572
+        ],
+        "incremental_without_digests": [
+          0.004138299991609529,
+          0.003482500003883615,
+          0.0033500999998068437,
+          0.003890100007993169,
+          0.00358770000457298
+        ]
+      }
     },
     {
       "N": 50,
       "accepted": 50,
       "outcome_identical": true,
-      "orig_mean_s": 0.399,
-      "orig_sd_s": 0.003,
-      "new_full_trace_mean_s": 0.081,
+      "orig_mean_s": 0.427,
+      "orig_sd_s": 0.014,
+      "new_full_trace_mean_s": 0.084,
       "new_full_trace_sd_s": 0.001,
-      "speedup_same_trace_profile_x": 5.0,
-      "new_mean_s": 0.009,
-      "new_sd_s": 0.0,
-      "speedup_x": 42.1
+      "speedup_same_trace_profile_x": 5.1,
+      "new_mean_s": 0.012,
+      "new_sd_s": 0.001,
+      "speedup_x": 36.2,
+      "samples_seconds": {
+        "cloning": [
+          0.4219028000079561,
+          0.4154744999977993,
+          0.42017199999827426,
+          0.45031030000245664,
+          0.42473689999314956
+        ],
+        "incremental_same_trace": [
+          0.0821840999997221,
+          0.0852086000086274,
+          0.08328430000983644,
+          0.08399339999596123,
+          0.08558909999555908
+        ],
+        "incremental_without_digests": [
+          0.011610599991399795,
+          0.01283819999662228,
+          0.011423600008129142,
+          0.011132500003441237,
+          0.011834600009024143
+        ]
+      }
     },
     {
       "N": 100,
       "accepted": 100,
       "outcome_identical": true,
-      "orig_mean_s": 1.434,
-      "orig_sd_s": 0.014,
-      "new_full_trace_mean_s": 0.294,
-      "new_full_trace_sd_s": 0.007,
-      "speedup_same_trace_profile_x": 4.9,
-      "new_mean_s": 0.017,
-      "new_sd_s": 0.001,
-      "speedup_x": 82.5
+      "orig_mean_s": 1.559,
+      "orig_sd_s": 0.101,
+      "new_full_trace_mean_s": 0.302,
+      "new_full_trace_sd_s": 0.008,
+      "speedup_same_trace_profile_x": 5.2,
+      "new_mean_s": 0.023,
+      "new_sd_s": 0.006,
+      "speedup_x": 67.1,
+      "samples_seconds": {
+        "cloning": [
+          1.7339960999961477,
+          1.509623999998439,
+          1.535568899998907,
+          1.5410478999983752,
+          1.4746727000019746
+        ],
+        "incremental_same_trace": [
+          0.3077954000036698,
+          0.2972225999983493,
+          0.3096995999949286,
+          0.30274630000349134,
+          0.2910911999933887
+        ],
+        "incremental_without_digests": [
+          0.03466770000522956,
+          0.02000370000314433,
+          0.020748399998410605,
+          0.020083499999600463,
+          0.020652399995015003
+        ]
+      }
     },
     {
       "N": 200,
       "accepted": 200,
       "outcome_identical": true,
-      "orig_mean_s": 5.238,
-      "orig_sd_s": 0.03,
-      "new_full_trace_mean_s": 1.074,
-      "new_full_trace_sd_s": 0.012,
-      "speedup_same_trace_profile_x": 4.9,
-      "new_mean_s": 0.032,
-      "new_sd_s": 0.002,
-      "speedup_x": 162.4
+      "orig_mean_s": 5.509,
+      "orig_sd_s": 0.038,
+      "new_full_trace_mean_s": 1.108,
+      "new_full_trace_sd_s": 0.01,
+      "speedup_same_trace_profile_x": 5.0,
+      "new_mean_s": 0.038,
+      "new_sd_s": 0.001,
+      "speedup_x": 145.1,
+      "samples_seconds": {
+        "cloning": [
+          5.479318300000159,
+          5.485372499999357,
+          5.485168600003817,
+          5.567460699996445,
+          5.526515599995037
+        ],
+        "incremental_same_trace": [
+          1.1102736000029836,
+          1.1220480999909341,
+          1.1104520999942906,
+          1.1018656000087503,
+          1.095436299990979
+        ],
+        "incremental_without_digests": [
+          0.03849390000686981,
+          0.03902609999931883,
+          0.03775309999764431,
+          0.03728870001214091,
+          0.037294900001143105
+        ]
+      }
     },
     {
       "N": 400,
       "accepted": 400,
       "outcome_identical": true,
-      "orig_mean_s": 20.219,
-      "orig_sd_s": 0.191,
-      "new_full_trace_mean_s": 4.176,
-      "new_full_trace_sd_s": 0.031,
-      "speedup_same_trace_profile_x": 4.8,
-      "new_mean_s": 0.06,
+      "orig_mean_s": 21.458,
+      "orig_sd_s": 0.154,
+      "new_full_trace_mean_s": 4.297,
+      "new_full_trace_sd_s": 0.045,
+      "speedup_same_trace_profile_x": 5.0,
+      "new_mean_s": 0.075,
       "new_sd_s": 0.002,
-      "speedup_x": 337.2
+      "speedup_x": 287.2,
+      "samples_seconds": {
+        "cloning": [
+          21.56281640000816,
+          21.27716359999613,
+          21.33718349999981,
+          21.649986899996293,
+          21.461072899997816
+        ],
+        "incremental_same_trace": [
+          4.2377267999982,
+          4.275081100000534,
+          4.35073750000447,
+          4.292910700009088,
+          4.330192599998554
+        ],
+        "incremental_without_digests": [
+          0.07596799999009818,
+          0.0729352999915136,
+          0.07464799999434035,
+          0.07289520000631455,
+          0.07713999999396037
+        ]
+      }
     },
     {
       "N": 800,
       "accepted": 800,
       "outcome_identical": true,
-      "orig_mean_s": 79.51,
-      "orig_sd_s": 0.26,
-      "new_full_trace_mean_s": 16.708,
-      "new_full_trace_sd_s": 0.127,
-      "speedup_same_trace_profile_x": 4.8,
-      "new_mean_s": 0.116,
-      "new_sd_s": 0.005,
-      "speedup_x": 684.2
+      "orig_mean_s": 85.507,
+      "orig_sd_s": 0.783,
+      "new_full_trace_mean_s": 17.361,
+      "new_full_trace_sd_s": 0.115,
+      "speedup_same_trace_profile_x": 4.9,
+      "new_mean_s": 0.149,
+      "new_sd_s": 0.011,
+      "speedup_x": 572.4,
+      "samples_seconds": {
+        "cloning": [
+          85.37109009998676,
+          86.13900970001123,
+          84.47656200001074,
+          85.1310361999931,
+          86.41813259999617
+        ],
+        "incremental_same_trace": [
+          17.488811700008227,
+          17.310537600002135,
+          17.190132600007928,
+          17.401621900004102,
+          17.413576000006287
+        ],
+        "incremental_without_digests": [
+          0.14433899999130517,
+          0.14373599999817088,
+          0.1681949999911012,
+          0.1438129000016488,
+          0.14677789999404922
+        ]
+      }
     }
-  ]
+  ],
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "incremental",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
 }

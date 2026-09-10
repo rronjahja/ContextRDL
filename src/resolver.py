@@ -7,6 +7,8 @@ from rdflib import Graph, Literal, URIRef
 from admissibility import check_admissibility, get_admissibility_regime
 from state_transition import apply_action
 from trace import graph_delta, graph_digest
+from policy_profile import policy_literal, validate_hvac_policy, validate_conflict_policy
+from numeric_profile import decimal_value
 
 
 EX = "http://example.org/building#"
@@ -27,18 +29,8 @@ def _clone_graph(graph: Graph) -> Graph:
     return new_graph
 
 
-def _literal_to_float(value: Literal | Any) -> Optional[float]:
-    if value is None:
-        return None
-    if isinstance(value, Literal):
-        return float(value.toPython())
-    return float(value)
-
-
 def _graph_value(graph: Graph, subject: URIRef, predicate: URIRef) -> Optional[Literal]:
-    for obj in graph.objects(subject, predicate):
-        return obj
-    return None
+    return policy_literal(graph, subject, predicate)
 
 
 def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, str]:
@@ -50,17 +42,17 @@ def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, s
     if max_predicate is None:
         return True, "policy_guard_not_applicable"
 
-    proposed_value = float(action["value"])
+    proposed_value = decimal_value(action["value"])
 
     min_literal = _graph_value(graph, POLICY_NODE, MIN_SETPOINT)
     if min_literal is not None:
-        min_value = _literal_to_float(min_literal)
+        min_value = decimal_value(min_literal)
         if min_value is not None and proposed_value < min_value:
             return False, f"policy_min_violation:{proposed_value} < {min_value}"
 
     max_literal = _graph_value(graph, POLICY_NODE, max_predicate)
     if max_literal is not None:
-        max_value = _literal_to_float(max_literal)
+        max_value = decimal_value(max_literal)
         if max_value is not None and proposed_value > max_value:
             return False, f"policy_role_cap_violation:{role}:{proposed_value} > {max_value}"
 
@@ -77,6 +69,8 @@ def resolve_actions(
     settings = settings or {}
     governance_cfg = settings.get("governance", {})
     conflict_policy = governance_cfg.get("conflict_policy", "first_writer_wins")
+    validate_conflict_policy(conflict_policy)
+    validate_hvac_policy(graph)
     schedule_key = settings.get(
         "schedule_key",
         ["roleRank", "priority", "tsKey", "rid", "bindKey", "aid"],

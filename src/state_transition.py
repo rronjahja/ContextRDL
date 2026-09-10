@@ -4,6 +4,7 @@ from typing import Any
 
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import XSD
+from numeric_profile import decimal_literal
 
 
 BOOLEAN_PREDICATES = {
@@ -25,7 +26,7 @@ def make_literal(predicate: str, value: Any) -> Literal:
         return Literal(coerced, datatype=XSD.boolean)
 
     if predicate in DECIMAL_PREDICATES:
-        return Literal(float(value), datatype=XSD.decimal)
+        return decimal_literal(value)
 
     return Literal(str(value))
 

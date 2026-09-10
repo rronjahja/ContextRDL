@@ -1,0 +1,9 @@
+stress N=64                  enabled=64/64  schedule=match  decisions=64/64  digest=match
+governance-clean (op > occ)  enabled=3/3  schedule=match  decisions=3/3  digest=match
+governance-clean (occ > op)  enabled=3/3  schedule=match  decisions=3/3  digest=match
+EV charging (headline)       enabled=3/3  schedule=match  decisions=3/3  digest=match
+EV charging (governance_grid_over_fleet) enabled=2/2  schedule=match  decisions=2/2  digest=match
+EV charging (governance_fleet_over_grid) enabled=2/2  schedule=match  decisions=2/2  digest=match
+EV charging (emergency)      enabled=3/3  schedule=match  decisions=3/3  digest=match
+
+Wrote results/hvac/experiment_replay_extra.json

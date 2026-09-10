@@ -37,7 +37,7 @@ from resolver import check_policy_guard
 from rule_engine import evaluate_rules, load_settings, resolve_governance_context, schedule_actions
 from rule_loader import load_rules
 from state_transition import apply_action
-from trace import graph_digest
+from trace import _environment, graph_digest
 
 SHAPES = "shapes/invariants.ttl"
 
@@ -146,6 +146,7 @@ def main(trials: int = 30):
                 "trials": trials,
                 "mean_ms": round(statistics.mean(times), 2),
                 "sd_ms": round(statistics.stdev(times), 2),
+                "runtime_samples_ms": times,
                 "mean_committed": statistics.mean(committed),
                 "mean_validation_calls": statistics.mean(validations),
                 "unique_states": len(digests),
@@ -167,7 +168,7 @@ def main(trials: int = 30):
         print(f"phase breakdown ({vname}, per step, ms):", breakdown[vname])
 
     out = Path(paths.hvac("experiment_runtime_controlled.json"))
-    out.write_text(json.dumps({"cells": cells, "phase_breakdown_ms": breakdown}, indent=2), encoding="utf-8")
+    out.write_text(json.dumps({"environment": _environment(), "cells": cells, "phase_breakdown_ms": breakdown}, indent=2), encoding="utf-8")
     print("Wrote", out)
 
 

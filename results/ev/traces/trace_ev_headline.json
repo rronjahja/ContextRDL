@@ -10,11 +10,13 @@
       "aid"
     ],
     "role_rank": {
-      "grid": 0,
-      "fleet": 1,
-      "driver": 2
+      "safety": 0,
+      "grid": 1,
+      "fleet": 2,
+      "driver": 3
     },
     "active_roles": [
+      "safety",
       "grid",
       "fleet",
       "driver"
@@ -24,22 +26,23 @@
     "shapes": "shapes/invariants_ev.ttl",
     "dependencies": {
       "shapes_path": "shapes/invariants_ev.ttl",
-      "shapes_sha256": "a5fb924f18e01cef55c47df8359cdf95829fa8cde346a0b9cc8a53a53280315f",
+      "shapes_sha256": "a6ce56587ecb756437f62a93c06016ef665924cec7994d7bea2194a7dab89075",
       "rules_path": "data/rules_ev.json",
-      "rules_sha256": "26dceea9da472821f0cc3873e48d0437ee6836848fb3867265ccb762127df4f5",
-      "binding_profile": "nt-1"
+      "rules_sha256": "3db02b4096b74689ed52fb14cad5da9bbc92cf036da91d8b059782234a209c44",
+      "binding_profile": "nt-1",
+      "numeric_profile": "finite-decimal-1"
     }
   },
   "input_graph": {
     "triples": [
       "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
-      "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"free\" .",
+      "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"occupied\" .",
       "<http://example.org/ev#CP1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/ev#ChargingPoint> .",
       "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
-      "<http://example.org/ev#CP2> <http://example.org/ev#connectorState> \"free\" .",
+      "<http://example.org/ev#CP2> <http://example.org/ev#connectorState> \"occupied\" .",
       "<http://example.org/ev#CP2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/ev#ChargingPoint> .",
       "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
-      "<http://example.org/ev#CP3> <http://example.org/ev#connectorState> \"free\" .",
+      "<http://example.org/ev#CP3> <http://example.org/ev#connectorState> \"occupied\" .",
       "<http://example.org/ev#CP3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/ev#ChargingPoint> .",
       "<http://example.org/ev#CP4> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
       "<http://example.org/ev#CP4> <http://example.org/ev#connectorState> \"free\" .",
@@ -51,9 +54,10 @@
       "<http://example.org/ev#Policy> <http://example.org/ev#fleetMaxPower> \"22\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
       "<http://example.org/ev#Policy> <http://example.org/ev#gridMaxPower> \"22\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
       "<http://example.org/ev#Policy> <http://example.org/ev#minPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
+      "<http://example.org/ev#Policy> <http://example.org/ev#safetyMaxPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .",
       "<http://example.org/ev#Policy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/ev#ControlPolicy> ."
     ],
-    "digest": "3110b86880ef1f924cdd8ccd746387ca35d2dc6c6b055f702fed4983a52013db"
+    "digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded"
   },
   "actions": [
     {
@@ -65,16 +69,16 @@
       "zone": "http://example.org/ev#CP1",
       "predicate": "http://example.org/ev#chargingPower",
       "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower",
-      "value": 22.0,
+      "value": "22.0",
       "priority": 1,
       "role": "driver",
-      "roleRank": 2,
+      "roleRank": 3,
       "tsKey": 1773478800000000,
       "bindKey": "{\"cp\":\"<http://example.org/ev#CP1>\",\"eid\":\"\\\"ev-001\\\"\",\"power\":\"\\\"22.0\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:00:00Z\\\"\"}",
       "bindings": {
         "cp": "http://example.org/ev#CP1",
         "eid": "ev-001",
-        "power": 22.0,
+        "power": "22.0",
         "ts": "2026-03-14T09:00:00Z"
       },
       "identity": {
@@ -93,16 +97,16 @@
       "zone": "http://example.org/ev#CP2",
       "predicate": "http://example.org/ev#chargingPower",
       "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower",
-      "value": 22.0,
+      "value": "22.0",
       "priority": 1,
       "role": "driver",
-      "roleRank": 2,
+      "roleRank": 3,
       "tsKey": 1773478800000000,
       "bindKey": "{\"cp\":\"<http://example.org/ev#CP2>\",\"eid\":\"\\\"ev-002\\\"\",\"power\":\"\\\"22.0\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:00:00Z\\\"\"}",
       "bindings": {
         "cp": "http://example.org/ev#CP2",
         "eid": "ev-002",
-        "power": 22.0,
+        "power": "22.0",
         "ts": "2026-03-14T09:00:00Z"
       },
       "identity": {
@@ -121,16 +125,16 @@
       "zone": "http://example.org/ev#CP3",
       "predicate": "http://example.org/ev#chargingPower",
       "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower",
-      "value": 22.0,
+      "value": "22.0",
       "priority": 1,
       "role": "driver",
-      "roleRank": 2,
+      "roleRank": 3,
       "tsKey": 1773478800000000,
       "bindKey": "{\"cp\":\"<http://example.org/ev#CP3>\",\"eid\":\"\\\"ev-003\\\"\",\"power\":\"\\\"22.0\\\"^^<http://www.w3.org/2001/XMLSchema#decimal>\",\"ts\":\"\\\"2026-03-14T09:00:00Z\\\"\"}",
       "bindings": {
         "cp": "http://example.org/ev#CP3",
         "eid": "ev-003",
-        "power": 22.0,
+        "power": "22.0",
         "ts": "2026-03-14T09:00:00Z"
       },
       "identity": {
@@ -150,13 +154,13 @@
     {
       "accepted": true,
       "aid": "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
-      "candidate_graph_digest": "133f4ef2e0a603135df35e60db593406488d997ff19b8e7a4e0826bac5154063",
+      "candidate_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
       "inserted_triples": [
         "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
       ],
       "policy_reason": "policy_guard_passed",
-      "post_graph_digest": "133f4ef2e0a603135df35e60db593406488d997ff19b8e7a4e0826bac5154063",
-      "pre_graph_digest": "3110b86880ef1f924cdd8ccd746387ca35d2dc6c6b055f702fed4983a52013db",
+      "post_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+      "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
       "reason": "admissible",
       "removed_triples": [
         "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
@@ -167,20 +171,20 @@
       "target": {
         "predicate": "http://example.org/ev#chargingPower",
         "subject": "http://example.org/ev#CP1",
-        "value": 22.0
+        "value": "22.0"
       },
       "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
     },
     {
       "accepted": true,
       "aid": "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
-      "candidate_graph_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
+      "candidate_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
       "inserted_triples": [
         "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
       ],
       "policy_reason": "policy_guard_passed",
-      "post_graph_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
-      "pre_graph_digest": "133f4ef2e0a603135df35e60db593406488d997ff19b8e7a4e0826bac5154063",
+      "post_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+      "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
       "reason": "admissible",
       "removed_triples": [
         "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
@@ -191,17 +195,17 @@
       "target": {
         "predicate": "http://example.org/ev#chargingPower",
         "subject": "http://example.org/ev#CP2",
-        "value": 22.0
+        "value": "22.0"
       },
       "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
     },
     {
       "accepted": false,
       "aid": "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
-      "candidate_graph_digest": "d1c50a35ca3cdca300f199ec7e4ac5fe65728b38e4f7c692c963700d56d1553c",
+      "candidate_graph_digest": "83bf802d5b3e8e33904b3ddb23aa91748bb9e6ebb4de9278a65cdbb38a887ac1",
       "policy_reason": "policy_guard_passed",
-      "post_graph_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
-      "pre_graph_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9",
+      "post_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+      "pre_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
       "reason": "inadmissible",
       "rid": "q1",
       "role": "driver",
@@ -209,7 +213,7 @@
       "target": {
         "predicate": "http://example.org/ev#chargingPower",
         "subject": "http://example.org/ev#CP3",
-        "value": 22.0
+        "value": "22.0"
       },
       "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
     }
@@ -218,5 +222,5 @@
     "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
     "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470"
   ],
-  "successor_digest": "fbca9dfada763cdb41c74772ca52f160dae033bae858ea032510f3709dd46eb9"
+  "successor_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4"
 }

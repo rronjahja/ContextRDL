@@ -1,0 +1,225 @@
+{
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.31.0",
+    "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+    "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+  },
+  "admissibility_regime": "shacl",
+  "invalid_inputs": [
+    {
+      "domain": "hvac",
+      "case": "multiple",
+      "rejected_at_initialization": [
+        "engine_empty",
+        "reference_empty",
+        "incremental_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "hvac",
+      "case": "missing_node",
+      "rejected_at_initialization": [
+        "engine_empty",
+        "reference_empty",
+        "incremental_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "hvac",
+      "case": "missing_value",
+      "rejected_at_initialization": [
+        "engine_empty",
+        "reference_empty",
+        "incremental_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "hvac",
+      "case": "wrong_datatype",
+      "rejected_at_initialization": [
+        "engine_empty",
+        "reference_empty",
+        "incremental_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "hvac",
+      "case": "nonfinite",
+      "rejected_at_initialization": [
+        "engine_empty",
+        "reference_empty",
+        "incremental_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "hvac",
+      "case": "native_number_decimal",
+      "rejected_at_initialization": [
+        "engine_empty",
+        "reference_empty",
+        "incremental_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "ev",
+      "case": "multiple",
+      "rejected_at_initialization": [
+        "pipeline_empty",
+        "reference_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "ev",
+      "case": "missing_node",
+      "rejected_at_initialization": [
+        "pipeline_empty",
+        "reference_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "ev",
+      "case": "missing_value",
+      "rejected_at_initialization": [
+        "pipeline_empty",
+        "reference_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "ev",
+      "case": "wrong_datatype",
+      "rejected_at_initialization": [
+        "pipeline_empty",
+        "reference_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "ev",
+      "case": "nonfinite",
+      "rejected_at_initialization": [
+        "pipeline_empty",
+        "reference_empty",
+        "second_empty"
+      ]
+    },
+    {
+      "domain": "ev",
+      "case": "native_number_decimal",
+      "rejected_at_initialization": [
+        "pipeline_empty",
+        "reference_empty",
+        "second_empty"
+      ]
+    }
+  ],
+  "unknown_conflict_policy_refused": true,
+  "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+  "hash_seeds": [
+    {
+      "seed": 0,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 1,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 2,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 3,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 4,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 5,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 6,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 7,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 8,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 9,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 10,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 11,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 12,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 13,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 14,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    },
+    {
+      "seed": 15,
+      "default_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
+      "refusals_match": true
+    }
+  ],
+  "invalid_domain_state_recovery_preserved": true,
+  "overall_pass": true,
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "shacl",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
+}

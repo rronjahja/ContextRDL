@@ -1,0 +1,44 @@
+
+=== scenario: valid ===
+start admissible : True
+accepted actions : 5 ['r6', 'r5', 'r2', 'r7', 'r8']
+final admissible : True
+recovered        : False
+  1. r6  ventilationMode  := emergency  ACCEPT  (admissible)
+  2. r5  emergencyState   := True       ACCEPT  (admissible)
+  3. r2  currentSetpoint  := 21.0       ACCEPT  (admissible)
+  4. r3  ventilationMode  := high       reject  (shadowed_by_prior_accepted_action)
+  5. r7  currentSetpoint  := 22.0       ACCEPT  (admissible)
+  6. r8  ventilationMode  := off        ACCEPT  (admissible)
+  7. r1  currentSetpoint  := 24.0       reject  (policy_role_cap_violation:occupant:24.0 > 23)
+  8. r4  currentSetpoint  := 21         reject  (shadowed_by_prior_accepted_action)
+
+=== scenario: single_violation ===
+start admissible : False
+accepted actions : 4 ['r2', 'r3', 'r7', 'r8']
+final admissible : True
+recovered        : True
+  1. r6  ventilationMode  := emergency  reject  (inadmissible)
+  2. r5  emergencyState   := True       reject  (inadmissible)
+  3. r2  currentSetpoint  := 21.0       ACCEPT  (admissible)
+  4. r3  ventilationMode  := high       ACCEPT  (admissible)
+  5. r7  currentSetpoint  := 22.0       ACCEPT  (admissible)
+  6. r8  ventilationMode  := off        ACCEPT  (admissible)
+  7. r1  currentSetpoint  := 27.0       reject  (policy_role_cap_violation:occupant:27.0 > 23)
+  8. r4  currentSetpoint  := 21         reject  (shadowed_by_prior_accepted_action)
+
+=== scenario: double_violation ===
+start admissible : False
+accepted actions : 0 []
+final admissible : False
+recovered        : False
+  1. r6  ventilationMode  := emergency  reject  (inadmissible)
+  2. r5  emergencyState   := True       reject  (inadmissible)
+  3. r2  currentSetpoint  := 21.0       reject  (inadmissible)
+  4. r3  ventilationMode  := high       reject  (inadmissible)
+  5. r7  currentSetpoint  := 22.0       reject  (inadmissible)
+  6. r8  ventilationMode  := off        reject  (inadmissible)
+  7. r1  currentSetpoint  := 27.0       reject  (policy_role_cap_violation:occupant:27.0 > 23)
+  8. r4  currentSetpoint  := 21         reject  (inadmissible)
+
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_invalid_start.json

@@ -19,9 +19,9 @@
     },
     "dependencies": {
       "shapes_path": "shapes/invariants.ttl",
-      "shapes_sha256": "1ca542668f976b88b2c8c9587d496ab0b3e3841dc0f742e9e72be9bde5c00301",
+      "shapes_sha256": "fed686759d8312bedef97d93abb434738a451bbe90e405eb4910dec8bed7c7c3",
       "binding_profile": "nt-1",
-      "admissibility_regime": "incremental"
+      "admissibility_regime": "shacl"
     }
   },
   "input_graph": {

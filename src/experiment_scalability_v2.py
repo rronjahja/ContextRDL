@@ -50,7 +50,7 @@ from resolver import resolve_actions as resolve_original  # noqa: E402
 from resolver_incremental import resolve_actions_incremental  # noqa: E402
 from rule_engine import evaluate_rules, load_settings, resolve_governance_context, schedule_actions  # noqa: E402
 from rule_loader import load_rules  # noqa: E402
-from trace import graph_digest  # noqa: E402
+from trace import graph_digest, _environment  # noqa: E402
 
 EX = Namespace("http://example.org/building#")
 SHAPES = "shapes/invariants.ttl"
@@ -69,10 +69,10 @@ def build_state(num_zones: int) -> Graph:
         g.add((zone, EX.occupied, Literal(False, datatype=XSD.boolean)))
         g.add((zone, EX.co2Level, Literal(500.0, datatype=XSD.decimal)))
     g.add((EX.Policy, RDF.type, EX.ControlPolicy))
-    g.add((EX.Policy, EX.occupantMaxSetpoint, Literal(23.0, datatype=XSD.decimal)))
-    g.add((EX.Policy, EX.operatorMaxSetpoint, Literal(24.0, datatype=XSD.decimal)))
-    g.add((EX.Policy, EX.emergencyMaxSetpoint, Literal(26.0, datatype=XSD.decimal)))
-    g.add((EX.Policy, EX.minSetpoint, Literal(18.0, datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.occupantMaxSetpoint, Literal("23.0", datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.operatorMaxSetpoint, Literal("24.0", datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.emergencyMaxSetpoint, Literal("26.0", datatype=XSD.decimal)))
+    g.add((EX.Policy, EX.minSetpoint, Literal("18.0", datatype=XSD.decimal)))
     return g
 
 
@@ -130,9 +130,9 @@ def run_case(n: int) -> Dict[str, Any]:
                           == [a["aid"] for a in accepted_full],
         "digest_match": digest_orig == digest_new == digest_full,
         "successor_digest": digest_orig,
-        "time_seconds_orig": round(t_orig, 6),
-        "time_seconds_new_full_trace": round(t_new_full, 6),
-        "time_seconds_new": round(t_new, 6),
+        "time_seconds_orig": t_orig,
+        "time_seconds_new_full_trace": t_new_full,
+        "time_seconds_new": t_new,
         "speedup_same_trace_profile_x": round(t_orig / t_new_full, 2) if t_new_full > 0 else None,
         "speedup_x": round(t_orig / t_new, 2) if t_new > 0 else None,
     }
@@ -150,7 +150,8 @@ def main(sizes: List[int] = SIZES) -> None:
               f"incr(no digests)={row['time_seconds_new']:7.4f}s ({row['speedup_x']}x) "
               f"digest={row['successor_digest'][:12]} "
               f"[{'OK' if row['accepted_match'] and row['digest_match'] and row['decisions_match_same_trace_profile'] else 'MISMATCH'}]")
-    (out_dir / "experiment_scalability_v2.json").write_text(json.dumps({"rows": rows}, indent=2), encoding="utf-8")
+    (out_dir / "experiment_scalability_v2.json").write_text(json.dumps({"environment": _environment(),
+        "admissibility_regime": os.environ.get("ADMISSIBILITY_REGIME", "incremental"), "rows": rows}, indent=2), encoding="utf-8")
     with open(out_dir / "experiment_scalability_v2.csv", "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
         writer.writeheader()

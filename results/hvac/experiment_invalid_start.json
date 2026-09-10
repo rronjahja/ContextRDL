@@ -36,7 +36,7 @@
         "order": 3,
         "rid": "r2",
         "target": "currentSetpoint",
-        "value": 21.0,
+        "value": "21.0",
         "accepted": true,
         "reason": "admissible"
       },
@@ -52,7 +52,7 @@
         "order": 5,
         "rid": "r7",
         "target": "currentSetpoint",
-        "value": 22.0,
+        "value": "22.0",
         "accepted": true,
         "reason": "admissible"
       },
@@ -68,15 +68,15 @@
         "order": 7,
         "rid": "r1",
         "target": "currentSetpoint",
-        "value": 24.0,
+        "value": "24.0",
         "accepted": false,
-        "reason": "policy_role_cap_violation:occupant:24.0 > 23.0"
+        "reason": "policy_role_cap_violation:occupant:24.0 > 23"
       },
       {
         "order": 8,
         "rid": "r4",
         "target": "currentSetpoint",
-        "value": 21.0,
+        "value": "21",
         "accepted": false,
         "reason": "shadowed_by_prior_accepted_action"
       }
@@ -127,7 +127,7 @@
         "order": 3,
         "rid": "r2",
         "target": "currentSetpoint",
-        "value": 21.0,
+        "value": "21.0",
         "accepted": true,
         "reason": "admissible"
       },
@@ -143,7 +143,7 @@
         "order": 5,
         "rid": "r7",
         "target": "currentSetpoint",
-        "value": 22.0,
+        "value": "22.0",
         "accepted": true,
         "reason": "admissible"
       },
@@ -159,15 +159,15 @@
         "order": 7,
         "rid": "r1",
         "target": "currentSetpoint",
-        "value": 27.0,
+        "value": "27.0",
         "accepted": false,
-        "reason": "policy_role_cap_violation:occupant:27.0 > 23.0"
+        "reason": "policy_role_cap_violation:occupant:27.0 > 23"
       },
       {
         "order": 8,
         "rid": "r4",
         "target": "currentSetpoint",
-        "value": 21.0,
+        "value": "21",
         "accepted": false,
         "reason": "shadowed_by_prior_accepted_action"
       }
@@ -228,7 +228,7 @@
         "order": 3,
         "rid": "r2",
         "target": "currentSetpoint",
-        "value": 21.0,
+        "value": "21.0",
         "accepted": false,
         "reason": "inadmissible"
       },
@@ -244,7 +244,7 @@
         "order": 5,
         "rid": "r7",
         "target": "currentSetpoint",
-        "value": 22.0,
+        "value": "22.0",
         "accepted": false,
         "reason": "inadmissible"
       },
@@ -260,18 +260,30 @@
         "order": 7,
         "rid": "r1",
         "target": "currentSetpoint",
-        "value": 27.0,
+        "value": "27.0",
         "accepted": false,
-        "reason": "policy_role_cap_violation:occupant:27.0 > 23.0"
+        "reason": "policy_role_cap_violation:occupant:27.0 > 23"
       },
       {
         "order": 8,
         "rid": "r4",
         "target": "currentSetpoint",
-        "value": 21.0,
+        "value": "21",
         "accepted": false,
         "reason": "inadmissible"
       }
     ]
+  },
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "shacl",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
   }
 }

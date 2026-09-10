@@ -146,7 +146,7 @@ def main():
 
     out = Path(paths.hvac("experiment_invalid_start.json"))
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(results, indent=2), encoding="utf-8")
+    out.write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
     print("\nWrote", out)
     expected = {"single_violation": 4, "double_violation": 0}
     if any(results[k]["accepted"] != v for k, v in expected.items() if k in results):

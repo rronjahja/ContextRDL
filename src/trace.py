@@ -87,7 +87,7 @@ def _environment() -> Dict[str, Any]:
     # modifications that the git revision alone cannot).
     try:
         digest = hashlib.sha256()
-        for rel in ("src", "ev", "configs", "shapes", "data"):
+        for rel in ("src", "ev", "configs", "shapes", "data", "scripts"):
             base = root / rel
             if not base.exists():
                 continue
@@ -143,12 +143,12 @@ def build_trace(
 
     trace = {
         "trace_version": "2.2",
-        "settings": deepcopy(settings) if settings is not None else {},
+        "settings": json.loads(json.dumps(settings, default=str)) if settings is not None else {},
         # Provenance of the recording run (not part of the execution
         # configuration; not compared by replay).
         "environment": _environment(),
-        "window": deepcopy(window_meta) if window_meta is not None else {},
-        "rules": _rules_snapshot(rules or []),
+        "window": json.loads(json.dumps(window_meta, default=str)) if window_meta is not None else {},
+        "rules": json.loads(json.dumps(_rules_snapshot(rules or []), default=str)),
         "events": json.loads(json.dumps(list(events or []), sort_keys=True, default=str)),
         "input_graph": serialize_graph_snapshot(input_graph),
         "enabled_actions": enabled_list,

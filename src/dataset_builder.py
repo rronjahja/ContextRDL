@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from pathlib import Path
 from rdflib import Dataset, Graph, Literal, URIRef
 from rdflib.namespace import XSD
+from numeric_profile import decimal_literal
 
 
 STATE_GRAPH_IRI = URIRef("urn:state")
@@ -56,7 +57,7 @@ def load_events(path: str) -> List[Dict[str, Any]]:
         for line in handle:
             stripped = line.strip()
             if stripped:
-                events.append(json.loads(stripped))
+                events.append(json.loads(stripped, parse_float=str))
     return events
 
 
@@ -87,14 +88,14 @@ def _to_literal_for_payload(key: str, value: Any) -> Literal | URIRef:
         return Literal(coerced, datatype=XSD.boolean)
 
     if key in NUMERIC_PAYLOAD_KEYS:
-        return Literal(float(value), datatype=XSD.decimal)
+        return decimal_literal(value)
 
     if isinstance(value, bool):
         return Literal(value, datatype=XSD.boolean)
     if isinstance(value, int):
         return Literal(value)
     if isinstance(value, float):
-        return Literal(value, datatype=XSD.decimal)
+        return decimal_literal(value)
 
     return Literal(str(value))
 

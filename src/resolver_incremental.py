@@ -34,6 +34,8 @@ from admissibility import (
     select_admissibility_backend,
 )
 from state_transition import make_literal
+from resolver import check_policy_guard
+from policy_profile import policy_literal, validate_hvac_policy, validate_conflict_policy
 
 
 # ---------------------------------------------------------------------------
@@ -56,43 +58,7 @@ _ROLE_MAX_PREDICATES = {
 # ---------------------------------------------------------------------------
 
 def _graph_value(graph: Graph, subject: URIRef, predicate: URIRef):
-    for obj in graph.objects(subject, predicate):
-        return obj
-    return None
-
-
-def _as_float(value) -> Optional[float]:
-    if value is None:
-        return None
-    try:
-        return float(value.toPython() if hasattr(value, "toPython") else value)
-    except Exception:
-        return None
-
-
-def check_policy_guard(graph: Graph, action: Mapping[str, Any]) -> Tuple[bool, str]:
-    if action.get("predicate") != _CURRENT_SETPOINT:
-        return True, "policy_guard_not_applicable"
-
-    role = str(action.get("role"))
-    max_pred = _ROLE_MAX_PREDICATES.get(role)
-    if max_pred is None:
-        return True, "policy_guard_not_applicable"
-
-    try:
-        proposed = float(action["value"])
-    except (TypeError, ValueError):
-        return True, "policy_guard_not_applicable"
-
-    min_val = _as_float(_graph_value(graph, _POLICY_NODE, _MIN_SETPOINT))
-    if min_val is not None and proposed < min_val:
-        return False, f"policy_min_violation:{proposed} < {min_val}"
-
-    max_val = _as_float(_graph_value(graph, _POLICY_NODE, max_pred))
-    if max_val is not None and proposed > max_val:
-        return False, f"policy_role_cap_violation:{role}:{proposed} > {max_val}"
-
-    return True, "policy_guard_passed"
+    return policy_literal(graph, subject, predicate)
 
 
 # ---------------------------------------------------------------------------
@@ -129,6 +95,8 @@ def resolve_actions_incremental(
     settings = settings or {}
     governance_cfg = settings.get("governance", {})
     conflict_policy = governance_cfg.get("conflict_policy", "first_writer_wins")
+    validate_conflict_policy(conflict_policy)
+    validate_hvac_policy(graph)
     schedule_key_fields = settings.get("schedule_key", DEFAULT_SCHEDULE_KEY)
     # Respect the same requested backend and representation profile as the
     # cloning resolver. Focused checks also require an admissible initial graph.

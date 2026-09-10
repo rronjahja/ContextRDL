@@ -1,0 +1,2233 @@
+{
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.31.0",
+    "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+    "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+  },
+  "admissibility_regime": "shacl",
+  "cases": [
+    {
+      "name": "emergency_alone",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "emergency_response": true,
+        "power_CP1": true,
+        "power_CP2": true,
+        "power_CP3": true,
+        "power_CP4": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 5.0,
+        "CP2": 5.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "charging",
+        "CP2": "charging",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "curtailed",
+      "enabled_rules": [
+        "q4",
+        "q5",
+        "q5"
+      ],
+      "accepted_rules": [
+        "q5",
+        "q5",
+        "q4"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "9e21a641afc0d277496a308b35e6c5c0b0d75ef04f7dedd487438f62a5e232c7",
+          "candidate_graph_digest": "8d2a2c5906e158ad90080e5e3923f5d03b68c64a41f6f0a6e618dcfb5e80a6f6",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "8d2a2c5906e158ad90080e5e3923f5d03b68c64a41f6f0a6e618dcfb5e80a6f6",
+          "pre_graph_digest": "b67f1b806b71eeee6680b974c436864f75cb8d39d2d665850edf923056fe9495",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "ad910b8eb21292b79083db1dd32bc523a9213cf7ce2f43d92c69f009fe807fb4",
+          "candidate_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "inserted_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "pre_graph_digest": "8d2a2c5906e158ad90080e5e3923f5d03b68c64a41f6f0a6e618dcfb5e80a6f6",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP2",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "213c8a00c35042c0cfa1c13b772c243894bc240c59c174365dd6561da55800b0",
+          "candidate_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "inserted_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"curtailed\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "pre_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"normal\" ."
+          ],
+          "rid": "q4",
+          "role": "grid",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#feederState",
+            "subject": "http://example.org/ev#Feeder1",
+            "value": "curtailed"
+          },
+          "target_key": "http://example.org/ev#Feeder1|http://example.org/ev#feederState"
+        }
+      ],
+      "successor_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+      "trace_path": "results/ev/traces/trace_ev_operational_emergency_alone.json"
+    },
+    {
+      "name": "emergency_capacity_charging",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "emergency_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 5.0,
+        "CP2": 5.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "charging",
+        "CP2": "charging",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "curtailed",
+      "enabled_rules": [
+        "q3",
+        "q4",
+        "q5",
+        "q5"
+      ],
+      "accepted_rules": [
+        "q5",
+        "q5",
+        "q4"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "9e21a641afc0d277496a308b35e6c5c0b0d75ef04f7dedd487438f62a5e232c7",
+          "candidate_graph_digest": "8d2a2c5906e158ad90080e5e3923f5d03b68c64a41f6f0a6e618dcfb5e80a6f6",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "8d2a2c5906e158ad90080e5e3923f5d03b68c64a41f6f0a6e618dcfb5e80a6f6",
+          "pre_graph_digest": "b67f1b806b71eeee6680b974c436864f75cb8d39d2d665850edf923056fe9495",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "ad910b8eb21292b79083db1dd32bc523a9213cf7ce2f43d92c69f009fe807fb4",
+          "candidate_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "inserted_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "pre_graph_digest": "8d2a2c5906e158ad90080e5e3923f5d03b68c64a41f6f0a6e618dcfb5e80a6f6",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP2",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "213c8a00c35042c0cfa1c13b772c243894bc240c59c174365dd6561da55800b0",
+          "candidate_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "inserted_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"curtailed\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "pre_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"normal\" ."
+          ],
+          "rid": "q4",
+          "role": "grid",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#feederState",
+            "subject": "http://example.org/ev#Feeder1",
+            "value": "curtailed"
+          },
+          "target_key": "http://example.org/ev#Feeder1|http://example.org/ev#feederState"
+        },
+        {
+          "accepted": false,
+          "aid": "5657acc308bae2e4bba5f717d85c16998694963af4455891dbbcc1906cdb9ef5",
+          "blocked_by_aid": "9e21a641afc0d277496a308b35e6c5c0b0d75ef04f7dedd487438f62a5e232c7",
+          "blocked_by_rid": "q5",
+          "post_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "pre_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "reason": "shadowed_by_prior_accepted_action",
+          "rid": "q3",
+          "role": "grid",
+          "schedule_index": 3,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "10.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+      "trace_path": "results/ev/traces/trace_ev_operational_emergency_capacity_charging.json"
+    },
+    {
+      "name": "emergency_capacity_idle",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "emergency_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 5.0,
+        "CP2": 5.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "charging",
+        "CP2": "charging",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "curtailed",
+      "enabled_rules": [
+        "q3",
+        "q4",
+        "q5",
+        "q5"
+      ],
+      "accepted_rules": [
+        "q5",
+        "q5",
+        "q4"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "9e21a641afc0d277496a308b35e6c5c0b0d75ef04f7dedd487438f62a5e232c7",
+          "candidate_graph_digest": "ab453494ddec6f49abdd1086193a12ec449b2a795f587a9b7ae072fd5b974301",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "ab453494ddec6f49abdd1086193a12ec449b2a795f587a9b7ae072fd5b974301",
+          "pre_graph_digest": "24f21536dd81dbd768d5ff85a603b63ac9525f7aaa8e7a8aa42960e8e5a1f6e9",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "ad910b8eb21292b79083db1dd32bc523a9213cf7ce2f43d92c69f009fe807fb4",
+          "candidate_graph_digest": "97c222524f4fac96464c8fb5fee4b161f202f9b4d92894ec01cedeee0a0c511a",
+          "inserted_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "97c222524f4fac96464c8fb5fee4b161f202f9b4d92894ec01cedeee0a0c511a",
+          "pre_graph_digest": "ab453494ddec6f49abdd1086193a12ec449b2a795f587a9b7ae072fd5b974301",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP2",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "213c8a00c35042c0cfa1c13b772c243894bc240c59c174365dd6561da55800b0",
+          "candidate_graph_digest": "9cbe3ed63d13889db595665dbef361f05371d0e43212c4a52f01af59057730fe",
+          "inserted_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"curtailed\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "9cbe3ed63d13889db595665dbef361f05371d0e43212c4a52f01af59057730fe",
+          "pre_graph_digest": "97c222524f4fac96464c8fb5fee4b161f202f9b4d92894ec01cedeee0a0c511a",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"normal\" ."
+          ],
+          "rid": "q4",
+          "role": "grid",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#feederState",
+            "subject": "http://example.org/ev#Feeder1",
+            "value": "curtailed"
+          },
+          "target_key": "http://example.org/ev#Feeder1|http://example.org/ev#feederState"
+        },
+        {
+          "accepted": false,
+          "aid": "3ce7024db3c9b88bd633b8fb69d72c8dbbd9de2bf500737c46c64b10c074aa3f",
+          "candidate_graph_digest": "bf2b2f836deddf4ec16f4ec9dacb86ba86569e4d6254895a75bcb0596ccff4ac",
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "9cbe3ed63d13889db595665dbef361f05371d0e43212c4a52f01af59057730fe",
+          "pre_graph_digest": "9cbe3ed63d13889db595665dbef361f05371d0e43212c4a52f01af59057730fe",
+          "reason": "inadmissible",
+          "rid": "q3",
+          "role": "grid",
+          "schedule_index": 3,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP3",
+            "value": "10.0"
+          },
+          "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "9cbe3ed63d13889db595665dbef361f05371d0e43212c4a52f01af59057730fe",
+      "trace_path": "results/ev/traces/trace_ev_operational_emergency_capacity_idle.json"
+    },
+    {
+      "name": "emergency_capacity_at_limit",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "emergency_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 5.0,
+        "CP2": 5.0,
+        "CP3": 5.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "charging",
+        "CP2": "charging",
+        "CP3": "charging",
+        "CP4": "free"
+      },
+      "feeder": "curtailed",
+      "enabled_rules": [
+        "q3",
+        "q4",
+        "q5",
+        "q5"
+      ],
+      "accepted_rules": [
+        "q5",
+        "q5",
+        "q4"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "9e21a641afc0d277496a308b35e6c5c0b0d75ef04f7dedd487438f62a5e232c7",
+          "candidate_graph_digest": "bbb2e0b22956fb36d420ce591e93d31f4e3d53c1e1ae59c2fb97b59adbbee791",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "bbb2e0b22956fb36d420ce591e93d31f4e3d53c1e1ae59c2fb97b59adbbee791",
+          "pre_graph_digest": "1f1144ea332e5346bbf0e391d0b3bed9db8d5db1e99c953d6b33f796b74e36c5",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "ad910b8eb21292b79083db1dd32bc523a9213cf7ce2f43d92c69f009fe807fb4",
+          "candidate_graph_digest": "6657bdf85bce2e9c609f1c797727fa3e2bec851a7f61c4a45db0afa6da3ab011",
+          "inserted_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "6657bdf85bce2e9c609f1c797727fa3e2bec851a7f61c4a45db0afa6da3ab011",
+          "pre_graph_digest": "bbb2e0b22956fb36d420ce591e93d31f4e3d53c1e1ae59c2fb97b59adbbee791",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP2",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "213c8a00c35042c0cfa1c13b772c243894bc240c59c174365dd6561da55800b0",
+          "candidate_graph_digest": "2e313be240477d658767f914b7525a1bce0973ed8b2a02ac8193007dc34fe3c2",
+          "inserted_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"curtailed\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "2e313be240477d658767f914b7525a1bce0973ed8b2a02ac8193007dc34fe3c2",
+          "pre_graph_digest": "6657bdf85bce2e9c609f1c797727fa3e2bec851a7f61c4a45db0afa6da3ab011",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"normal\" ."
+          ],
+          "rid": "q4",
+          "role": "grid",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#feederState",
+            "subject": "http://example.org/ev#Feeder1",
+            "value": "curtailed"
+          },
+          "target_key": "http://example.org/ev#Feeder1|http://example.org/ev#feederState"
+        },
+        {
+          "accepted": false,
+          "aid": "3ce7024db3c9b88bd633b8fb69d72c8dbbd9de2bf500737c46c64b10c074aa3f",
+          "candidate_graph_digest": "91475f9cb6c1369987f9d9c1de75921c61283a92458237a9a847bd21cadb4db5",
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "2e313be240477d658767f914b7525a1bce0973ed8b2a02ac8193007dc34fe3c2",
+          "pre_graph_digest": "2e313be240477d658767f914b7525a1bce0973ed8b2a02ac8193007dc34fe3c2",
+          "reason": "inadmissible",
+          "rid": "q3",
+          "role": "grid",
+          "schedule_index": 3,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP3",
+            "value": "10.0"
+          },
+          "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "2e313be240477d658767f914b7525a1bce0973ed8b2a02ac8193007dc34fe3c2",
+      "trace_path": "results/ev/traces/trace_ev_operational_emergency_capacity_at_limit.json"
+    },
+    {
+      "name": "driver_without_emergency",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "power_CP3": true,
+        "accepted_rules": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 10.0,
+        "CP2": 10.0,
+        "CP3": 22.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "charging",
+        "CP2": "charging",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q1"
+      ],
+      "accepted_rules": [
+        "q1"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "be03a2be6b3118ab25b9202fcfc95ec14cf15d423ed20838520dad76ff1eb0f9",
+          "candidate_graph_digest": "cec61763f95ce54b313c4b22e7eba8a63e590f2c96bb1eac00883238c71ae1ce",
+          "inserted_triples": [
+            "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "cec61763f95ce54b313c4b22e7eba8a63e590f2c96bb1eac00883238c71ae1ce",
+          "pre_graph_digest": "1aaff4412a7938aea395baf7dffc71421c517e850e3342aa4edc749cbf3f932d",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP3",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "cec61763f95ce54b313c4b22e7eba8a63e590f2c96bb1eac00883238c71ae1ce",
+      "trace_path": "results/ev/traces/trace_ev_operational_driver_without_emergency.json"
+    },
+    {
+      "name": "driver_with_emergency",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "emergency_response": true,
+        "power_CP3": true,
+        "rejection_q1": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 5.0,
+        "CP2": 5.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "charging",
+        "CP2": "charging",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "curtailed",
+      "enabled_rules": [
+        "q1",
+        "q4",
+        "q5",
+        "q5"
+      ],
+      "accepted_rules": [
+        "q5",
+        "q5",
+        "q4"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "9e21a641afc0d277496a308b35e6c5c0b0d75ef04f7dedd487438f62a5e232c7",
+          "candidate_graph_digest": "9e515d5c21c4970d874ce19787393d229786bc44e0e7bd11d3072d01a93349e3",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "9e515d5c21c4970d874ce19787393d229786bc44e0e7bd11d3072d01a93349e3",
+          "pre_graph_digest": "1aaff4412a7938aea395baf7dffc71421c517e850e3342aa4edc749cbf3f932d",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"10.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "ad910b8eb21292b79083db1dd32bc523a9213cf7ce2f43d92c69f009fe807fb4",
+          "candidate_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "inserted_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"5.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "pre_graph_digest": "9e515d5c21c4970d874ce19787393d229786bc44e0e7bd11d3072d01a93349e3",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"10.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP2",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "213c8a00c35042c0cfa1c13b772c243894bc240c59c174365dd6561da55800b0",
+          "candidate_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "inserted_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"curtailed\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "pre_graph_digest": "de298c0e4f7ab65ae92bf9a31b0f61cd2abe268eca24d6917cfe3b13b6a64017",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"normal\" ."
+          ],
+          "rid": "q4",
+          "role": "grid",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#feederState",
+            "subject": "http://example.org/ev#Feeder1",
+            "value": "curtailed"
+          },
+          "target_key": "http://example.org/ev#Feeder1|http://example.org/ev#feederState"
+        },
+        {
+          "accepted": false,
+          "aid": "be03a2be6b3118ab25b9202fcfc95ec14cf15d423ed20838520dad76ff1eb0f9",
+          "candidate_graph_digest": "d5240d2ae38f6ef8cd740424e276a5e279ea06834478e60b38c42b88632e1c78",
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "pre_graph_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+          "reason": "inadmissible",
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 3,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP3",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "9dcd77274ddd88b413a33bf17f0c127582aa41d85c765c19875eb0c31c3e8094",
+      "trace_path": "results/ev/traces/trace_ev_operational_driver_with_emergency.json"
+    },
+    {
+      "name": "fault_charging",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "fault_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "outOfService",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q8",
+        "q9"
+      ],
+      "accepted_rules": [
+        "q9",
+        "q8"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "candidate_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q9",
+          "role": "safety",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 0
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "6eeb9f6363279b1dbcbb29a850fa9d4fb1a17c6b45b52f20a47d32ed6d4f0657",
+          "candidate_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"outOfService\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"occupied\" ."
+          ],
+          "rid": "q8",
+          "role": "safety",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#connectorState",
+            "subject": "http://example.org/ev#CP1",
+            "value": "outOfService"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#connectorState"
+        }
+      ],
+      "successor_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+      "trace_path": "results/ev/traces/trace_ev_operational_fault_charging.json"
+    },
+    {
+      "name": "fault_charge_free",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "fault_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "outOfService",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q1",
+        "q8"
+      ],
+      "accepted_rules": [
+        "q8"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "6eeb9f6363279b1dbcbb29a850fa9d4fb1a17c6b45b52f20a47d32ed6d4f0657",
+          "candidate_graph_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"outOfService\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+          "pre_graph_digest": "f62f7105900e2a84281380ae36808b122abf0c61d8bc6a4701e0ef19313768c5",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"free\" ."
+          ],
+          "rid": "q8",
+          "role": "safety",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#connectorState",
+            "subject": "http://example.org/ev#CP1",
+            "value": "outOfService"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#connectorState"
+        },
+        {
+          "accepted": false,
+          "aid": "a4ee6b7e765bd7bbe837e1f74249980da9a996591457912cb2b91b95c14cc7c9",
+          "candidate_graph_digest": "588557ed997d47968390bb7d4b33f0dac0e651df1b5df648016c89ddd9b3b40a",
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+          "pre_graph_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+          "reason": "inadmissible",
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+      "trace_path": "results/ev/traces/trace_ev_operational_fault_charge_free.json"
+    },
+    {
+      "name": "fault_with_capacity",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "fault_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "outOfService",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q3",
+        "q8",
+        "q9"
+      ],
+      "accepted_rules": [
+        "q9",
+        "q8"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "candidate_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q9",
+          "role": "safety",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 0
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "6eeb9f6363279b1dbcbb29a850fa9d4fb1a17c6b45b52f20a47d32ed6d4f0657",
+          "candidate_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"outOfService\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"occupied\" ."
+          ],
+          "rid": "q8",
+          "role": "safety",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#connectorState",
+            "subject": "http://example.org/ev#CP1",
+            "value": "outOfService"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#connectorState"
+        },
+        {
+          "accepted": false,
+          "aid": "5657acc308bae2e4bba5f717d85c16998694963af4455891dbbcc1906cdb9ef5",
+          "blocked_by_aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "blocked_by_rid": "q9",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "reason": "shadowed_by_prior_accepted_action",
+          "rid": "q3",
+          "role": "grid",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "10.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+      "trace_path": "results/ev/traces/trace_ev_operational_fault_with_capacity.json"
+    },
+    {
+      "name": "fault_with_emergency",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "emergency_response": true,
+        "fault_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "outOfService",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "curtailed",
+      "enabled_rules": [
+        "q4",
+        "q5",
+        "q8",
+        "q9"
+      ],
+      "accepted_rules": [
+        "q9",
+        "q8",
+        "q4"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "candidate_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q9",
+          "role": "safety",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 0
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "6eeb9f6363279b1dbcbb29a850fa9d4fb1a17c6b45b52f20a47d32ed6d4f0657",
+          "candidate_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"outOfService\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"occupied\" ."
+          ],
+          "rid": "q8",
+          "role": "safety",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#connectorState",
+            "subject": "http://example.org/ev#CP1",
+            "value": "outOfService"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#connectorState"
+        },
+        {
+          "accepted": false,
+          "aid": "9e21a641afc0d277496a308b35e6c5c0b0d75ef04f7dedd487438f62a5e232c7",
+          "blocked_by_aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "blocked_by_rid": "q9",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "reason": "shadowed_by_prior_accepted_action",
+          "rid": "q5",
+          "role": "grid",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 5
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "213c8a00c35042c0cfa1c13b772c243894bc240c59c174365dd6561da55800b0",
+          "candidate_graph_digest": "79bf8fc7c91357176ba8ffab7069a83265574ef4002533f137b1bdc0c3966f85",
+          "inserted_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"curtailed\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "79bf8fc7c91357176ba8ffab7069a83265574ef4002533f137b1bdc0c3966f85",
+          "pre_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#Feeder1> <http://example.org/ev#feederState> \"normal\" ."
+          ],
+          "rid": "q4",
+          "role": "grid",
+          "schedule_index": 3,
+          "target": {
+            "predicate": "http://example.org/ev#feederState",
+            "subject": "http://example.org/ev#Feeder1",
+            "value": "curtailed"
+          },
+          "target_key": "http://example.org/ev#Feeder1|http://example.org/ev#feederState"
+        }
+      ],
+      "successor_digest": "79bf8fc7c91357176ba8ffab7069a83265574ef4002533f137b1bdc0c3966f85",
+      "trace_path": "results/ev/traces/trace_ev_operational_fault_with_emergency.json"
+    },
+    {
+      "name": "fault_with_fleet",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "fault_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "outOfService",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q2",
+        "q8",
+        "q9"
+      ],
+      "accepted_rules": [
+        "q9",
+        "q8"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "candidate_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q9",
+          "role": "safety",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 0
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "6eeb9f6363279b1dbcbb29a850fa9d4fb1a17c6b45b52f20a47d32ed6d4f0657",
+          "candidate_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"outOfService\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"occupied\" ."
+          ],
+          "rid": "q8",
+          "role": "safety",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#connectorState",
+            "subject": "http://example.org/ev#CP1",
+            "value": "outOfService"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#connectorState"
+        },
+        {
+          "accepted": false,
+          "aid": "09bf6b3b18537eb360b2dd20ac5ef728db1744c3360aad3e69f0a13c052b5d7b",
+          "blocked_by_aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "blocked_by_rid": "q9",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "reason": "shadowed_by_prior_accepted_action",
+          "rid": "q2",
+          "role": "fleet",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+      "trace_path": "results/ev/traces/trace_ev_operational_fault_with_fleet.json"
+    },
+    {
+      "name": "fault_with_departure",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "fault_response": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "outOfService",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q7",
+        "q8",
+        "q9"
+      ],
+      "accepted_rules": [
+        "q9",
+        "q8"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "candidate_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q9",
+          "role": "safety",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 0
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        },
+        {
+          "accepted": true,
+          "aid": "6eeb9f6363279b1dbcbb29a850fa9d4fb1a17c6b45b52f20a47d32ed6d4f0657",
+          "candidate_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"outOfService\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "3e8fb178269884f2706e58ed47a3308e22c7a0322aeee4904650e3f2cd63c03a",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"occupied\" ."
+          ],
+          "rid": "q8",
+          "role": "safety",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#connectorState",
+            "subject": "http://example.org/ev#CP1",
+            "value": "outOfService"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#connectorState"
+        },
+        {
+          "accepted": false,
+          "aid": "5c1ebe53612e8572ee2fa3d2636c6e2433d14983ca688bafbf062c29ce88260f",
+          "blocked_by_aid": "50087449fc3eae857baa979f73286821729482f8f44b6067493d19046cba292f",
+          "blocked_by_rid": "q9",
+          "post_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "pre_graph_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+          "reason": "shadowed_by_prior_accepted_action",
+          "rid": "q7",
+          "role": "fleet",
+          "schedule_index": 2,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 22
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "a11646c85e6eeb76bf0931328e629559d82679098f4b7ade03c00f6dc5f1efca",
+      "trace_path": "results/ev/traces/trace_ev_operational_fault_with_departure.json"
+    },
+    {
+      "name": "plug_and_charge",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "power_CP1": true,
+        "connector_CP1": true,
+        "accepted_rules": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 22.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "occupied",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q1",
+        "q6"
+      ],
+      "accepted_rules": [
+        "q6",
+        "q1"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "453797d916eb601d00c7a79451a187a0d0feb7992b582ce5af157867ec53a06c",
+          "candidate_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"occupied\" ."
+          ],
+          "policy_reason": "policy_guard_not_applicable",
+          "post_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "pre_graph_digest": "f62f7105900e2a84281380ae36808b122abf0c61d8bc6a4701e0ef19313768c5",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#connectorState> \"free\" ."
+          ],
+          "rid": "q6",
+          "role": "driver",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#connectorState",
+            "subject": "http://example.org/ev#CP1",
+            "value": "occupied"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#connectorState"
+        },
+        {
+          "accepted": true,
+          "aid": "a4ee6b7e765bd7bbe837e1f74249980da9a996591457912cb2b91b95c14cc7c9",
+          "candidate_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 1,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+      "trace_path": "results/ev/traces/trace_ev_operational_plug_and_charge.json"
+    },
+    {
+      "name": "plug_on_faulted",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "fault_response": true,
+        "rejection_q1": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "outOfService",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q1"
+      ],
+      "accepted_rules": [],
+      "decisions": [
+        {
+          "accepted": false,
+          "aid": "a4ee6b7e765bd7bbe837e1f74249980da9a996591457912cb2b91b95c14cc7c9",
+          "candidate_graph_digest": "588557ed997d47968390bb7d4b33f0dac0e651df1b5df648016c89ddd9b3b40a",
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+          "pre_graph_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+          "reason": "inadmissible",
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "d2ff05ad2be903e43ce8694b1ac67121dfc5fdd4e868c01a085b648eeb98e6a5",
+      "trace_path": "results/ev/traces/trace_ev_operational_plug_on_faulted.json"
+    },
+    {
+      "name": "departure",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "power_CP1": true,
+        "accepted_rules": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 22.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "occupied",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q7"
+      ],
+      "accepted_rules": [
+        "q7"
+      ],
+      "decisions": [
+        {
+          "accepted": true,
+          "aid": "5c1ebe53612e8572ee2fa3d2636c6e2433d14983ca688bafbf062c29ce88260f",
+          "candidate_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "inserted_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "policy_reason": "policy_guard_passed",
+          "post_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+          "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "reason": "admissible",
+          "removed_triples": [
+            "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+          ],
+          "rid": "q7",
+          "role": "fleet",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": 22
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+      "trace_path": "results/ev/traces/trace_ev_operational_departure.json"
+    },
+    {
+      "name": "policy_role_cap",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "power_CP1": true,
+        "rejection_q1": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "occupied",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q1"
+      ],
+      "accepted_rules": [],
+      "decisions": [
+        {
+          "accepted": false,
+          "aid": "a4ee6b7e765bd7bbe837e1f74249980da9a996591457912cb2b91b95c14cc7c9",
+          "policy_reason": "policy_role_cap_violation:driver:22.0 > 11",
+          "post_graph_digest": "65321c4148f70a527601a70e47ef0c85a9265fbb9dd591d221054f373fb0c91b",
+          "pre_graph_digest": "65321c4148f70a527601a70e47ef0c85a9265fbb9dd591d221054f373fb0c91b",
+          "reason": "policy_role_cap_violation:driver:22.0 > 11",
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "65321c4148f70a527601a70e47ef0c85a9265fbb9dd591d221054f373fb0c91b",
+      "trace_path": "results/ev/traces/trace_ev_operational_policy_role_cap.json"
+    },
+    {
+      "name": "policy_minimum",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "power_CP1": true,
+        "rejection_q1": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "occupied",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q1"
+      ],
+      "accepted_rules": [],
+      "decisions": [
+        {
+          "accepted": false,
+          "aid": "fb2408decf89b84d636d2ab65072ef295026b08431a830be42607ae0ccad28bd",
+          "policy_reason": "policy_min_violation:-1.0 < 0",
+          "post_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "reason": "policy_min_violation:-1.0 < 0",
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "-1.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+      "trace_path": "results/ev/traces/trace_ev_operational_policy_minimum.json"
+    },
+    {
+      "name": "inactive_driver",
+      "checks": {
+        "initial_admissible": true,
+        "final_admissible": true,
+        "power_CP1": true,
+        "rejection_q1": true,
+        "second_schedule": true,
+        "second_digest": true,
+        "second_decisions": true,
+        "replay": true
+      },
+      "powers": {
+        "CP1": 0.0,
+        "CP2": 0.0,
+        "CP3": 0.0,
+        "CP4": 0.0
+      },
+      "connectors": {
+        "CP1": "occupied",
+        "CP2": "occupied",
+        "CP3": "occupied",
+        "CP4": "free"
+      },
+      "feeder": "normal",
+      "enabled_rules": [
+        "q1"
+      ],
+      "accepted_rules": [],
+      "decisions": [
+        {
+          "accepted": false,
+          "aid": "a4ee6b7e765bd7bbe837e1f74249980da9a996591457912cb2b91b95c14cc7c9",
+          "post_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+          "reason": "inactive_role",
+          "rid": "q1",
+          "role": "driver",
+          "schedule_index": 0,
+          "target": {
+            "predicate": "http://example.org/ev#chargingPower",
+            "subject": "http://example.org/ev#CP1",
+            "value": "22.0"
+          },
+          "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+        }
+      ],
+      "successor_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+      "trace_path": "results/ev/traces/trace_ev_operational_inactive_driver.json"
+    }
+  ],
+  "order_control": {
+    "gates": "all four unchanged; schedule order is the only perturbation",
+    "subsets": [
+      {
+        "subjects": [
+          "http://example.org/ev#CP1"
+        ],
+        "admissible": true
+      },
+      {
+        "subjects": [
+          "http://example.org/ev#CP2"
+        ],
+        "admissible": true
+      },
+      {
+        "subjects": [
+          "http://example.org/ev#CP3"
+        ],
+        "admissible": true
+      },
+      {
+        "subjects": [
+          "http://example.org/ev#CP1",
+          "http://example.org/ev#CP2"
+        ],
+        "admissible": true
+      },
+      {
+        "subjects": [
+          "http://example.org/ev#CP1",
+          "http://example.org/ev#CP3"
+        ],
+        "admissible": true
+      },
+      {
+        "subjects": [
+          "http://example.org/ev#CP2",
+          "http://example.org/ev#CP3"
+        ],
+        "admissible": true
+      },
+      {
+        "subjects": [
+          "http://example.org/ev#CP1",
+          "http://example.org/ev#CP2",
+          "http://example.org/ev#CP3"
+        ],
+        "admissible": false
+      }
+    ],
+    "permutations": [
+      {
+        "order": [
+          "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+          "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+          "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482"
+        ],
+        "accepted_subjects": [
+          "http://example.org/ev#CP1",
+          "http://example.org/ev#CP2"
+        ],
+        "successor_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+        "final_admissible": true,
+        "decisions": [
+          {
+            "accepted": true,
+            "aid": "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+            "candidate_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+            "inserted_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+            "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 0,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP1",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": true,
+            "aid": "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+            "candidate_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "inserted_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 1,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP2",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": false,
+            "aid": "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+            "candidate_graph_digest": "83bf802d5b3e8e33904b3ddb23aa91748bb9e6ebb4de9278a65cdbb38a887ac1",
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "pre_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "reason": "inadmissible",
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 2,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP3",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+          }
+        ]
+      },
+      {
+        "order": [
+          "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+          "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+          "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470"
+        ],
+        "accepted_subjects": [
+          "http://example.org/ev#CP1",
+          "http://example.org/ev#CP3"
+        ],
+        "successor_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+        "final_admissible": true,
+        "decisions": [
+          {
+            "accepted": true,
+            "aid": "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+            "candidate_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+            "inserted_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+            "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 0,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP1",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": true,
+            "aid": "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+            "candidate_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "inserted_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "pre_graph_digest": "7988d7a2d1c8a6c2abe7486c377b55d2b32a6ad37cb03d0468410a84d42c80f2",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 1,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP3",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": false,
+            "aid": "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+            "candidate_graph_digest": "83bf802d5b3e8e33904b3ddb23aa91748bb9e6ebb4de9278a65cdbb38a887ac1",
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "pre_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "reason": "inadmissible",
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 2,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP2",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+          }
+        ]
+      },
+      {
+        "order": [
+          "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+          "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+          "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482"
+        ],
+        "accepted_subjects": [
+          "http://example.org/ev#CP2",
+          "http://example.org/ev#CP1"
+        ],
+        "successor_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+        "final_admissible": true,
+        "decisions": [
+          {
+            "accepted": true,
+            "aid": "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+            "candidate_graph_digest": "25d5a5213881936e719ca65934d12c11c7eb69a956d2a0e62e6667e05fd182f9",
+            "inserted_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "25d5a5213881936e719ca65934d12c11c7eb69a956d2a0e62e6667e05fd182f9",
+            "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 0,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP2",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": true,
+            "aid": "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+            "candidate_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "inserted_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "pre_graph_digest": "25d5a5213881936e719ca65934d12c11c7eb69a956d2a0e62e6667e05fd182f9",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 1,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP1",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": false,
+            "aid": "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+            "candidate_graph_digest": "83bf802d5b3e8e33904b3ddb23aa91748bb9e6ebb4de9278a65cdbb38a887ac1",
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "pre_graph_digest": "c10417de9a92575b262c4138fd9367dc95e8585b6d25d067ad6b37dcb68355a4",
+            "reason": "inadmissible",
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 2,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP3",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+          }
+        ]
+      },
+      {
+        "order": [
+          "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+          "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+          "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1"
+        ],
+        "accepted_subjects": [
+          "http://example.org/ev#CP2",
+          "http://example.org/ev#CP3"
+        ],
+        "successor_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+        "final_admissible": true,
+        "decisions": [
+          {
+            "accepted": true,
+            "aid": "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+            "candidate_graph_digest": "25d5a5213881936e719ca65934d12c11c7eb69a956d2a0e62e6667e05fd182f9",
+            "inserted_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "25d5a5213881936e719ca65934d12c11c7eb69a956d2a0e62e6667e05fd182f9",
+            "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 0,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP2",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": true,
+            "aid": "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+            "candidate_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "inserted_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "pre_graph_digest": "25d5a5213881936e719ca65934d12c11c7eb69a956d2a0e62e6667e05fd182f9",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 1,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP3",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": false,
+            "aid": "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+            "candidate_graph_digest": "83bf802d5b3e8e33904b3ddb23aa91748bb9e6ebb4de9278a65cdbb38a887ac1",
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "pre_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "reason": "inadmissible",
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 2,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP1",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+          }
+        ]
+      },
+      {
+        "order": [
+          "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+          "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+          "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470"
+        ],
+        "accepted_subjects": [
+          "http://example.org/ev#CP3",
+          "http://example.org/ev#CP1"
+        ],
+        "successor_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+        "final_admissible": true,
+        "decisions": [
+          {
+            "accepted": true,
+            "aid": "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+            "candidate_graph_digest": "bc4acdb4251c205b413c16135745a23d36adb577f0d55caead0c18d4b27af5fc",
+            "inserted_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "bc4acdb4251c205b413c16135745a23d36adb577f0d55caead0c18d4b27af5fc",
+            "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 0,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP3",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": true,
+            "aid": "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+            "candidate_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "inserted_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "pre_graph_digest": "bc4acdb4251c205b413c16135745a23d36adb577f0d55caead0c18d4b27af5fc",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP1> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 1,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP1",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": false,
+            "aid": "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+            "candidate_graph_digest": "83bf802d5b3e8e33904b3ddb23aa91748bb9e6ebb4de9278a65cdbb38a887ac1",
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "pre_graph_digest": "c338ed5c169f6e4c8206c6a7782fd4a8119337f6d39ab34165211201fff4b7dc",
+            "reason": "inadmissible",
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 2,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP2",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+          }
+        ]
+      },
+      {
+        "order": [
+          "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+          "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+          "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1"
+        ],
+        "accepted_subjects": [
+          "http://example.org/ev#CP3",
+          "http://example.org/ev#CP2"
+        ],
+        "successor_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+        "final_admissible": true,
+        "decisions": [
+          {
+            "accepted": true,
+            "aid": "1a6c0f1a046de6672da1efe164929e51bd86cec048579559e624f6b9cd635482",
+            "candidate_graph_digest": "bc4acdb4251c205b413c16135745a23d36adb577f0d55caead0c18d4b27af5fc",
+            "inserted_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "bc4acdb4251c205b413c16135745a23d36adb577f0d55caead0c18d4b27af5fc",
+            "pre_graph_digest": "5e639a3b3b755493cc79715367bcdf8d99ee47740d519f8756ec3d3653465ded",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP3> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 0,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP3",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP3|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": true,
+            "aid": "bad4e93a95300663c1054aba8ddf6cf7e83f1bcc615ecedf023f05ed201fc470",
+            "candidate_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "inserted_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"22.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "pre_graph_digest": "bc4acdb4251c205b413c16135745a23d36adb577f0d55caead0c18d4b27af5fc",
+            "reason": "admissible",
+            "removed_triples": [
+              "<http://example.org/ev#CP2> <http://example.org/ev#chargingPower> \"0\"^^<http://www.w3.org/2001/XMLSchema#decimal> ."
+            ],
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 1,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP2",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP2|http://example.org/ev#chargingPower"
+          },
+          {
+            "accepted": false,
+            "aid": "e3c0d037f86c0acd25a0a7f6e149f147882bfd61a80dbe63e8611dba12fcc4b1",
+            "candidate_graph_digest": "83bf802d5b3e8e33904b3ddb23aa91748bb9e6ebb4de9278a65cdbb38a887ac1",
+            "policy_reason": "policy_guard_passed",
+            "post_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "pre_graph_digest": "947f4c1bf703c26372df2cf56bdebac876fabf4d1c7b050168e010c936702d5f",
+            "reason": "inadmissible",
+            "rid": "q1",
+            "role": "driver",
+            "schedule_index": 2,
+            "target": {
+              "predicate": "http://example.org/ev#chargingPower",
+              "subject": "http://example.org/ev#CP1",
+              "value": "22.0"
+            },
+            "target_key": "http://example.org/ev#CP1|http://example.org/ev#chargingPower"
+          }
+        ]
+      }
+    ],
+    "unique_states": 3,
+    "admissible_permutations": 6
+  },
+  "rule_coverage": [
+    "q1",
+    "q2",
+    "q3",
+    "q4",
+    "q5",
+    "q6",
+    "q7",
+    "q8",
+    "q9"
+  ],
+  "overall_pass": true,
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "shacl",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
+}

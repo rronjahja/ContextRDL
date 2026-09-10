@@ -152,7 +152,7 @@ def main():
 
     out = {"cases": [case_1, case_2]}
     with open(paths.hvac("experiment_governance_v2.json"), "w", encoding="utf-8") as fh:
-        json.dump(out, fh, indent=2)
+        json.dump(out, fh, indent=2, default=str)
 
     for c in (case_1, case_2):
         print(f"\n=== {c['case']} ===")

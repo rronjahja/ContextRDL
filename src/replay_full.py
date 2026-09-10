@@ -40,6 +40,7 @@ from rule_engine import evaluate_rules, resolve_governance_context, schedule_act
 from rule_loader import load_rules
 from trace import _jsonable_action, _rules_snapshot, file_sha256, graph_from_snapshot, load_trace
 from rule_engine import BINDING_PROFILE
+from numeric_profile import NUMERIC_PROFILE
 
 
 def _graph_digest(graph: Graph) -> str:
@@ -121,6 +122,7 @@ def _replay_body(trace, trace_path, rules_path, settings, contexts_path="data/co
     if deps.get("shapes_sha256"):
         dependency_ok = dependency_ok and file_sha256(shapes_path) == deps["shapes_sha256"]
     profile_ok = deps.get("binding_profile", BINDING_PROFILE) == BINDING_PROFILE
+    numeric_profile_ok = deps.get("numeric_profile") == NUMERIC_PROFILE
     # Internal consistency of the recorded snapshots.
     input_snapshot_ok = _graph_digest(input_graph) == trace["input_graph"]["digest"]
     recorded_successor_lines = trace["successor_graph"].get("triples")
@@ -174,6 +176,7 @@ def _replay_body(trace, trace_path, rules_path, settings, contexts_path="data/co
         "window_identity_consistent": window_identity_ok,
         "dependencies_match": dependency_ok,
         "binding_profile_supported": profile_ok,
+        "numeric_profile_supported": numeric_profile_ok,
         "input_snapshot_consistent": input_snapshot_ok,
         "successor_snapshot_consistent": successor_snapshot_ok,
         "rules_snapshot_match": regen_rules_snapshot == trace.get("rules", regen_rules_snapshot),

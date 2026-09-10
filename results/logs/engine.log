@@ -1,0 +1,24 @@
+
+Schedule Σ_t:
+
+r6 e9a2560bf7bb3d0ee87909f1669e58cd2fc6779aa3d9eab13527fd4b762e6c1a http://example.org/building#ZoneC|http://example.org/building#ventilationMode emergency
+r5 2528a83443f08f93c1592159e64787c004dea243e3e78d0eb148c7800141228b http://example.org/building#ZoneC|http://example.org/building#emergencyState True
+r2 051f044691c258adf5055bad01df6af91d9f8a440fa908dc63aebb5190e2d4b1 http://example.org/building#ZoneA|http://example.org/building#currentSetpoint 21.0
+r3 bad6721fbaebebe2b6e2a706ddb5096d8800db9857a6f1da2b286d55e83e9ecd http://example.org/building#ZoneC|http://example.org/building#ventilationMode high
+r7 a5f44a83956467ca81eaf0120754ab496257b662df01879f26600ccb45c5cc19 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 22.0
+r8 05b896b953f9d68a30c4199676738d64d324b3eb473b2a214b8b021233aa5c08 http://example.org/building#ZoneA|http://example.org/building#ventilationMode off
+r1 5dcce020e468b7da5c19e9810cec029f44541476ee106db11a8697f1f92e8c32 http://example.org/building#ZoneA|http://example.org/building#currentSetpoint 24.0
+r4 70e54004dd846a4a51fb314d773757cc84b00438da0b605cea830bc081650f7f http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 21
+
+Accepted actions B_t:
+
+r6 e9a2560bf7bb3d0ee87909f1669e58cd2fc6779aa3d9eab13527fd4b762e6c1a http://example.org/building#ZoneC|http://example.org/building#ventilationMode emergency
+r5 2528a83443f08f93c1592159e64787c004dea243e3e78d0eb148c7800141228b http://example.org/building#ZoneC|http://example.org/building#emergencyState True
+r2 051f044691c258adf5055bad01df6af91d9f8a440fa908dc63aebb5190e2d4b1 http://example.org/building#ZoneA|http://example.org/building#currentSetpoint 21.0
+r7 a5f44a83956467ca81eaf0120754ab496257b662df01879f26600ccb45c5cc19 http://example.org/building#ZoneB|http://example.org/building#currentSetpoint 22.0
+r8 05b896b953f9d68a30c4199676738d64d324b3eb473b2a214b8b021233aa5c08 http://example.org/building#ZoneA|http://example.org/building#ventilationMode off
+
+Trace summary:
+
+{'enabled_count': 8, 'scheduled_count': 8, 'accepted_count': 5, 'rejected_count': 3}
+Successor digest: 4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f

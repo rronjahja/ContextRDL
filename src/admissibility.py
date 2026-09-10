@@ -29,6 +29,8 @@ from typing import Iterable, List, Optional, Set, Tuple
 
 from rdflib import Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, XSD
+from policy_profile import (HVAC_POLICY_NODE, HVAC_POLICY_PREDICATES,
+                            PolicyProfileError, validate_hvac_policy)
 
 EX = Namespace("http://example.org/building#")
 ALLOWED_VENTILATION = {"off", "normal", "high", "emergency"}
@@ -41,7 +43,7 @@ _INTEGER_LEXICAL = re.compile(r"[+-]?[0-9]+")
 
 # This hand-written validator implements exactly this shipped shape file.
 # Local scope alone is insufficient to justify using it for other shapes.
-_COMPILED_SHAPES_SHA256 = "1ca542668f976b88b2c8c9587d496ab0b3e3841dc0f742e9e72be9bde5c00301"
+_COMPILED_SHAPES_SHA256 = "fed686759d8312bedef97d93abb434738a451bbe90e405eb4910dec8bed7c7c3"
 
 def supports_incremental_shapes(shapes_path: Optional[str] = None) -> bool:
     path = Path(shapes_path or _DEFAULT_SHAPES_PATH)
@@ -279,6 +281,10 @@ def _check_admissibility_fast(
     non-finite and malformed literals must be handled by the reference path.
     """
     violations: List[str] = []
+    try:
+        validate_hvac_policy(graph)
+    except PolicyProfileError as exc:
+        violations.append(f"ControlPolicyShape: {exc}")
     zone_classes = _zone_class_closure(graph)
     if focus_zones is None:
         typed_zones = {z for c in zone_classes for z in graph.subjects(RDF.type, c)}

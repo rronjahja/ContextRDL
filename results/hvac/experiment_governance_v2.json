@@ -15,7 +15,7 @@
       "accepted_rids": [
         "A_op"
       ],
-      "final_ZoneA_setpoint": 23.0,
+      "final_ZoneA_setpoint": "23.0",
       "successor_digest": "e8e977acd657fa74ce09bdfb85abdee0cd0713854c8ce13ef3d3a424a7a79f74",
       "decisions": [
         {
@@ -53,7 +53,7 @@
       "accepted_rids": [
         "A_occ"
       ],
-      "final_ZoneA_setpoint": 22.0,
+      "final_ZoneA_setpoint": "22.0",
       "successor_digest": "577c53aa6de8be6bf18f25aab49c15499dd158ad4a69b678f43aab3018cb1bcb",
       "decisions": [
         {
@@ -76,5 +76,17 @@
         }
       ]
     }
-  ]
+  ],
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "shacl",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
 }

@@ -83,6 +83,18 @@ def structured_mutations() -> List[List[Mutation]]:
                 ("emerg_true", zone, EMERG, [Literal(True)]),
                 ("vent", zone, VENT, [Literal(mode)]),
             ])
+    policy = URIRef(EX + "Policy")
+    for name in ("minSetpoint", "occupantMaxSetpoint", "operatorMaxSetpoint", "emergencyMaxSetpoint"):
+        predicate = URIRef(EX + name)
+        for tag, values in (
+            ("policy_missing", []),
+            ("policy_multiple", [Literal("20", datatype=XSD.decimal), Literal("24", datatype=XSD.decimal)]),
+            ("policy_integer", [Literal(24)]),
+            ("policy_string", [Literal("24")]),
+            ("policy_nonfinite", [Literal("NaN", datatype=XSD.decimal, normalize=False)]),
+            ("policy_decimal", [Literal("24.000", datatype=XSD.decimal, normalize=False)]),
+        ):
+            cases.append([(tag, policy, predicate, values)])
     return cases
 
 

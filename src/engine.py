@@ -12,6 +12,7 @@ from resolver import resolve_actions
 from rule_engine import evaluate_rules, load_settings, resolve_governance_context, schedule_actions
 from rule_loader import load_rules, validate_rules
 from trace import build_trace, file_sha256, save_trace
+from numeric_profile import NUMERIC_PROFILE
 
 
 def _deep_update(base: Dict[str, Any], updates: Dict[str, Any]) -> Dict[str, Any]:
@@ -49,7 +50,14 @@ def run_engine(
     # is recorded in the trace settings and replay_full re-applies it.
     settings["admissibility_regime"] = os.environ.get("ADMISSIBILITY_REGIME", "incremental").lower()
 
-    current_state = deepcopy(state_graph) if state_graph is not None else load_state(state_path)
+    input_state = state_graph if state_graph is not None else load_state(state_path)
+    # Reject ambiguous policy configuration even on an empty window. Domain
+    # invariants retain their per-candidate semantics, including invalid-start
+    # recovery under the reference validator.
+    from policy_profile import validate_hvac_policy, validate_conflict_policy
+    validate_hvac_policy(input_state)
+    validate_conflict_policy(settings.get("governance", {}).get("conflict_policy", "first_writer_wins"))
+    current_state = deepcopy(input_state) if state_graph is not None else input_state
     event_list = deepcopy(events) if events is not None else load_events(events_path)
     rule_list = deepcopy(rules) if rules is not None else load_rules(rules_path)
     validate_rules(rule_list)
@@ -57,13 +65,13 @@ def run_engine(
     # rid-sorted, so that R is a set) and the content identity of the shape
     # graph (Definition 11 (iii), (xi)); replay rebuilds the rules from the
     # trace and verifies the shape graph before comparing.
-    canonical_rules = sorted(deepcopy(rule_list), key=lambda r: r["rid"])
+    canonical_rules = json.loads(json.dumps(sorted(deepcopy(rule_list), key=lambda r: r["rid"]), default=str))
     canonical_json = json.dumps(canonical_rules, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     settings["dependencies"] = {
         "rules_sha256": hashlib.sha256(canonical_json.encode("utf-8")).hexdigest(),
         "rules_inline": canonical_rules,
         "shapes_path": shapes_path, "shapes_sha256": file_sha256(shapes_path),
-        "binding_profile": "nt-1",
+        "binding_profile": "nt-1", "numeric_profile": NUMERIC_PROFILE,
     }
     rule_provenance = ({"rules_source": "file", "rules_path": rules_path, "rules_file_sha256": file_sha256(rules_path)}
                        if rules is None else {"rules_source": "inline"})

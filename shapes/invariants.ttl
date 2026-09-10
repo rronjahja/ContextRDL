@@ -2,6 +2,19 @@
 @prefix ex: <http://example.org/building#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+# Policy configuration is mandatory even for an empty evaluation window.
+# Initialization checks this profile separately from domain-state invariants.
+ex:ControlPolicyShape a sh:NodeShape ;
+    sh:targetNode ex:Policy ;
+    sh:property [ sh:path ex:minSetpoint ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] ;
+    sh:property [ sh:path ex:occupantMaxSetpoint ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] ;
+    sh:property [ sh:path ex:operatorMaxSetpoint ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] ;
+    sh:property [ sh:path ex:emergencyMaxSetpoint ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+        sh:pattern "^[+-]?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)$" ] .
+
 ex:ZoneSetpointShape a sh:NodeShape ;
     sh:targetClass ex:HVAC_Zone ;
     sh:property [

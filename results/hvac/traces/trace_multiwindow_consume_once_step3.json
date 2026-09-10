@@ -7,7 +7,7 @@
       "bindings": {
         "eid": "evt-preB-1",
         "setpoint": "21.0",
-        "target": 23.0,
+        "target": "23.0",
         "ts": "2026-03-14T09:07:10Z",
         "zone": "http://example.org/building#ZoneB"
       },
@@ -27,7 +27,7 @@
       "roleRank": 1,
       "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
       "tsKey": 1773479230000000,
-      "value": 23.0,
+      "value": "23.0",
       "window_id": "sliding:2026-03-14T09:03:00+00:00::2026-03-14T09:08:00+00:00",
       "zone": "http://example.org/building#ZoneB"
     }
@@ -62,7 +62,7 @@
       },
       "target": {
         "predicate": "http://example.org/building#currentSetpoint",
-        "value": 23.0,
+        "value": "23.0",
         "zone": "http://example.org/building#ZoneB"
       },
       "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint"
@@ -76,7 +76,7 @@
       "bindings": {
         "eid": "evt-preB-1",
         "setpoint": "21.0",
-        "target": 23.0,
+        "target": "23.0",
         "ts": "2026-03-14T09:07:10Z",
         "zone": "http://example.org/building#ZoneB"
       },
@@ -96,7 +96,7 @@
       "roleRank": 1,
       "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
       "tsKey": 1773479230000000,
-      "value": 23.0,
+      "value": "23.0",
       "window_id": "sliding:2026-03-14T09:03:00+00:00::2026-03-14T09:08:00+00:00",
       "zone": "http://example.org/building#ZoneB"
     }
@@ -104,13 +104,13 @@
   "environment": {
     "platform": "Windows-11-10.0.26200-SP0",
     "pyshacl": "0.31.0",
-    "python": "3.14.3",
+    "python": "3.12.10",
     "rdflib": "7.6.0",
     "rules_file_sha256": "23abae25b2cd6fd27c4ffd79b194925fcd339efb5f818f4835862562d3dfe2f9",
     "rules_path": "configs/rules.json",
     "rules_source": "file",
-    "source_manifest_sha256": "207e9ff572ff4d63689591cc9d508f8e96132c1c654473b4ea4bf328130cdfad",
-    "source_revision": "7e50049b3af27b488a5df0a4cf69c8935b9ac2b8"
+    "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf",
+    "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75"
   },
   "events": [
     {
@@ -245,7 +245,7 @@
       "bindings": {
         "eid": "evt-preB-1",
         "setpoint": "21.0",
-        "target": 23.0,
+        "target": "23.0",
         "ts": "2026-03-14T09:07:10Z",
         "zone": "http://example.org/building#ZoneB"
       },
@@ -265,15 +265,16 @@
       "roleRank": 1,
       "target_key": "http://example.org/building#ZoneB|http://example.org/building#currentSetpoint",
       "tsKey": 1773479230000000,
-      "value": 23.0,
+      "value": "23.0",
       "window_id": "sliding:2026-03-14T09:03:00+00:00::2026-03-14T09:08:00+00:00",
       "zone": "http://example.org/building#ZoneB"
     }
   ],
   "settings": {
-    "admissibility_regime": "incremental",
+    "admissibility_regime": "shacl",
     "dependencies": {
       "binding_profile": "nt-1",
+      "numeric_profile": "finite-decimal-1",
       "rules_inline": [
         {
           "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?delta WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupantSetpointRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:delta> ?delta . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
@@ -392,7 +393,7 @@
       ],
       "rules_sha256": "c36e065b5a29bf44cb4db97cd697cc99e1ba4eca7eb35e52601f8d3855fbfaac",
       "shapes_path": "shapes/invariants.ttl",
-      "shapes_sha256": "1ca542668f976b88b2c8c9587d496ab0b3e3841dc0f742e9e72be9bde5c00301"
+      "shapes_sha256": "fed686759d8312bedef97d93abb434738a451bbe90e405eb4910dec8bed7c7c3"
     },
     "entailment_regime": "none",
     "event_delivery": "consume_once",

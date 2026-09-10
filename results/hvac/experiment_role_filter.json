@@ -66,7 +66,7 @@
     ],
     "successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
     "replay_overall_pass": true,
-    "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\hvac\\traces\\trace_role_default.json"
+    "trace_path": "results/hvac/traces/trace_role_default.json"
   },
   "occupant-inactive": {
     "context": "occupant-inactive",
@@ -134,7 +134,7 @@
     ],
     "successor_digest": "4bbb205b597fc0b5310d6f4b1338347fc014cccf8de131cbd63e87bfb563014f",
     "replay_overall_pass": true,
-    "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\hvac\\traces\\trace_role_occupant-inactive.json"
+    "trace_path": "results/hvac/traces/trace_role_occupant-inactive.json"
   },
   "operator-inactive": {
     "context": "operator-inactive",
@@ -200,7 +200,19 @@
     ],
     "successor_digest": "05dbe40cdbc14ad372cbff9523866d392582b64fbfc3c0c123d0cb60bae7ec7e",
     "replay_overall_pass": true,
-    "trace_path": "G:\\Other computers\\My Laptop\\University\\Dr.Sc University Ljubljane\\Context RDL\\experiment\\results\\hvac\\traces\\trace_role_operator-inactive.json"
+    "trace_path": "results/hvac/traces/trace_role_operator-inactive.json"
   },
-  "occupant_inactive_same_successor_as_default": true
+  "occupant_inactive_same_successor_as_default": true,
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "shacl",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
 }

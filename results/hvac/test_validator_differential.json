@@ -2,19 +2,31 @@
   "overall_pass": true,
   "seed": 20260817,
   "n_random": 500,
-  "total_cases": 996,
-  "agreements": 996,
+  "total_cases": 1020,
+  "agreements": 1020,
   "backend_cases": {
-    "incremental": 990,
+    "incremental": 1014,
     "shacl_fallback": 6
   },
   "backend_agreements": {
-    "incremental": 990,
+    "incremental": 1014,
     "shacl_fallback": 6
   },
   "agreement_rate": 1.0,
-  "agree_on_conforming": 128,
-  "agree_on_violating": 668,
+  "agree_on_conforming": 132,
+  "agree_on_violating": 688,
   "rollback_restored": 200,
-  "disagreements": []
+  "disagreements": [],
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
+      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    },
+    "requested_admissibility_regime": "shacl",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
 }
