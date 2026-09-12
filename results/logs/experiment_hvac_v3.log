@@ -4,33 +4,33 @@ PART 1: BASELINE (7 strategies, mean +/- sd runtime)
 
 -- default (enabled=8) --
   strategy                                 uniq   adm% committed     runtime ms
-  Ours                                        1  100.0       5.0    93.52+-3.72
-  SHACL only, fixed order                     1  100.0       6.0   145.94+-3.81
-  Fixed order, no gates                       1    0.0       8.0     1.61+-0.14
-  Shuffled order, no gates                    8   30.0       8.0     1.61+-0.19
-  Arrival order, per-action SHACL             1  100.0       6.0   141.82+-4.58
-  Arrival order, per-event SHACL              1  100.0       7.0   107.29+-4.12
-  Shuffled order, all four gates             11  100.0       3.7    89.33+-3.39
+  Ours                                        1  100.0       5.0    93.87+-3.60
+  SHACL only, fixed order                     1  100.0       6.0   147.30+-4.45
+  Fixed order, no gates                       1    0.0       8.0     1.62+-0.19
+  Shuffled order, no gates                    8   30.0       8.0     1.51+-0.15
+  Arrival order, per-action SHACL             1  100.0       6.0   140.92+-5.91
+  Arrival order, per-event SHACL              1  100.0       7.0   104.86+-4.20
+  Shuffled order, all four gates             11  100.0       3.7    89.08+-4.56
 
 -- tie conflict (enabled=3) --
   strategy                                 uniq   adm% committed     runtime ms
-  Ours                                        1  100.0       2.0    36.43+-2.54
-  SHACL only, fixed order                     1  100.0       3.0    52.63+-3.06
-  Fixed order, no gates                       1  100.0       3.0     0.70+-0.04
-  Shuffled order, no gates                    2  100.0       3.0     0.93+-1.23
-  Arrival order, per-action SHACL             1  100.0       3.0    51.85+-1.79
-  Arrival order, per-event SHACL              1  100.0       3.0    35.23+-2.26
-  Shuffled order, all four gates              2  100.0       2.0    35.98+-3.00
+  Ours                                        1  100.0       2.0    35.90+-2.47
+  SHACL only, fixed order                     1  100.0       3.0    51.75+-2.89
+  Fixed order, no gates                       1  100.0       3.0     0.73+-0.12
+  Shuffled order, no gates                    2  100.0       3.0     0.66+-0.06
+  Arrival order, per-action SHACL             1  100.0       3.0    51.42+-2.78
+  Arrival order, per-event SHACL              1  100.0       3.0    34.66+-2.65
+  Shuffled order, all four gates              2  100.0       2.0    35.79+-2.76
 
 -- governance conflict (enabled=3) --
   strategy                                 uniq   adm% committed     runtime ms
-  Ours                                        1  100.0       2.0    36.73+-3.09
-  SHACL only, fixed order                     1  100.0       3.0    51.71+-2.58
-  Fixed order, no gates                       1  100.0       3.0     0.97+-1.32
-  Shuffled order, no gates                    2  100.0       3.0     0.67+-0.06
-  Arrival order, per-action SHACL             1  100.0       3.0    52.31+-2.82
-  Arrival order, per-event SHACL              1  100.0       3.0    35.04+-2.44
-  Shuffled order, all four gates              2  100.0       2.0    35.53+-2.90
+  Ours                                        1  100.0       2.0    35.80+-2.11
+  SHACL only, fixed order                     1  100.0       3.0    51.82+-2.83
+  Fixed order, no gates                       1  100.0       3.0     0.95+-1.28
+  Shuffled order, no gates                    2  100.0       3.0     0.67+-0.05
+  Arrival order, per-action SHACL             1  100.0       3.0    51.59+-2.54
+  Arrival order, per-event SHACL              1  100.0       3.0    34.22+-2.16
+  Shuffled order, all four gates              2  100.0       2.0    35.28+-2.41
 
 ========================================================================
 PART 2: R2.6 -- committed order under SHACL-gated (default workload)

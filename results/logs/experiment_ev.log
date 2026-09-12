@@ -8,7 +8,7 @@
   successor digest: c10417de9a92575b ...
 
 == EV headline, 30 trials ==
-  ours:          1 state(s), 100.0% admissible, 161.99+-3.84 ms
+  ours:          1 state(s), 100.0% admissible, 161.48+-4.79 ms
   deterministic: 1 state(s), 0.0% admissible
   random:        1 state(s), 0.0% admissible
 

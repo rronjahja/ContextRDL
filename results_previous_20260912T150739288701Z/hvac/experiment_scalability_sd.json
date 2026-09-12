@@ -1,0 +1,242 @@
+{
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.31.0",
+    "source_revision": "c27a36e954665f150451071495f156d25dd90f2e",
+    "source_manifest_sha256": "20364ac62211cd1b87e24a81b8af48e3f7660addd4ed54f25a5d5947550433fd"
+  },
+  "admissibility_regime": "incremental",
+  "repeats": 5,
+  "rows": [
+    {
+      "N": 10,
+      "accepted": 10,
+      "outcome_identical": true,
+      "orig_mean_s": 0.037,
+      "orig_sd_s": 0.007,
+      "new_full_trace_mean_s": 0.007,
+      "new_full_trace_sd_s": 0.0,
+      "speedup_same_trace_profile_x": 5.0,
+      "new_mean_s": 0.004,
+      "new_sd_s": 0.0,
+      "speedup_x": 9.3,
+      "samples_seconds": {
+        "cloning": [
+          0.031213899987051263,
+          0.032188699988182634,
+          0.04491660001804121,
+          0.04494909997447394,
+          0.0315785999991931
+        ],
+        "incremental_same_trace": [
+          0.007666699995752424,
+          0.0069315000146161765,
+          0.0076243999938014895,
+          0.007791700016241521,
+          0.006901399989146739
+        ],
+        "incremental_without_digests": [
+          0.00364330000593327,
+          0.003740399988600984,
+          0.004498299997067079,
+          0.004028199997264892,
+          0.004016499995486811
+        ]
+      }
+    },
+    {
+      "N": 50,
+      "accepted": 50,
+      "outcome_identical": true,
+      "orig_mean_s": 0.413,
+      "orig_sd_s": 0.006,
+      "new_full_trace_mean_s": 0.085,
+      "new_full_trace_sd_s": 0.004,
+      "speedup_same_trace_profile_x": 4.9,
+      "new_mean_s": 0.011,
+      "new_sd_s": 0.001,
+      "speedup_x": 36.6,
+      "samples_seconds": {
+        "cloning": [
+          0.4088688000047114,
+          0.4082617000094615,
+          0.420281700004125,
+          0.419877100008307,
+          0.40922639999189414
+        ],
+        "incremental_same_trace": [
+          0.08245849999366328,
+          0.08455609998782165,
+          0.08246110001346096,
+          0.08283509998000227,
+          0.09257269999943674
+        ],
+        "incremental_without_digests": [
+          0.011038800003007054,
+          0.011313299997709692,
+          0.01216240000212565,
+          0.010920600005192682,
+          0.010986600012984127
+        ]
+      }
+    },
+    {
+      "N": 100,
+      "accepted": 100,
+      "outcome_identical": true,
+      "orig_mean_s": 1.469,
+      "orig_sd_s": 0.007,
+      "new_full_trace_mean_s": 0.293,
+      "new_full_trace_sd_s": 0.001,
+      "speedup_same_trace_profile_x": 5.0,
+      "new_mean_s": 0.02,
+      "new_sd_s": 0.0,
+      "speedup_x": 75.0,
+      "samples_seconds": {
+        "cloning": [
+          1.4713297999987844,
+          1.4634619999851566,
+          1.476391700009117,
+          1.4738083999836817,
+          1.4602578000049107
+        ],
+        "incremental_same_trace": [
+          0.29327110000303946,
+          0.2937209000228904,
+          0.29420209999079816,
+          0.29176340001868084,
+          0.29208669997751713
+        ],
+        "incremental_without_digests": [
+          0.019611700001405552,
+          0.019471999985398725,
+          0.01932920000399463,
+          0.019534199993358925,
+          0.01993629999924451
+        ]
+      }
+    },
+    {
+      "N": 200,
+      "accepted": 200,
+      "outcome_identical": true,
+      "orig_mean_s": 5.479,
+      "orig_sd_s": 0.033,
+      "new_full_trace_mean_s": 1.117,
+      "new_full_trace_sd_s": 0.015,
+      "speedup_same_trace_profile_x": 4.9,
+      "new_mean_s": 0.037,
+      "new_sd_s": 0.001,
+      "speedup_x": 147.0,
+      "samples_seconds": {
+        "cloning": [
+          5.45786950000911,
+          5.438626599992858,
+          5.49146990000736,
+          5.481624100008048,
+          5.526106999983313
+        ],
+        "incremental_same_trace": [
+          1.1091967000102159,
+          1.113281600002665,
+          1.1056108999764547,
+          1.1440044000046328,
+          1.1123277000151575
+        ],
+        "incremental_without_digests": [
+          0.036141599994152784,
+          0.03891169998678379,
+          0.03724320000037551,
+          0.03677239999524318,
+          0.0373187999939546
+        ]
+      }
+    },
+    {
+      "N": 400,
+      "accepted": 400,
+      "outcome_identical": true,
+      "orig_mean_s": 21.677,
+      "orig_sd_s": 0.542,
+      "new_full_trace_mean_s": 4.489,
+      "new_full_trace_sd_s": 0.209,
+      "speedup_same_trace_profile_x": 4.8,
+      "new_mean_s": 0.078,
+      "new_sd_s": 0.011,
+      "speedup_x": 277.5,
+      "samples_seconds": {
+        "cloning": [
+          21.322549100004835,
+          21.57906550000189,
+          21.369693799992092,
+          21.48232690000441,
+          22.630440800014185
+        ],
+        "incremental_same_trace": [
+          4.336801400000695,
+          4.3887257000023965,
+          4.437720499990974,
+          4.423663399997167,
+          4.85567550000269
+        ],
+        "incremental_without_digests": [
+          0.09746300001279451,
+          0.0741719999932684,
+          0.07292930001858622,
+          0.07211829998414032,
+          0.07388520002132282
+        ]
+      }
+    },
+    {
+      "N": 800,
+      "accepted": 800,
+      "outcome_identical": true,
+      "orig_mean_s": 94.206,
+      "orig_sd_s": 3.897,
+      "new_full_trace_mean_s": 19.18,
+      "new_full_trace_sd_s": 0.74,
+      "speedup_same_trace_profile_x": 4.9,
+      "new_mean_s": 0.161,
+      "new_sd_s": 0.02,
+      "speedup_x": 585.3,
+      "samples_seconds": {
+        "cloning": [
+          98.14978720000363,
+          93.31436989997746,
+          96.95174819999374,
+          94.47432720000506,
+          88.14178520001587
+        ],
+        "incremental_same_trace": [
+          19.69646599999396,
+          19.01506520001567,
+          20.11395739999716,
+          18.849651399999857,
+          18.222785699996166
+        ],
+        "incremental_without_digests": [
+          0.17571330000646412,
+          0.14695559997926466,
+          0.14825289999134839,
+          0.1453271000063978,
+          0.18850629997905344
+        ]
+      }
+    }
+  ],
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "c27a36e954665f150451071495f156d25dd90f2e",
+      "source_manifest_sha256": "20364ac62211cd1b87e24a81b8af48e3f7660addd4ed54f25a5d5947550433fd"
+    },
+    "requested_admissibility_regime": "incremental",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
+}

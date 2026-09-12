@@ -1,0 +1,34 @@
+== EV headline window (3x 22kW on CP1/CP2/CP3) ==
+  enabled: 3 | schedule: ['q1', 'q1', 'q1']
+    q1   CP1   value=22.0   -> True  (admissible)
+    q1   CP2   value=22.0   -> True  (admissible)
+    q1   CP3   value=22.0   -> False (inadmissible)
+  committed powers: {'CP1': 22.0, 'CP2': 22.0, 'CP3': 0.0, 'CP4': 0.0}
+  final admissible: True
+  successor digest: c10417de9a92575b ...
+
+== EV headline, 30 trials ==
+  ours:          1 state(s), 100.0% admissible, 159.98+-4.56 ms
+  deterministic: 1 state(s), 0.0% admissible
+  random:        1 state(s), 0.0% admissible
+
+== EV governance (grid capacity 10 vs fleet schedule 22 on CP1) ==
+  grid_over_fleet: committed CP1 = 10.0 kW, accepted=['q3'], admissible=True
+  fleet_over_grid: committed CP1 = 22.0 kW, accepted=['q2'], admissible=True
+
+== EV grid-emergency window (primed CP1=CP2=22 kW) ==
+  schedule: [('q5', 'CP1', 5), ('q5', 'CP2', 5), ('q4', 'Feeder1', 'curtailed')]
+    q5   CP1      val=5          -> True  (admissible)
+    q5   CP2      val=5          -> True  (admissible)
+    q4   Feeder1  val=curtailed  -> True  (admissible)
+  committed powers: {'CP1': 5.0, 'CP2': 5.0, 'CP3': 0.0, 'CP4': 0.0}
+  committed feeder state: curtailed
+  final admissible: True
+
+== EV replay (trace-based) and cross-process re-execution ==
+  EV charging (headline)                   schedule=match decisions=3/3 digest=match cross-process=match
+  EV charging (governance_grid_over_fleet) schedule=match decisions=2/2 digest=match cross-process=match
+  EV charging (governance_fleet_over_grid) schedule=match decisions=2/2 digest=match cross-process=match
+  EV charging (emergency)                  schedule=match decisions=3/3 digest=match cross-process=match
+
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\ev\experiment_ev.json

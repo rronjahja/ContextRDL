@@ -4,8 +4,8 @@
     "platform": "Windows-11-10.0.26200-SP0",
     "rdflib": "7.6.0",
     "pyshacl": "0.31.0",
-    "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
-    "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+    "source_revision": "c27a36e954665f150451071495f156d25dd90f2e",
+    "source_manifest_sha256": "20364ac62211cd1b87e24a81b8af48e3f7660addd4ed54f25a5d5947550433fd"
   },
   "accepted_only": [
     {
@@ -16,17 +16,17 @@
       "accepted": 100,
       "rejected": 0,
       "runtime_samples_s": [
-        0.08947989999433048,
-        0.08564950000436511,
-        0.08824830000230577
+        0.08766869999817573,
+        0.08633330001612194,
+        0.08684259999427013
       ],
       "peak_heap_samples_bytes": [
-        586235,
+        590971,
         582362,
         577418
       ],
-      "incr_mean_s": 0.0878,
-      "incr_sd_s": 0.002,
+      "incr_mean_s": 0.0869,
+      "incr_sd_s": 0.0007,
       "peak_heap_mib": 0.56,
       "trace_kib": 751.8,
       "successor_digest": "edd030a9c5972bdd"
@@ -39,18 +39,18 @@
       "accepted": 200,
       "rejected": 0,
       "runtime_samples_s": [
-        0.17048519999661949,
-        0.16947169999184553,
-        0.17137359999469481
+        0.1698751999938395,
+        0.17169610000564717,
+        0.17000589999952354
       ],
       "peak_heap_samples_bytes": [
-        1085006,
-        1084566,
+        1090694,
+        1083798,
         1079638
       ],
-      "incr_mean_s": 0.1704,
+      "incr_mean_s": 0.1705,
       "incr_sd_s": 0.001,
-      "peak_heap_mib": 1.03,
+      "peak_heap_mib": 1.04,
       "trace_kib": 1499.3,
       "successor_digest": "94b8e134670a4ac1"
     },
@@ -62,17 +62,17 @@
       "accepted": 400,
       "rejected": 0,
       "runtime_samples_s": [
-        0.33478340000147,
-        0.3396509000012884,
-        0.3660870000021532
+        0.341136999981245,
+        0.3722373000055086,
+        0.3418101000133902
       ],
       "peak_heap_samples_bytes": [
-        2292754,
-        2289922,
-        2299122
+        2298818,
+        2294618,
+        2285170
       ],
-      "incr_mean_s": 0.3468,
-      "incr_sd_s": 0.0168,
+      "incr_mean_s": 0.3517,
+      "incr_sd_s": 0.0178,
       "peak_heap_mib": 2.19,
       "trace_kib": 2994.2,
       "successor_digest": "0dae3272aa15781f"
@@ -85,17 +85,17 @@
       "accepted": 800,
       "rejected": 0,
       "runtime_samples_s": [
-        0.6745661000022665,
-        0.7150391000031959,
-        0.6664922999916598
+        0.6742690999817569,
+        0.7263755000021774,
+        0.6802471000119112
       ],
       "peak_heap_samples_bytes": [
-        4308426,
+        4314722,
         4326026,
         4307146
       ],
-      "incr_mean_s": 0.6854,
-      "incr_sd_s": 0.026,
+      "incr_mean_s": 0.6936,
+      "incr_sd_s": 0.0285,
       "peak_heap_mib": 4.13,
       "trace_kib": 5984.0,
       "successor_digest": "8df61f8a40b07382"
@@ -110,17 +110,17 @@
       "accepted": 50,
       "rejected": 50,
       "runtime_samples_s": [
-        0.06502680000266992,
-        0.06403550000686664,
-        0.06426640000427142
+        0.0649760999949649,
+        0.06333680002717301,
+        0.06354989999090321
       ],
       "peak_heap_samples_bytes": [
-        516454,
-        515630,
-        504702
+        516838,
+        515606,
+        504678
       ],
-      "incr_mean_s": 0.0644,
-      "incr_sd_s": 0.0005,
+      "incr_mean_s": 0.064,
+      "incr_sd_s": 0.0009,
       "peak_heap_mib": 0.49,
       "trace_kib": 661.9,
       "successor_digest": "e5acc0706ff823dc"
@@ -133,17 +133,17 @@
       "accepted": 100,
       "rejected": 100,
       "runtime_samples_s": [
-        0.12387029999808874,
-        0.1236911999876611,
-        0.1426427000114927
+        0.1369544000190217,
+        0.12367010000161827,
+        0.1241462999896612
       ],
       "peak_heap_samples_bytes": [
-        945470,
+        958182,
         952350,
-        952302
+        894910
       ],
-      "incr_mean_s": 0.1301,
-      "incr_sd_s": 0.0109,
+      "incr_mean_s": 0.1283,
+      "incr_sd_s": 0.0075,
       "peak_heap_mib": 0.91,
       "trace_kib": 1319.5,
       "successor_digest": "ffb4c0db8767d82a"
@@ -156,18 +156,18 @@
       "accepted": 200,
       "rejected": 200,
       "runtime_samples_s": [
-        0.24500070000067353,
-        0.26485730000422336,
-        0.24076410000270698
+        0.24956329999258742,
+        0.24775469998712651,
+        0.24838980002095923
       ],
       "peak_heap_samples_bytes": [
-        2019450,
-        2030450,
-        2011554
+        2028698,
+        2025450,
+        2011402
       ],
-      "incr_mean_s": 0.2502,
-      "incr_sd_s": 0.0129,
-      "peak_heap_mib": 1.94,
+      "incr_mean_s": 0.2486,
+      "incr_sd_s": 0.0009,
+      "peak_heap_mib": 1.93,
       "trace_kib": 2634.6,
       "successor_digest": "4d8524651b1f25bd"
     },
@@ -179,17 +179,17 @@
       "accepted": 400,
       "rejected": 400,
       "runtime_samples_s": [
-        0.4819019999995362,
-        0.507267299995874,
-        0.4805975000053877
+        0.5219252999813762,
+        0.4935129000223242,
+        0.49425999997765757
       ],
       "peak_heap_samples_bytes": [
-        3776130,
-        3786946,
-        3768490
+        3785762,
+        3782658,
+        3768338
       ],
-      "incr_mean_s": 0.4899,
-      "incr_sd_s": 0.015,
+      "incr_mean_s": 0.5032,
+      "incr_sd_s": 0.0162,
       "peak_heap_mib": 3.61,
       "trace_kib": 5264.9,
       "successor_digest": "c2aaea699b03b4a8"
@@ -202,13 +202,13 @@
       "accepted": 4,
       "rejected": 4,
       "runtime_samples_s": [
-        0.07210249999479856,
-        0.05037040000024717,
-        0.05038889999559615
+        0.1003408000105992,
+        0.05236119998153299,
+        0.05230619999929331
       ],
-      "ref_mean_s": 0.058,
-      "ref_sd_s": 0.013,
-      "per_action_ms": 7.2
+      "ref_mean_s": 0.068,
+      "ref_sd_s": 0.028,
+      "per_action_ms": 8.54
     },
     {
       "points": 16,
@@ -216,13 +216,13 @@
       "accepted": 8,
       "rejected": 8,
       "runtime_samples_s": [
-        0.13772440000320785,
-        0.11028059999807738,
-        0.11843200000294019
+        0.11324789997888729,
+        0.12155500001972541,
+        0.11361199998646043
       ],
-      "ref_mean_s": 0.122,
-      "ref_sd_s": 0.014,
-      "per_action_ms": 7.63
+      "ref_mean_s": 0.116,
+      "ref_sd_s": 0.005,
+      "per_action_ms": 7.26
     },
     {
       "points": 32,
@@ -230,13 +230,13 @@
       "accepted": 16,
       "rejected": 16,
       "runtime_samples_s": [
-        0.2600185000046622,
-        0.2677317000052426,
-        0.2677564999903552
+        0.2740884999802802,
+        0.2758878000022378,
+        0.2743954999896232
       ],
-      "ref_mean_s": 0.265,
-      "ref_sd_s": 0.004,
-      "per_action_ms": 8.29
+      "ref_mean_s": 0.275,
+      "ref_sd_s": 0.001,
+      "per_action_ms": 8.59
     },
     {
       "points": 64,
@@ -244,13 +244,13 @@
       "accepted": 32,
       "rejected": 32,
       "runtime_samples_s": [
-        0.6876058000052581,
-        0.6828414999909,
-        0.6879426000086823
+        0.7068569999828469,
+        0.6964006999915,
+        0.7078322999877855
       ],
-      "ref_mean_s": 0.686,
-      "ref_sd_s": 0.003,
-      "per_action_ms": 10.72
+      "ref_mean_s": 0.704,
+      "ref_sd_s": 0.006,
+      "per_action_ms": 11.0
     }
   ],
   "campaign": {
@@ -259,8 +259,8 @@
       "platform": "Windows-11-10.0.26200-SP0",
       "rdflib": "7.6.0",
       "pyshacl": "0.31.0",
-      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
-      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+      "source_revision": "c27a36e954665f150451071495f156d25dd90f2e",
+      "source_manifest_sha256": "20364ac62211cd1b87e24a81b8af48e3f7660addd4ed54f25a5d5947550433fd"
     },
     "requested_admissibility_regime": "incremental",
     "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."

@@ -1,0 +1,18 @@
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\.venv\Lib\site-packages\rdflib\graph.py:1721: DeprecationWarning: Dataset.default_context is deprecated, use Dataset.default_graph instead.
+  query_graph = self.default_context.identifier
+test_archived_traces_replay_with_their_own_inline_rules (__main__.GovernanceEnablementTests.test_archived_traces_replay_with_their_own_inline_rules) ... ok
+test_conflicting_duplicate_event_records_are_rejected (__main__.GovernanceEnablementTests.test_conflicting_duplicate_event_records_are_rejected) ... ok
+test_default_workload_keeps_all_rules_and_successor (__main__.GovernanceEnablementTests.test_default_workload_keeps_all_rules_and_successor) ... ok
+test_ev_operational_cases_still_satisfy_their_postconditions (__main__.GovernanceEnablementTests.test_ev_operational_cases_still_satisfy_their_postconditions) ... ok
+test_four_recorded_fixtures_keep_their_semantic_outputs (__main__.GovernanceEnablementTests.test_four_recorded_fixtures_keep_their_semantic_outputs) ... ok
+test_identical_duplicate_events_do_not_duplicate_actions (__main__.GovernanceEnablementTests.test_identical_duplicate_events_do_not_duplicate_actions) ... ok
+test_inactive_roles_still_receive_runtime_decisions (__main__.GovernanceEnablementTests.test_inactive_roles_still_receive_runtime_decisions) ... ok
+test_missing_role_triple_does_not_enable_event_rules (__main__.GovernanceEnablementTests.test_missing_role_triple_does_not_enable_event_rules) ... ok
+test_new_trace_replays_with_current_inline_rules (__main__.GovernanceEnablementTests.test_new_trace_replays_with_current_inline_rules) ... ok
+test_payload_cannot_override_reserved_event_metadata (__main__.GovernanceEnablementTests.test_payload_cannot_override_reserved_event_metadata) ... ok
+test_wrong_unknown_and_empty_roles_do_not_enable_event_rules (__main__.GovernanceEnablementTests.test_wrong_unknown_and_empty_roles_do_not_enable_event_rules) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 10.055s
+
+OK

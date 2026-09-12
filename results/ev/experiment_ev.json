@@ -47,8 +47,8 @@
     "runs": 30,
     "ours_unique_states": 1,
     "ours_admissible_pct": 100.0,
-    "ours_mean_runtime_ms": 161.99343333137222,
-    "ours_sd_runtime_ms": 3.8443557997065354,
+    "ours_mean_runtime_ms": 161.47767666746708,
+    "ours_sd_runtime_ms": 4.792181705111119,
     "random_unique_states": 1,
     "random_admissible_pct": 0.0,
     "deterministic_unique_states": 1,
@@ -236,8 +236,8 @@
       "platform": "Windows-11-10.0.26200-SP0",
       "rdflib": "7.6.0",
       "pyshacl": "0.31.0",
-      "source_revision": "9a81bbc66eb2d07c7e4001875502bce1cba97d75",
-      "source_manifest_sha256": "532aedae833a9f7b5f307b87ac79988217c2d3e21242c20a1cdb862df893bdbf"
+      "source_revision": "c27a36e954665f150451071495f156d25dd90f2e",
+      "source_manifest_sha256": "20364ac62211cd1b87e24a81b8af48e3f7660addd4ed54f25a5d5947550433fd"
     },
     "requested_admissibility_regime": "shacl",
     "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."

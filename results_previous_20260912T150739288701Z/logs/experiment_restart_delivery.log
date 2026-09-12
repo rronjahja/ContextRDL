@@ -1,0 +1,5 @@
+commit_then_retry            -> {"first_accepted": ["r4"], "ledger_after": ["evt-occB-1", "evt-occB-1-dup"], "retry_visible_events": [], "retry_accepted": [], "retry_committed_empty_
+crash_then_retry             -> {"discarded": ["54407e2d85714d14c13142ed4c8f018a"], "accepted": ["r4"], "ledger_after": ["evt-occB-1", "evt-occB-1-dup"], "zone_b": 21.0, "invariant_h
+later_window_consume_once    -> {"accepted": [], "visible": [], "zone_b": 21.0, "chain": ["e6ce1f4e8e2495c5589588e556c21c8d", "54407e2d85714d14c13142ed4c8f018a"], "invariant_holds": 
+later_window_redelivery      -> {"accepted": ["r4"], "visible": ["evt-occB-1", "evt-occB-1-dup"], "zone_b": 22.0, "chain": ["e6ce1f4e8e2495c5589588e556c21c8d", "54407e2d85714d14c1314
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_restart_delivery.json

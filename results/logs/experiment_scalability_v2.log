@@ -1,7 +1,7 @@
-N=  10 accepted=  10 ref=   0.038s incr(same trace)=  0.008s (4.96x) incr(no digests)= 0.0042s (9.12x) digest=67d43a6735b5 [OK]
-N=  50 accepted=  50 ref=   0.435s incr(same trace)=  0.083s (5.24x) incr(no digests)= 0.0118s (36.84x) digest=045b6e716b37 [OK]
-N= 100 accepted= 100 ref=   1.476s incr(same trace)=  0.294s (5.02x) incr(no digests)= 0.0204s (72.23x) digest=887f39ac7f90 [OK]
-N= 200 accepted= 200 ref=   5.515s incr(same trace)=  1.124s (4.9x) incr(no digests)= 0.0387s (142.61x) digest=75569763d9d6 [OK]
-N= 400 accepted= 400 ref=  21.493s incr(same trace)=  4.253s (5.05x) incr(no digests)= 0.0741s (289.9x) digest=03559af84f4d [OK]
-N= 800 accepted= 800 ref=  88.303s incr(same trace)= 17.910s (4.93x) incr(no digests)= 0.1446s (610.68x) digest=1fb5461e3a65 [OK]
+N=  10 accepted=  10 ref=   0.034s incr(same trace)=  0.007s (4.66x) incr(no digests)= 0.0038s (8.89x) digest=67d43a6735b5 [OK]
+N=  50 accepted=  50 ref=   0.413s incr(same trace)=  0.084s (4.93x) incr(no digests)= 0.0114s (36.18x) digest=045b6e716b37 [OK]
+N= 100 accepted= 100 ref=   1.470s incr(same trace)=  0.296s (4.96x) incr(no digests)= 0.0201s (73.15x) digest=887f39ac7f90 [OK]
+N= 200 accepted= 200 ref=   5.479s incr(same trace)=  1.143s (4.79x) incr(no digests)= 0.0375s (146.02x) digest=75569763d9d6 [OK]
+N= 400 accepted= 400 ref=  21.559s incr(same trace)=  4.396s (4.9x) incr(no digests)= 0.0732s (294.46x) digest=03559af84f4d [OK]
+N= 800 accepted= 800 ref=  85.388s incr(same trace)= 17.549s (4.87x) incr(no digests)= 0.1438s (593.66x) digest=1fb5461e3a65 [OK]
 Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_scalability_v2.json

@@ -1,0 +1,54 @@
+========================================================================
+PART 1: BASELINE (7 strategies, mean +/- sd runtime)
+========================================================================
+
+-- default (enabled=8) --
+  strategy                                 uniq   adm% committed     runtime ms
+  Ours                                        1  100.0       5.0    93.64+-3.73
+  SHACL only, fixed order                     1  100.0       6.0   145.41+-4.26
+  Fixed order, no gates                       1    0.0       8.0     1.68+-0.15
+  Shuffled order, no gates                    8   30.0       8.0     1.55+-0.16
+  Arrival order, per-action SHACL             1  100.0       6.0   143.57+-5.73
+  Arrival order, per-event SHACL              1  100.0       7.0   104.46+-3.70
+  Shuffled order, all four gates             11  100.0       3.7    88.61+-4.72
+
+-- tie conflict (enabled=3) --
+  strategy                                 uniq   adm% committed     runtime ms
+  Ours                                        1  100.0       2.0    35.79+-2.52
+  SHACL only, fixed order                     1  100.0       3.0    51.61+-2.85
+  Fixed order, no gates                       1  100.0       3.0     0.73+-0.11
+  Shuffled order, no gates                    2  100.0       3.0     0.65+-0.05
+  Arrival order, per-action SHACL             1  100.0       3.0    51.54+-2.78
+  Arrival order, per-event SHACL              1  100.0       3.0    34.81+-2.56
+  Shuffled order, all four gates              2  100.0       2.0    35.26+-2.63
+
+-- governance conflict (enabled=3) --
+  strategy                                 uniq   adm% committed     runtime ms
+  Ours                                        1  100.0       2.0    35.83+-2.54
+  SHACL only, fixed order                     1  100.0       3.0    52.01+-2.89
+  Fixed order, no gates                       1  100.0       3.0     0.96+-1.33
+  Shuffled order, no gates                    2  100.0       3.0     0.67+-0.07
+  Arrival order, per-action SHACL             1  100.0       3.0    51.87+-3.22
+  Arrival order, per-event SHACL              1  100.0       3.0    34.36+-2.17
+  Shuffled order, all four gates              2  100.0       2.0    35.49+-2.97
+
+========================================================================
+PART 2: R2.6 -- committed order under SHACL-gated (default workload)
+========================================================================
+  1. r6   ZoneC  ventilationMode  = emergency
+  2. r5   ZoneC  emergencyState   = True
+  3. r2   ZoneA  currentSetpoint  = 21.0
+  4. r7   ZoneB  currentSetpoint  = 22.0
+  5. r8   ZoneA  ventilationMode  = off
+  6. r4   ZoneB  currentSetpoint  = 21
+  >>> SIXTH committed action is: r4
+
+========================================================================
+PART 3: REPLAY TABLE
+========================================================================
+  default                            enabled=8  enabled=OK schedule=OK accepted=OK decisions=OK digest=OK  overall=PASS
+  tie conflict                       enabled=3  enabled=OK schedule=OK accepted=OK decisions=OK digest=OK  overall=PASS
+  governance (op > occ)              enabled=3  enabled=OK schedule=OK accepted=OK decisions=OK digest=OK  overall=PASS
+  governance (occ > op)              enabled=3  enabled=OK schedule=OK accepted=OK decisions=OK digest=OK  overall=PASS
+
+Wrote results/hvac/experiment_hvac_v3.json

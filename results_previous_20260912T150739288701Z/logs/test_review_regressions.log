@@ -1,0 +1,33 @@
+G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\.venv\Lib\site-packages\rdflib\graph.py:1721: DeprecationWarning: Dataset.default_context is deprecated, use Dataset.default_graph instead.
+  query_graph = self.default_context.identifier
+test_changed_local_shapes_use_reference_validator (__main__.ReviewRegressions.test_changed_local_shapes_use_reference_validator) ... ok
+test_duplicate_rule_identifiers_rejected (__main__.ReviewRegressions.test_duplicate_rule_identifiers_rejected) ... ok
+test_empty_windows_keep_anchor_identity (__main__.ReviewRegressions.test_empty_windows_keep_anchor_identity) ... ok
+test_enumerations_preserve_rdf_term_identity (__main__.ReviewRegressions.test_enumerations_preserve_rdf_term_identity) ... ok
+test_inactive_actions_receive_a_decision (__main__.ReviewRegressions.test_inactive_actions_receive_a_decision) ... ok
+test_multiline_literal_snapshot_roundtrip (__main__.ReviewRegressions.test_multiline_literal_snapshot_roundtrip) ... ok
+test_nonfinite_setpoint_not_accepted_by_fast_validator (__main__.ReviewRegressions.test_nonfinite_setpoint_not_accepted_by_fast_validator) ... ok
+test_noop_has_empty_graph_delta (__main__.ReviewRegressions.test_noop_has_empty_graph_delta) ... ok
+test_original_default_result_is_preserved (__main__.ReviewRegressions.test_original_default_result_is_preserved) ... ok
+test_replay_rejects_corrupted_decision_delta (__main__.ReviewRegressions.test_replay_rejects_corrupted_decision_delta) ... ok
+test_rule_set_order_does_not_change_trace (__main__.ReviewRegressions.test_rule_set_order_does_not_change_trace) ... ok
+test_windows_newlines_preserve_compiled_shape_profile (__main__.ReviewRegressions.test_windows_newlines_preserve_compiled_shape_profile) ... ok
+test_changed_shape_file_at_same_path_is_reparsed (__main__.V3Regressions.test_changed_shape_file_at_same_path_is_reparsed) ... ok
+test_decimal_boundaries_are_exact (__main__.V3Regressions.test_decimal_boundaries_are_exact) ... ok
+test_inline_rules_replay_from_embedded_rule_set (__main__.V3Regressions.test_inline_rules_replay_from_embedded_rule_set) ... ok
+test_ledger_uses_exact_identifiers (__main__.V3Regressions.test_ledger_uses_exact_identifiers) ... ok
+test_persistence_refuses_broken_chains_and_inconsistent_pairs (__main__.V3Regressions.test_persistence_refuses_broken_chains_and_inconsistent_pairs) ... ok
+test_replay_rejects_corrupted_snapshots_and_records (__main__.V3Regressions.test_replay_rejects_corrupted_snapshots_and_records) ... ok
+test_replay_restores_environment_and_validates_profile (__main__.V3Regressions.test_replay_restores_environment_and_validates_profile) ... ok
+test_zone_a_node_shapes_apply_without_class_assertion (__main__.V3Regressions.test_zone_a_node_shapes_apply_without_class_assertion) ... ok
+test_cross_implementation_handles_empty_pipeline_trace (__main__.V4Regressions.test_cross_implementation_handles_empty_pipeline_trace) ... ok
+test_replay_detects_window_identity_corruption (__main__.V4Regressions.test_replay_detects_window_identity_corruption) ... ok
+test_replay_without_recorded_context_and_explicit_contexts_path (__main__.V4Regressions.test_replay_without_recorded_context_and_explicit_contexts_path) ... ok
+test_store_rejects_trace_with_hollow_successor_snapshot (__main__.V4Regressions.test_store_rejects_trace_with_hollow_successor_snapshot) ... ok
+test_subclass_typed_zone_is_targeted (__main__.V4Regressions.test_subclass_typed_zone_is_targeted) ... ok
+test_untyped_zone_a_with_two_setpoints_and_off (__main__.V4Regressions.test_untyped_zone_a_with_two_setpoints_and_off) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 5.411s
+
+OK

@@ -17,6 +17,6 @@ test_supported_updates_retain_focused_fast_path (__main__.ValidatorProfileTests.
 test_unknown_regime_rejected_including_empty_schedule (__main__.ValidatorProfileTests.test_unknown_regime_rejected_including_empty_schedule) ... ok
 
 ----------------------------------------------------------------------
-Ran 13 tests in 9.585s
+Ran 13 tests in 9.116s
 
 OK

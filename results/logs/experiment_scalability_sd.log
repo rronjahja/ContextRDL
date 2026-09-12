@@ -1,24 +1,24 @@
-N=  10  ref=   0.031+-0.000s  incr(same trace)=  0.007+-0.000s (4.3x)  incr(no digests)= 0.0037+-0.0003s (8.4x)  [OK]
-N=  50  ref=   0.427+-0.014s  incr(same trace)=  0.084+-0.001s (5.1x)  incr(no digests)= 0.0118+-0.0007s (36.2x)  [OK]
-N= 100  ref=   1.559+-0.101s  incr(same trace)=  0.302+-0.008s (5.2x)  incr(no digests)= 0.0232+-0.0064s (67.1x)  [OK]
-N= 200  ref=   5.509+-0.038s  incr(same trace)=  1.108+-0.010s (5.0x)  incr(no digests)= 0.0380+-0.0008s (145.1x)  [OK]
-N= 400  ref=  21.458+-0.154s  incr(same trace)=  4.297+-0.045s (5.0x)  incr(no digests)= 0.0747+-0.0019s (287.2x)  [OK]
-N= 800  ref=  85.507+-0.783s  incr(same trace)= 17.361+-0.115s (4.9x)  incr(no digests)= 0.1494+-0.0106s (572.4x)  [OK]
+N=  10  ref=   0.034+-0.003s  incr(same trace)=  0.008+-0.000s (4.5x)  incr(no digests)= 0.0038+-0.0003s (9.0x)  [OK]
+N=  50  ref=   0.413+-0.007s  incr(same trace)=  0.084+-0.005s (4.9x)  incr(no digests)= 0.0110+-0.0004s (37.7x)  [OK]
+N= 100  ref=   1.474+-0.011s  incr(same trace)=  0.296+-0.001s (5.0x)  incr(no digests)= 0.0197+-0.0003s (74.8x)  [OK]
+N= 200  ref=   5.520+-0.053s  incr(same trace)=  1.132+-0.018s (4.9x)  incr(no digests)= 0.0379+-0.0011s (145.7x)  [OK]
+N= 400  ref=  21.556+-0.074s  incr(same trace)=  4.384+-0.045s (4.9x)  incr(no digests)= 0.0789+-0.0111s (273.2x)  [OK]
+N= 800  ref=  86.558+-1.204s  incr(same trace)= 17.639+-0.145s (4.9x)  incr(no digests)= 0.1577+-0.0183s (549.0x)  [OK]
 
 ============================================================
 LaTeX rows for Table tab:scalability (paste these):
 ============================================================
- 10 &   10 & 0.031 $\pm$ 0.000 & 0.007 $\pm$ 0.000 & 4.3$\times$ & 0.004 $\pm$ 0.000 & 8.4$\times$ \\
+ 10 &   10 & 0.034 $\pm$ 0.003 & 0.008 $\pm$ 0.000 & 4.5$\times$ & 0.004 $\pm$ 0.000 & 9.0$\times$ \\
 \hline
- 50 &   50 & 0.427 $\pm$ 0.014 & 0.084 $\pm$ 0.001 & 5.1$\times$ & 0.012 $\pm$ 0.001 & 36.2$\times$ \\
+ 50 &   50 & 0.413 $\pm$ 0.007 & 0.084 $\pm$ 0.005 & 4.9$\times$ & 0.011 $\pm$ 0.000 & 37.7$\times$ \\
 \hline
-100 &  100 & 1.559 $\pm$ 0.101 & 0.302 $\pm$ 0.008 & 5.2$\times$ & 0.023 $\pm$ 0.006 & 67.1$\times$ \\
+100 &  100 & 1.474 $\pm$ 0.011 & 0.296 $\pm$ 0.001 & 5.0$\times$ & 0.020 $\pm$ 0.000 & 74.8$\times$ \\
 \hline
-200 &  200 & 5.509 $\pm$ 0.038 & 1.108 $\pm$ 0.010 & 5.0$\times$ & 0.038 $\pm$ 0.001 & 145.1$\times$ \\
+200 &  200 & 5.520 $\pm$ 0.053 & 1.132 $\pm$ 0.018 & 4.9$\times$ & 0.038 $\pm$ 0.001 & 145.7$\times$ \\
 \hline
-400 &  400 & 21.458 $\pm$ 0.154 & 4.297 $\pm$ 0.045 & 5.0$\times$ & 0.075 $\pm$ 0.002 & 287.2$\times$ \\
+400 &  400 & 21.556 $\pm$ 0.074 & 4.384 $\pm$ 0.045 & 4.9$\times$ & 0.079 $\pm$ 0.011 & 273.2$\times$ \\
 \hline
-800 &  800 & 85.507 $\pm$ 0.783 & 17.361 $\pm$ 0.115 & 4.9$\times$ & 0.149 $\pm$ 0.011 & 572.4$\times$ \\
+800 &  800 & 86.558 $\pm$ 1.204 & 17.639 $\pm$ 0.145 & 4.9$\times$ & 0.158 $\pm$ 0.018 & 549.0$\times$ \\
 \hline
 
 Wrote results/hvac/experiment_scalability_sd.json

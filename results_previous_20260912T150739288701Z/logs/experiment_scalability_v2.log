@@ -1,0 +1,7 @@
+N=  10 accepted=  10 ref=   0.032s incr(same trace)=  0.007s (4.5x) incr(no digests)= 0.0033s (9.87x) digest=67d43a6735b5 [OK]
+N=  50 accepted=  50 ref=   0.414s incr(same trace)=  0.083s (5.0x) incr(no digests)= 0.0111s (37.24x) digest=045b6e716b37 [OK]
+N= 100 accepted= 100 ref=   1.512s incr(same trace)=  0.296s (5.1x) incr(no digests)= 0.0204s (74.11x) digest=887f39ac7f90 [OK]
+N= 200 accepted= 200 ref=   5.490s incr(same trace)=  1.130s (4.86x) incr(no digests)= 0.0375s (146.53x) digest=75569763d9d6 [OK]
+N= 400 accepted= 400 ref=  21.410s incr(same trace)=  4.341s (4.93x) incr(no digests)= 0.0737s (290.57x) digest=03559af84f4d [OK]
+N= 800 accepted= 800 ref=  85.433s incr(same trace)= 17.420s (4.9x) incr(no digests)= 0.1439s (593.56x) digest=1fb5461e3a65 [OK]
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_scalability_v2.json

@@ -1,0 +1,21 @@
+{
+  "overall_pass": true,
+  "seed": 20260817,
+  "n_random": 500,
+  "total_cases": 1020,
+  "agreements": 1020,
+  "backend_cases": {
+    "incremental": 1014,
+    "shacl_fallback": 6
+  },
+  "backend_agreements": {
+    "incremental": 1014,
+    "shacl_fallback": 6
+  },
+  "agreement_rate": 1.0,
+  "agree_on_conforming": 132,
+  "agree_on_violating": 688,
+  "rollback_restored": 200
+}
+disagreements: 0
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\test_validator_differential.json

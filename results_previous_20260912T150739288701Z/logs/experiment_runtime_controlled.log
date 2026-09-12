@@ -1,0 +1,7 @@
+gate=first_writer_wins validator=full_shacl     92.17 ± 3.63 ms  committed=5  valcalls=5  admissible=True
+gate=first_writer_wins validator=incremental     7.28 ± 0.34 ms  committed=5  valcalls=5  admissible=True
+gate=off               validator=full_shacl    129.22 ± 4.40 ms  committed=6  valcalls=7  admissible=True
+gate=off               validator=incremental    10.21 ± 0.35 ms  committed=6  valcalls=7  admissible=True
+phase breakdown (full_shacl, per step, ms): {'conflict_gate': 0.003, 'digest': 0.1, 'mutation': 0.96, 'policy_guard': 0.077, 'validation': 91.2}
+phase breakdown (incremental, per step, ms): {'conflict_gate': 0.002, 'digest': 0.086, 'mutation': 0.957, 'policy_guard': 0.036, 'validation': 6.163}
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_runtime_controlled.json

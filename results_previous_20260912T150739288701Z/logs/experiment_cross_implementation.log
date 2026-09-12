@@ -1,0 +1,8 @@
+default                      n=8  schedule=True  decisions=True  post-state=True  accepted=True  digest=True  reasons=['admissible', 'policy_role_cap_violation', 'shadowed_by_prior_accepted_action']
+tie_conflict                 n=3  schedule=True  decisions=True  post-state=True  accepted=True  digest=True  reasons=['admissible', 'shadowed_by_prior_accepted_action']
+governance_conflict          n=3  schedule=True  decisions=True  post-state=True  accepted=True  digest=True  reasons=['admissible', 'shadowed_by_prior_accepted_action']
+governance_conflict_reversed n=3  schedule=True  decisions=True  post-state=True  accepted=True  digest=True  reasons=['admissible', 'shadowed_by_prior_accepted_action']
+default_occupant_inactive    n=8  schedule=True  decisions=True  post-state=True  accepted=True  digest=True  reasons=['admissible', 'inactive_role', 'shadowed_by_prior_accepted_action']
+governance_clean_op_gt_occ   n=3  schedule=True  decisions=True  post-state=True  accepted=True  digest=True  reasons=['admissible', 'inadmissible', 'shadowed_by_prior_accepted_action']
+governance_clean_occ_gt_op   n=3  schedule=True  decisions=True  post-state=True  accepted=True  digest=True  reasons=['admissible', 'shadowed_by_prior_accepted_action']
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_cross_implementation.json

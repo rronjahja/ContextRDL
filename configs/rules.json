@@ -4,7 +4,7 @@
       "rid": "r1",
       "priority": 2,
       "issuing_role": "occupant",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?delta WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupantSetpointRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:delta> ?delta . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?delta WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"occupant\" ; <urn:prop:type> \"OccupantSetpointRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:delta> ?delta . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#currentSetpoint",
@@ -19,7 +19,7 @@
       "rid": "r2",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?cap WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:cap> ?cap . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?cap WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"operator\" ; <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:cap> ?cap . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#currentSetpoint",
@@ -33,7 +33,7 @@
       "rid": "r3",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"CO2Spike\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:mode> ?mode . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?mode WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"operator\" ; <urn:prop:type> \"CO2Spike\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:mode> ?mode . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#ventilationMode",
@@ -47,7 +47,7 @@
       "rid": "r4",
       "priority": 2,
       "issuing_role": "occupant",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"OccupancyDetected\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint ; ex:occupied false . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"occupant\" ; <urn:prop:type> \"OccupancyDetected\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint ; ex:occupied false . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#currentSetpoint",
@@ -62,7 +62,7 @@
       "rid": "r5",
       "priority": 1,
       "issuing_role": "emergency",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?state WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:state> ?state . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:emergencyState ?currentState . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?state WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"emergency\" ; <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:state> ?state . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:emergencyState ?currentState . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#emergencyState",
@@ -76,7 +76,7 @@
       "rid": "r6",
       "priority": 0,
       "issuing_role": "emergency",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"emergency\" ; <urn:prop:type> \"EmergencyAlarm\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?currentMode . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#ventilationMode",
@@ -90,7 +90,7 @@
       "rid": "r7",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?target WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"PreheatRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:target> ?target . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone ?setpoint ?target WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"operator\" ; <urn:prop:type> \"PreheatRequest\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone ; <urn:prop:target> ?target . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:currentSetpoint ?setpoint . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#currentSetpoint",
@@ -104,7 +104,7 @@
       "rid": "r8",
       "priority": 1,
       "issuing_role": "operator",
-      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
+      "condition_select": "PREFIX ex: <http://example.org/building#> SELECT ?e ?eid ?ts ?zone WHERE { GRAPH <urn:window> { ?e <urn:prop:role> \"operator\" ; <urn:prop:type> \"DemandResponsePeak\" ; <urn:prop:eid> ?eid ; <urn:prop:timestamp> ?ts ; <urn:prop:zone> ?zone . } GRAPH <urn:state> { ?zone a ex:HVAC_Zone ; ex:ventilationMode ?mode . } }",
       "delete_template": null,
       "insert_template": {
         "predicate": "http://example.org/building#ventilationMode",

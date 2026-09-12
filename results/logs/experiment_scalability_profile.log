@@ -1,16 +1,16 @@
 --- A: accepted-only, zone-local, incremental resolver ---
-N= 100 triples=  405 acc= 100 rej=   0 t=0.0878s heap=0.56MiB trace=751.8KiB
-N= 200 triples=  805 acc= 200 rej=   0 t=0.1704s heap=1.03MiB trace=1499.3KiB
-N= 400 triples= 1605 acc= 400 rej=   0 t=0.3468s heap=2.19MiB trace=2994.2KiB
-N= 800 triples= 3205 acc= 800 rej=   0 t=0.6854s heap=4.13MiB trace=5984.0KiB
+N= 100 triples=  405 acc= 100 rej=   0 t=0.0869s heap=0.56MiB trace=751.8KiB
+N= 200 triples=  805 acc= 200 rej=   0 t=0.1705s heap=1.04MiB trace=1499.3KiB
+N= 400 triples= 1605 acc= 400 rej=   0 t=0.3517s heap=2.19MiB trace=2994.2KiB
+N= 800 triples= 3205 acc= 800 rej=   0 t=0.6936s heap=4.13MiB trace=5984.0KiB
 --- B: 50% rejected, zone-local, incremental resolver ---
-N= 100 acc=  50 rej=  50 t=0.0644s heap=0.49MiB
-N= 200 acc= 100 rej= 100 t=0.1301s heap=0.91MiB
-N= 400 acc= 200 rej= 200 t=0.2502s heap=1.94MiB
-N= 800 acc= 400 rej= 400 t=0.4899s heap=3.61MiB
+N= 100 acc=  50 rej=  50 t=0.0640s heap=0.49MiB
+N= 200 acc= 100 rej= 100 t=0.1283s heap=0.91MiB
+N= 400 acc= 200 rej= 200 t=0.2486s heap=1.93MiB
+N= 800 acc= 400 rej= 400 t=0.5032s heap=3.61MiB
 --- C: cross-target feeder budget, reference pySHACL per action ---
-points=  8 acc=  4 rej=  4 t=0.058s (7.2 ms/action)
-points= 16 acc=  8 rej=  8 t=0.122s (7.63 ms/action)
-points= 32 acc= 16 rej= 16 t=0.265s (8.29 ms/action)
-points= 64 acc= 32 rej= 32 t=0.686s (10.72 ms/action)
+points=  8 acc=  4 rej=  4 t=0.068s (8.54 ms/action)
+points= 16 acc=  8 rej=  8 t=0.116s (7.26 ms/action)
+points= 32 acc= 16 rej= 16 t=0.275s (8.59 ms/action)
+points= 64 acc= 32 rej= 32 t=0.704s (11.0 ms/action)
 Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_scalability_profile.json

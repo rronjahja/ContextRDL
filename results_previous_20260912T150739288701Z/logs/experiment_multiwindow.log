@@ -1,0 +1,14 @@
+
+=== mode: redelivery (runs=30, unique sequences=1) ===
+  2026-03-14T09:04:00Z  enabled=2 accepted=1 ['r4']  ZoneB=21.0  late_dropped=[]
+  2026-03-14T09:06:00Z  enabled=2 accepted=1 ['r4']  ZoneB=22.0  late_dropped=[]
+  2026-03-14T09:08:00Z  enabled=1 accepted=1 ['r7']  ZoneB=23.0  late_dropped=['evt-late-1']
+  -> the occupancy occurrence (identifiers ['evt-occB-1', 'evt-occB-1-dup']) fired r4 2 time(s) across the run
+
+=== mode: consume_once (runs=30, unique sequences=1) ===
+  2026-03-14T09:04:00Z  enabled=2 accepted=1 ['r4']  ZoneB=21.0  late_dropped=[]
+  2026-03-14T09:06:00Z  enabled=0 accepted=0 []  ZoneB=21.0  late_dropped=[]
+  2026-03-14T09:08:00Z  enabled=1 accepted=1 ['r7']  ZoneB=23.0  late_dropped=['evt-late-1']
+  -> the occupancy occurrence (identifiers ['evt-occB-1', 'evt-occB-1-dup']) fired r4 1 time(s) across the run
+
+Wrote G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\hvac\experiment_multiwindow.json

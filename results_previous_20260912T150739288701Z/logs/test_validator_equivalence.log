@@ -1,0 +1,17 @@
+=== Single-perturbation results ===
+  [PASS] setpoint_below_min_ZoneA: inc=False shacl=False expected=False
+  [PASS] setpoint_above_max_ZoneA: inc=False shacl=False expected=False
+  [PASS] setpoint_above_ZoneA_cap: inc=False shacl=False expected=False
+  [PASS] setpoint_at_ZoneA_cap_boundary: inc=True shacl=True expected=True
+  [PASS] vent_off_with_high_setpoint_ZoneA: inc=False shacl=False expected=False
+  [PASS] vent_invalid_mode_ZoneB: inc=False shacl=False expected=False
+  [PASS] emergency_true_but_vent_normal_ZoneC: inc=False shacl=False expected=False
+  [PASS] setpoint_at_lower_boundary: inc=True shacl=True expected=True
+  [PASS] setpoint_at_upper_boundary: inc=True shacl=True expected=True
+  [PASS] vent_emergency_valid: inc=True shacl=True expected=True
+  [PASS] setpoint_above_ZoneA_cap_by_one: inc=False shacl=False expected=False
+  [PASS] vent_off_at_exact_21_ZoneA: inc=True shacl=True expected=True
+
+=== Pair perturbations: 49 total, 0 disagreements ===
+
+ALL PASSED: 12 singles + 49 pairs.

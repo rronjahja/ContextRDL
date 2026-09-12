@@ -63,6 +63,7 @@ sys.path.insert(0, str(SRC))
 import paths  # noqa: E402  (results layout)
 from rule_engine import BINDING_PROFILE, canonical_binding, schedule_actions  # noqa: E402  (shared scheduler and identity)
 from rule_loader import validate_rules  # noqa: E402
+from dataset_builder import validate_event_records
 from policy_profile import policy_literal, validate_policy_profile, validate_conflict_policy, PolicyProfileError
 from numeric_profile import (NUMERIC_PROFILE, decimal_value, decimal_literal, decimal_add,
                              validation_decimal_context)
@@ -164,6 +165,7 @@ def _to_literal_for_payload(key: str, value: Any):
 
 def build_dataset(state_graph: Graph, events: List[Dict[str, Any]]) -> Tuple[Dataset, Dict[str, Any]]:
     """All events share one window (single evaluation step), mirroring the HVAC default."""
+    validate_event_records(events)
     ds = Dataset()
     state = ds.graph(STATE_GRAPH_IRI)
     for t in state_graph:

@@ -16,6 +16,28 @@ URN_PROP_NS = "urn:prop:"
 NUMERIC_PAYLOAD_KEYS = {"delta", "cap", "target"}
 BOOLEAN_PAYLOAD_KEYS = {"state"}
 URI_PAYLOAD_KEYS = {"zone"}
+EVENT_METADATA_KEYS = frozenset({"eid", "timestamp", "type", "role", "order"})
+
+
+def validate_event_records(events: List[Dict[str, Any]]) -> None:
+    """Keep one event's authority and identity separate from its payload.
+
+    Identical redeliveries are allowed. Conflicting records with one identifier
+    must not merge their metadata into a single RDF event node.
+    """
+    seen: Dict[str, str] = {}
+    for event in events:
+        payload = event.get("payload", {})
+        if not isinstance(payload, dict):
+            raise ValueError("Event payload must be an object")
+        reserved = EVENT_METADATA_KEYS.intersection(payload)
+        if reserved:
+            raise ValueError("Event payload uses reserved metadata keys: " + ", ".join(sorted(reserved)))
+        event_id = str(event["eid"])
+        canonical = json.dumps(event, sort_keys=True, separators=(",", ":"), default=str)
+        if event_id in seen and seen[event_id] != canonical:
+            raise ValueError("Conflicting event records share identifier: " + event_id)
+        seen[event_id] = canonical
 
 
 def prop_uri(name: str) -> URIRef:
@@ -211,6 +233,7 @@ def build_dataset(
         state.add(triple)
 
     selected_events, window_meta = select_window_events(events, settings=settings, anchor_timestamp=anchor_timestamp)
+    validate_event_records(selected_events)
 
     alias_graph = dataset.graph(WINDOW_ALIAS_IRI)
     named_window_graph = dataset.graph(URIRef(f"urn:window:{window_meta['window_id']}"))

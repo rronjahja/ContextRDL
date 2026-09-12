@@ -1,0 +1,109 @@
+{
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.31.0",
+    "source_revision": "c27a36e954665f150451071495f156d25dd90f2e",
+    "source_manifest_sha256": "20364ac62211cd1b87e24a81b8af48e3f7660addd4ed54f25a5d5947550433fd"
+  },
+  "admissibility_regime": "incremental",
+  "rows": [
+    {
+      "decisions_match_same_trace_profile": true,
+      "actions": 10,
+      "accepted_orig": 10,
+      "accepted_new": 10,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "67d43a6735b5498cc413460a4f65b2c9eb0c347fea34fe2dc59dae0c3ef4bc38",
+      "time_seconds_orig": 0.03239219999522902,
+      "time_seconds_new_full_trace": 0.007197300001280382,
+      "time_seconds_new": 0.0032829000265337527,
+      "speedup_same_trace_profile_x": 4.5,
+      "speedup_x": 9.87
+    },
+    {
+      "decisions_match_same_trace_profile": true,
+      "actions": 50,
+      "accepted_orig": 50,
+      "accepted_new": 50,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "045b6e716b370b5402e9892a0e11f0936a6f18ff5de8386bf7442615fdb12838",
+      "time_seconds_orig": 0.41448969999328256,
+      "time_seconds_new_full_trace": 0.08293120001326315,
+      "time_seconds_new": 0.011128999991342425,
+      "speedup_same_trace_profile_x": 5.0,
+      "speedup_x": 37.24
+    },
+    {
+      "decisions_match_same_trace_profile": true,
+      "actions": 100,
+      "accepted_orig": 100,
+      "accepted_new": 100,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "887f39ac7f9084720dc3d542474e28c635a36a15641ae16bda7bf2841d9db623",
+      "time_seconds_orig": 1.5122075999970548,
+      "time_seconds_new_full_trace": 0.29624739999417216,
+      "time_seconds_new": 0.020404099981533363,
+      "speedup_same_trace_profile_x": 5.1,
+      "speedup_x": 74.11
+    },
+    {
+      "decisions_match_same_trace_profile": true,
+      "actions": 200,
+      "accepted_orig": 200,
+      "accepted_new": 200,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "75569763d9d6740452cdb75f18d05da6e9b5d61a93afb42f0f138d90048ab01c",
+      "time_seconds_orig": 5.4903174999926705,
+      "time_seconds_new_full_trace": 1.1302616999892052,
+      "time_seconds_new": 0.037467699992703274,
+      "speedup_same_trace_profile_x": 4.86,
+      "speedup_x": 146.53
+    },
+    {
+      "decisions_match_same_trace_profile": true,
+      "actions": 400,
+      "accepted_orig": 400,
+      "accepted_new": 400,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "03559af84f4de0b0f340751e6acbc9beb4828b289b37c02b23a929c935d5abc5",
+      "time_seconds_orig": 21.40966330000083,
+      "time_seconds_new_full_trace": 4.34134549999726,
+      "time_seconds_new": 0.0736818999866955,
+      "speedup_same_trace_profile_x": 4.93,
+      "speedup_x": 290.57
+    },
+    {
+      "decisions_match_same_trace_profile": true,
+      "actions": 800,
+      "accepted_orig": 800,
+      "accepted_new": 800,
+      "accepted_match": true,
+      "digest_match": true,
+      "successor_digest": "1fb5461e3a650665b12e755d51632f478fc3316079055abf4ec76da81b6e84e7",
+      "time_seconds_orig": 85.43317639999441,
+      "time_seconds_new_full_trace": 17.419912499986822,
+      "time_seconds_new": 0.14393280001240782,
+      "speedup_same_trace_profile_x": 4.9,
+      "speedup_x": 593.56
+    }
+  ],
+  "campaign": {
+    "environment": {
+      "python": "3.12.10",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "rdflib": "7.6.0",
+      "pyshacl": "0.31.0",
+      "source_revision": "c27a36e954665f150451071495f156d25dd90f2e",
+      "source_manifest_sha256": "20364ac62211cd1b87e24a81b8af48e3f7660addd4ed54f25a5d5947550433fd"
+    },
+    "requested_admissibility_regime": "incremental",
+    "note": "Validator comparison suites also explicitly invoke both backends; per-case fields specify them."
+  }
+}

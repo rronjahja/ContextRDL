@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -19,7 +18,9 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from trace import _environment
+from trace import _environment, file_sha256
+
+RESULT_SHA256_PROFILE = "sha256-crlf-to-lf-v1"
 
 CORRECTNESS = [
     "src/test_review_regressions.py", "src/test_v5_regressions.py",
@@ -27,6 +28,7 @@ CORRECTNESS = [
     "src/test_validator_differential.py", "src/test_resolver_equivalence.py",
     "src/experiment_policy_profile.py", "src/experiment_semantic_boundaries.py",
     "src/experiment_hvac_v3.py",
+    "src/test_governance_enablement.py",
     "src/experiment_runtime_controlled.py", "src/experiment_determinism_stress.py",
     "src/experiment_hashseed.py", "src/experiment_governance_v2.py",
     "src/experiment_role_filter.py", "src/experiment_invalid_start.py",
@@ -77,7 +79,9 @@ def main():
         raise SystemExit("Unknown script: " + args.start_at)
     start = names.index(args.start_at) if args.start_at else 0
     manifest = {"started_utc": datetime.now(timezone.utc).isoformat(),
-                "environment": env_info, "commands": [], "overall_pass": False}
+                "environment": env_info, "commands": [], "overall_pass": False,
+                "result_sha256_profile": RESULT_SHA256_PROFILE,
+                "pythonhashseed": "0"}
     if start:
         previous = json.loads(manifest_path.read_text(encoding="utf-8"))
         if previous["environment"]["source_manifest_sha256"] != env_info["source_manifest_sha256"]:
@@ -89,7 +93,8 @@ def main():
     for script, regime in commands[start:]:
         print(f"Running {script} (ADMISSIBILITY_REGIME={regime})", flush=True)
         env = dict(os.environ, ADMISSIBILITY_REGIME=regime, PYTHONHASHSEED="0",
-                   PYTHONDONTWRITEBYTECODE="1", PYTHONUNBUFFERED="1")
+                   PYTHONDONTWRITEBYTECODE="1", PYTHONUNBUFFERED="1",
+                   PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
         log = log_dir / (Path(script).stem + ".log")
         begin = time.perf_counter()
         with log.open("w", encoding="utf-8") as stream:
@@ -116,7 +121,7 @@ def main():
     manifest["overall_pass"] = True
     manifest["finished_utc"] = datetime.now(timezone.utc).isoformat()
     manifest["result_sha256"] = {
-        p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+        p.relative_to(ROOT).as_posix(): file_sha256(str(p))
         for p in sorted(out.rglob("*.json")) if p != manifest_path}
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(f"All {len(commands)} commands passed; results/regeneration.json records provenance.")

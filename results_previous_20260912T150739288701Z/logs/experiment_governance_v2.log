@@ -1,0 +1,20 @@
+
+=== default (operator > occupant) ===
+schedule order:  ['A_unsafe', 'A_op', 'A_occ']
+accepted:        ['A_op']
+ZoneA setpoint:  23.0
+digest:          e8e977acd657fa74
+  A_unsafe: accepted=0      value= 24.0  reason=inadmissible
+  A_op: accepted=1      value= 23.0  reason=admissible
+  A_occ: accepted=0      value= 22.0  reason=shadowed_by_prior_accepted_action
+
+=== reversed (occupant > operator) ===
+schedule order:  ['A_occ', 'A_unsafe', 'A_op']
+accepted:        ['A_occ']
+ZoneA setpoint:  22.0
+digest:          577c53aa6de8be6b
+  A_occ: accepted=1      value= 22.0  reason=admissible
+  A_unsafe: accepted=0      value= 24.0  reason=shadowed_by_prior_accepted_action
+  A_op: accepted=0      value= 23.0  reason=shadowed_by_prior_accepted_action
+
+Wrote results/hvac/experiment_governance_v2.json

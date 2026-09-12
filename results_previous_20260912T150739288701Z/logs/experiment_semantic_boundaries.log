@@ -1,0 +1,26 @@
+Checking feeder_configuration
+Failed to convert Literal lexical form to value. Datatype=http://www.w3.org/2001/XMLSchema#decimal, Converter=<class 'decimal.Decimal'>
+Traceback (most recent call last):
+  File "G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\.venv\Lib\site-packages\rdflib\term.py", line 2262, in _castLexicalToPython
+    return conv_func(lexical)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^
+decimal.InvalidOperation: [<class 'decimal.ConversionSyntax'>]
+Checking numeric_plumbing
+Checking numeric_boundaries
+Checking aggregate_boundaries
+Checking generated_ev_states
+Checked 50 generated EV cases
+Checked 100 generated EV cases
+Checked 150 generated EV cases
+Checked 200 generated EV cases
+Checked 250 generated EV cases
+Checked 300 generated EV cases
+Checked 350 generated EV cases
+Checked 400 generated EV cases
+Checked 450 generated EV cases
+Checked 500 generated EV cases
+Checked 550 generated EV cases
+Checked 600 generated EV cases
+Checked 650 generated EV cases
+Report: G:\Other computers\My Laptop\University\Dr.Sc University Ljubljane\Context RDL\experiment\results\semantic_boundaries.json
+Boundary checks passed for the selected scope.

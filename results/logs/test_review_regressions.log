@@ -28,6 +28,6 @@ test_subclass_typed_zone_is_targeted (__main__.V4Regressions.test_subclass_typed
 test_untyped_zone_a_with_two_setpoints_and_off (__main__.V4Regressions.test_untyped_zone_a_with_two_setpoints_and_off) ... ok
 
 ----------------------------------------------------------------------
-Ran 26 tests in 5.585s
+Ran 26 tests in 5.229s
 
 OK
