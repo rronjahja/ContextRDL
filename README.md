@@ -31,13 +31,13 @@ requirements.txt           Python dependencies
 ## Setup (Windows PowerShell)
 
 ```powershell
-py -3.14 -m venv .venv
+py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 $env:PYTHONDONTWRITEBYTECODE = "1"
 ```
 
-The manuscript's numbers were produced with CPython 3.14, rdflib 7.6.0 and pySHACL 0.31.0 on a 12th Gen Intel
+The manuscript's numbers were produced with CPython 3.12, rdflib 7.6.0 and pySHACL 0.31.0 on a 12th Gen Intel
 Core i9-12900KF. All semantic results (accepted sets, decisions, successor digests, agreement counts) are
 environment-independent; only the runtime columns depend on the machine.
 
