@@ -140,12 +140,17 @@ def main(n_random: int = 500, seed: int = 20260817):
     stats = {"cases": 0, "agree": 0, "conform_agree": 0, "violate_agree": 0}
     backend_counts = {"incremental": 0, "shacl_fallback": 0}
     backend_agreements = {"incremental": 0, "shacl_fallback": 0}
+    backend_verdict_counts = {
+        "incremental": {"conforming": 0, "nonconforming": 0},
+        "shacl_fallback": {"conforming": 0, "nonconforming": 0},
+    }
 
     def record_backend(graph, inc, ref):
         backend = ("incremental" if supports_incremental_shapes(SHAPES) and fast_path_eligible(graph)[0]
                    else "shacl_fallback")
         backend_counts[backend] += 1
         backend_agreements[backend] += int(inc == ref)
+        backend_verdict_counts[backend]["conforming" if ref else "nonconforming"] += 1
 
     def record(tag: str, mutations: List[Mutation], graph: Graph):
         inc, ref = verdicts(graph)
@@ -206,6 +211,7 @@ def main(n_random: int = 500, seed: int = 20260817):
         "agreements": stats["agree"],
         "backend_cases": backend_counts,
         "backend_agreements": backend_agreements,
+        "backend_verdict_counts": backend_verdict_counts,
         "agreement_rate": round(stats["agree"] / stats["cases"], 6),
         "agree_on_conforming": stats["conform_agree"],
         "agree_on_violating": stats["violate_agree"],
